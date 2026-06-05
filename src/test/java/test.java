@@ -5,6 +5,5 @@ public class test {
         System.out.println("ciao sono Manuel");
         int x=1;
         System.out.println(x);
-
     }
 }
