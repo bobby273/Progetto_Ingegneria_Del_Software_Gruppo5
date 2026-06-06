@@ -96,9 +96,6 @@ public class MainframeCliente extends JFrame {
         VediCarrello = new JButton();
         VediCarrello.setText("Visualizzazione carrello");
         contentPanel.add(VediCarrello, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        VisualizzaStoricoOrdini = new JButton();
-        VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini");
-        contentPanel.add(VisualizzaStoricoOrdini, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         RicercaProdotto = new JButton();
         RicercaProdotto.setText("Ricerca di prodotti");
         contentPanel.add(RicercaProdotto, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
@@ -110,6 +107,9 @@ public class MainframeCliente extends JFrame {
         CatalogoPane = new JPanel();
         CatalogoPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         CatalogoScrollPane.setViewportView(CatalogoPane);
+        VisualizzaStoricoOrdini = new JButton();
+        VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini");
+        contentPanel.add(VisualizzaStoricoOrdini, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
