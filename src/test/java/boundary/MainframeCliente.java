@@ -52,9 +52,7 @@ public class MainframeCliente extends JFrame {
             JButton btnInfo = new JButton("Altre info");
 
             final int idProdotto = i;
-            btnInfo.addActionListener(e -> {
-                JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto);
-            });
+            btnInfo.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
 
             panelProdotto.add(lblInfo, BorderLayout.CENTER);
             panelProdotto.add(btnInfo, BorderLayout.EAST);
@@ -69,6 +67,12 @@ public class MainframeCliente extends JFrame {
 
     //TODO: Qui sto solo testando se la schermata va
     public static void main(String[] args) {
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         new MainframeCliente();
     }
 
