@@ -1,13 +1,31 @@
 package entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.List;
 
+@Entity
 public class Cliente extends Utente{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String indirizzoSpedizione;
     private byte immagineProfilo;
     private List<Ordine> ordiniPersonali;
 
-    boolean  annullaOrdine(Ordine ordine){
+    public Cliente(){}
+
+    public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
+        super(email, nome, cognome, password);
+        this.indirizzoSpedizione=indirizzoSpedizione;
+    }
+
+
+    boolean annullaOrdine(Ordine ordine){
         if(ordine == null) return false;
         if(!ordiniPersonali.contains(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
@@ -23,12 +41,12 @@ public class Cliente extends Utente{
         StoricoOrdini storico = StoricoOrdini.getInstance();
         List<Ordine> tuttiGliOrdini= storico.getOrdini();
         for (Ordine ordine : tuttiGliOrdini) {
-            if(ordine.getCliente().getEmail().equals(this.email)){
+            if(ordine.getCliente().getEmail().equals(this.getEmail())){
                 ordiniPersonali.add(ordine);
             };
         }
         //parte di stampa degli ordini
-        System.out.println("Elenco ordini del cliente: "+this.nome+"\t"+this.cognome+"\n");
+        System.out.println("Elenco ordini del cliente: "+this.getNome()+"\t"+this.getCognome()+"\n");
         System.out.println("----------------------------------------\n");
         if (ordiniPersonali.isEmpty()) {
             System.out.println("Non hai ancora effettuato alcun ordine");
@@ -65,4 +83,5 @@ public class Cliente extends Utente{
         System.out.println("==================================================");
 
     }
+
 }

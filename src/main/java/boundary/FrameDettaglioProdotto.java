@@ -43,41 +43,52 @@ public class FrameDettaglioProdotto extends JFrame {
                 System.out.println("Bottone aggiungi al carrello premuto");
                 String nomeProdotto = lblNomeProdotto.getText();
                 int qtaDesiderata = (int) spinnerQtaDesiderataProdotto.getValue();
-                if (qtaDesiderata > 0) { //TODO: Metti altri test sugli input
-                    //Quantità inserita valida; si procede al controller
-                    //boolean esito = //TODO: metodo controller apposito
 
-
-                    lblEsito.setText("Aggiunto al carrello!");
-                    spinnerQtaDesiderataProdotto.setValue(0);
-                    lblEsito.setForeground(Color.GREEN);
-                    lblEsito.setVisible(true);
-
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Prodotto ok",
-                            "Conferma aggiunta al carrello",
-                            JOptionPane.INFORMATION_MESSAGE
-                    );
-
-                } else {
-                    //Quantità inserita non valida
-
-
-                    lblEsito.setText("ERRORE! Quantità inserita non valida!");
-                    lblEsito.setForeground(Color.RED);
-                    spinnerQtaDesiderataProdotto.setValue(0);
-                    lblEsito.setVisible(true);
-
-                    JOptionPane.showMessageDialog(
-                            null,
-                            "Errore! Quantità richiesta non valida!",
-                            "Errore aggiunta al carrello",
-                            JOptionPane.ERROR_MESSAGE
-                    );
-                }
+                checkInput(nomeProdotto, qtaDesiderata);
             }
         });
+    }
+
+    private boolean checkInput(String nomeProdotto, int qtaDesiderata){
+        boolean esito = false;
+        if(!nomeProdotto.isEmpty() && nomeProdotto.length() < 1000){//TODO: Nome non presente in catalogo
+
+            if (qtaDesiderata > 0) {
+                //Quantità inserita valida; si procede al controller
+                //boolean esito = //TODO: metodo controller apposito
+
+
+                lblEsito.setText("Aggiunto al carrello!");
+                spinnerQtaDesiderataProdotto.setValue(0);
+                lblEsito.setForeground(Color.GREEN);
+                lblEsito.setVisible(true);
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Prodotto ok",
+                        "Conferma aggiunta al carrello",
+                        JOptionPane.INFORMATION_MESSAGE
+                );
+                esito=true;
+
+            } else {
+                //Quantità inserita non valida
+
+
+                lblEsito.setText("ERRORE! Quantità inserita non valida!");
+                lblEsito.setForeground(Color.RED);
+                spinnerQtaDesiderataProdotto.setValue(0);
+                lblEsito.setVisible(true);
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Errore! Quantità richiesta non valida!",
+                        "Errore aggiunta al carrello",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
+        }
+        return esito;
     }
 
     private void fillProdotto() {
