@@ -31,12 +31,12 @@ public class UserFacade {
         return regUt.verificaProfiloCliente(email, password);
     }
 
-    public boolean aggiungiOAggiornaProfilo(String mailUtente, String nomeProdotto, int qtaDesiderata){
+    /*public boolean aggiungiOAggiornaProfilo(String mailUtente, String nomeProdotto, int qtaDesiderata){
         try{
             //Cerca prodotto per nome
             Prodotto prodotto = gp.cercaPrimoPerCampi(Prodotto.class, Map.of("nome", nomeProdotto));
             if(prodotto == null || prodotto.get){}
         }
-    }
+    }*/
 
 }
