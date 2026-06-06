@@ -56,7 +56,7 @@ public class Cliente extends Utente{
             return;
         }
 
-        // Stampiamo la "tabella" completa con tutti gli attributi dell'ordine'
+        // Stampiamo la "tabella" completa con tutti gli attributi della classe ordine
         System.out.println("==================================================");
         System.out.println("             DETTAGLIO COMPLETO ORDINE            ");
         System.out.println("==================================================");

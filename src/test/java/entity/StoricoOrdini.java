@@ -22,7 +22,7 @@ public class StoricoOrdini {
 
 
     // scriviamo ora i modi per aggiungere e rimuovere ordini nella nostra lista
-    //aggiungiOrdini servirà per ogni instanza di Ordine, mentre rimuovere verrà chiamata da annullaOrdine()
+    // aggiungiOrdini servirà per ogni instanza di Ordine, mentre rimuovere verrà chiamata da annullaOrdine()
 
     public void aggiungiOrdine(Ordine ordineDaAggiungere){
         if (ordineDaAggiungere != null && this.ordini.contains(ordineDaAggiungere)) {
