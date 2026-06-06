@@ -49,6 +49,11 @@ public class FrameStoricoOrdini extends JFrame {
                 }
             }
         });
+
+        private void mostraDettagliOrdine(Ordine ordineSelezionato) {
+             FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, ordineSelezionato);
+             frameDettaglio.setVisible(true);
+        }
     }
 
 
