@@ -6,6 +6,8 @@ import com.intellij.uiDesigner.core.Spacer;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 public class FrameDettaglioProdotto extends JFrame {
 
@@ -18,21 +20,81 @@ public class FrameDettaglioProdotto extends JFrame {
     private JLabel lblScontatoProdotto;
     private JTextArea txtAreaDescrizioneProdotto;
     private JPanel panelProdotto;
+    private JLabel lblEsito;
 
-    //costruttore per definire impostazioni finestra
+    //costruttore per definire impostazioni finestra e invocare il metodo fillProdotto()
     public FrameDettaglioProdotto() {
+        lblEsito.setVisible(false);
         setTitle("Visualizzazione prodotto");
         setContentPane(panelProdotto);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(500, 500);
+        setSize(700, 500);
         setLocationRelativeTo(null);
 
+        fillProdotto();
+
         setVisible(true);
+
+        btnAggiungiACarrello.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                //Chiama il metodo da eseguire quando si preme il pulsante
+
+                System.out.println("Bottone aggiungi al carrello premuto");
+                String nomeProdotto = lblNomeProdotto.getText();
+                int qtaDesiderata = (int) spinnerQtaDesiderataProdotto.getValue();
+                if (qtaDesiderata > 0) { //TODO: Metti altri test sugli input
+                    //Quantità inserita valida; si procede al controller
+                    //boolean esito = //TODO: metodo controller apposito
+
+
+                    lblEsito.setText("Aggiunto al carrello!");
+                    spinnerQtaDesiderataProdotto.setValue(0);
+                    lblEsito.setForeground(Color.GREEN);
+                    lblEsito.setVisible(true);
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Prodotto ok",
+                            "Conferma aggiunta al carrello",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+
+                } else {
+                    //Quantità inserita non valida
+
+
+                    lblEsito.setText("ERRORE! Quantità inserita non valida!");
+                    lblEsito.setForeground(Color.RED);
+                    spinnerQtaDesiderataProdotto.setValue(0);
+                    lblEsito.setVisible(true);
+
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Errore! Quantità richiesta non valida!",
+                            "Errore aggiunta al carrello",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
+            }
+        });
+    }
+
+    private void fillProdotto() {
+        //TODO: E' solo per testare il display dei dati prodotto, dovrai poi pescarli dal db
+        //String nomeProdotto, double prezzoProdotto, String categoriaProdotto, int qtaDispProdotto, double scontatoProdotto, String descrizioneProdotto
+        lblNomeProdotto.setText("Prodotto 1");
+        lblPrezzoProdotto.setText("100.00");
+        lblCategoriaProdotto.setText("Categoria 1");
+        lblQtaDispProdotto.setText("10");
+        lblScontatoProdotto.setText("10.00");
+        txtAreaDescrizioneProdotto.setText("Descrizione prodotto 1");
     }
 
 
     //main per testare la funzionalità
     public static void main(String[] args) {
+        //chiama costruttore della finestra
         new FrameDettaglioProdotto();
     }
 
@@ -101,22 +163,25 @@ public class FrameDettaglioProdotto extends JFrame {
         final Spacer spacer6 = new Spacer();
         panelProdotto.add(spacer6, new GridConstraints(5, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(3, 3, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(3, 4, new Insets(0, 0, 0, 0), -1, -1));
         panelProdotto.add(panel1, new GridConstraints(6, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final JLabel label7 = new JLabel();
         label7.setText("Quantità desiderata:");
         panel1.add(label7, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer7 = new Spacer();
-        panel1.add(spacer7, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
-        final Spacer spacer8 = new Spacer();
-        panel1.add(spacer8, new GridConstraints(1, 0, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer7, new GridConstraints(1, 0, 2, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         spinnerQtaDesiderataProdotto = new JSpinner();
-        panel1.add(spinnerQtaDesiderataProdotto, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(spinnerQtaDesiderataProdotto, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         btnAggiungiACarrello = new JButton();
         btnAggiungiACarrello.setText("Aggiungi al carrello");
-        panel1.add(btnAggiungiACarrello, new GridConstraints(1, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        panel1.add(btnAggiungiACarrello, new GridConstraints(1, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer8 = new Spacer();
+        panel1.add(spacer8, new GridConstraints(2, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final Spacer spacer9 = new Spacer();
-        panel1.add(spacer9, new GridConstraints(2, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer9, new GridConstraints(1, 3, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        lblEsito = new JLabel();
+        lblEsito.setText("Label");
+        panel1.add(lblEsito, new GridConstraints(0, 3, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer10 = new Spacer();
         panelProdotto.add(spacer10, new GridConstraints(6, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         txtAreaDescrizioneProdotto = new JTextArea();
