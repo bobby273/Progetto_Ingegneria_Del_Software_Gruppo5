@@ -43,4 +43,16 @@ public class Ordine {
     public Cliente getCliente() {
         return cliente;
     }
+
+    public String getId() {
+        return id;
+    }
+
+    public float getTotale() {
+        return totale;
+    }
+
+    public Stato getStato() {
+        return stato;
+    }
 }

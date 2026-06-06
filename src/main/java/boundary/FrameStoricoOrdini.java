@@ -33,9 +33,40 @@ public class FrameStoricoOrdini extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
+        fillTabella();
         addListenerTabella(); //il listener per poter interagire con la tabella
     }
 
+    private void fillTabella() {
+        // 1. Chiediamo al controller la lista degli ordini per questo cliente
+        listaOrdiniAttuali = controller.richiediElencoOrdini();
+
+        // 2. Definiamo i titoli delle colonne
+        String[] colonne = {"ID Ordine", "Totale (€)", "Stato"};
+
+        // 3. Creiamo il modello della tabella
+        DefaultTableModel model = new DefaultTableModel(colonne, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // 4. Se ci sono ordini, creiamo una riga per ciascuno di essi
+        if (listaOrdiniAttuali != null) {
+            for (Ordine o : listaOrdiniAttuali) {
+                Object[] riga = {
+                        o.getId(),
+                        o.getTotale(),
+                        o.getStato()
+                };
+                model.addRow(riga);
+            }
+        }
+
+        // 5. Inseriamo il modello pieno di dati nella tabella visiva
+        tabellaOrdini.setModel(model);
+    }
     private void addListenerTabella(){
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
