@@ -1,15 +1,17 @@
 package controller;
 
-import entity.Cliente;
-import entity.Ordine;
-import entity.Stato;
+import entity.ClientFacade;
 import java.util.List;
 
+//in teoria queste librerie vanno levate quando avremo ultimato clientFacade
+import entity.Ordine;
+import entity.Stato;
+
 public class ControllerCliente {
-    Cliente cliente;
     //costruttore
     //TODO: verificarne la correttezza
-    public ControllerCliente(Cliente cliente) {
+    private ClientFacade cliente;
+    public ControllerCliente(ClientFacade cliente) {
         this.cliente = cliente;
     }
 
