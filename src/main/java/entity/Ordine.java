@@ -42,4 +42,8 @@ public class Ordine {
     public Cliente getCliente() {
         return cliente;
     }
+
+    public void setStato(Stato stato) {
+
+    }
 }
