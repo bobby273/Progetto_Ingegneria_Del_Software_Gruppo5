@@ -5,10 +5,6 @@ import java.util.List;
 public class Cliente extends Utente{
     private String indirizzoSpedizione;
     private byte immagineProfilo;
-    private String email;
-    private String password;
-    private String nome;
-    private String cognome;
     private List<Ordine> ordiniPersonali;
 
     boolean  annullaOrdine(Ordine ordine){
