@@ -53,6 +53,15 @@ public class StoricoOrdini {
         }
 
     }
+
+    //metodo ausiliario per ottenere l'elenco ordini, è necessario per visualizza elenco ordini
+    public List<Ordine> getOrdini(){
+        return (List<Ordine>) this.ordini;
+    }
+
+
+
+    //casi d'uso non trattati in questo progetto:
     public void generaReport(){
         System.out.println("Report generato"); //stub generico che funziona da placeholder della vera funzione
     }

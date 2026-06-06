@@ -40,7 +40,7 @@ public class Ordine {
         return prodottiInOrdine;
     }
 
-    public void setStato(Stato stato) {
-        return;
+    public Cliente getCliente() {
+        return cliente;
     }
 }
