@@ -22,6 +22,8 @@ public class Ordine {
 
         this.prodottiContenuti = aggiungiDaCarrello(carrello);
 
+        StoricoOrdini.getInstance().aggiungiOrdine(this);
+        //in questo modo, l'ordine appena instanziato verrà aggiunto automaticamente allo Storico
     }
 
     private ArrayList<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
