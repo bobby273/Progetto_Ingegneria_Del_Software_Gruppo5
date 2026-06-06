@@ -59,8 +59,12 @@ public class FrameRegistrazione {
                     }
                     if(esito== ControllerAccesso.AMM_CREATO){
                         labelEsito.setText("Amministratore registrato con successo.");
+                    } else if(esito==ControllerAccesso.AMM_EXS){
+                        labelEsito.setText("Amministratore gia' registrato con queste credenziali.");
                     } else if(esito== ControllerAccesso.CLIE_CREATO){
                         labelEsito.setText("Cliente registrato con successo.");
+                    }else if(esito==ControllerAccesso.CLIE_EXS){
+                        labelEsito.setText("Cliente gia' registrato con queste credenziali.");
                     } else {
                         labelEsito.setText("Errore dimensione campi.");
                     }

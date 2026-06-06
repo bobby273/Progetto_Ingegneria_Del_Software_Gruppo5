@@ -3,23 +3,22 @@
              xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_1.xsd"
              version="3.1">
 
-    <persistence-unit name="RegistrazionePU">
+    <persistence-unit name="db_igs">
 
         <class>entity.Amministratore</class>
         <class>entity.Cliente</class>
 
         <properties>
-            <!-- Connessione al DB -->
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/nome_del_tuo_database?serverTimezone=UTC"/>
+
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/"/>
             <property name="jakarta.persistence.jdbc.user" value="pinguini"/>
             <property name="jakarta.persistence.jdbc.password" value="4dita"/>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>
 
-            <!-- Hibernate genera in automatico le tabelle se non esistono -->
-            <property name="jakarta.persistence.schema-generation.database.action" value="update"/>
-
-            <!-- Mostra le query SQL in console (utile per il debug) -->
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+
         </properties>
     </persistence-unit>
 </persistence>

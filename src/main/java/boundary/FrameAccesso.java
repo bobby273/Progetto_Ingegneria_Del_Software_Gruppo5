@@ -30,8 +30,7 @@ public class FrameAccesso {
                     } else if (esito == ControllerAccesso.UTENTE_CLIE){
                         //chiamata alla frame di cliente
                         labelEsito.setText("Cliente");
-                    }
-                    else
+                    } else
                         //chiamata a frame di errore?
                         labelEsito.setText("Utente non trovato");
                 } else

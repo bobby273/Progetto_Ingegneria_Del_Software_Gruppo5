@@ -13,4 +13,13 @@ public class UserFacade {
     public int creaNuovoCliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         return regUt.creaNuovoCliente(email, nome, cognome, password, indirizzoSpedizione);
     }
+
+    public boolean verificaProfiloAmministratore(String email, String password){
+        return regUt.verificaProfiloAmministratore(email, password);
+    }
+
+    public boolean verificaProfiloCliente(String email, String password){
+        return regUt.verificaProfiloCliente(email, password);
+    }
+
 }

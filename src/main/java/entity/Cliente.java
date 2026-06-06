@@ -1,17 +1,31 @@
 package entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 import java.util.List;
 
+@Entity
 public class Cliente extends Utente{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String indirizzoSpedizione;
     private byte immagineProfilo;
-    private String email;
-    private String password;
-    private String nome;
-    private String cognome;
     private List<Ordine> ordiniPersonali;
 
-    boolean  annullaOrdine(Ordine ordine){
+    public Cliente(){}
+
+    public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
+        super(email, nome, cognome, password);
+        this.indirizzoSpedizione=indirizzoSpedizione;
+    }
+
+
+    boolean annullaOrdine(Ordine ordine){
         if(ordine == null) return false;
         if(!ordiniPersonali.contains(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
