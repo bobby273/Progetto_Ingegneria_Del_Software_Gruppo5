@@ -39,4 +39,8 @@ public class Ordine {
         }
         return prodottiInOrdine;
     }
+
+    public Cliente getCliente() {
+        return cliente;
+    }
 }
