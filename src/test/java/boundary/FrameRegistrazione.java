@@ -41,17 +41,28 @@ public class FrameRegistrazione {
                     boolean isAdmin=checkBoxAdmin.isSelected();
                     String badge=textFieldBadge.getText();
 
-                    int esito;
-                    if(isAdmin)
-                        esito= ControllerAccesso.creaNuovoAmministratore(email, nome, cognome, password, badge);
-                    else
-                        esito= ControllerAccesso.creaNuovoCliente(email, nome, cognome, password, indirizzoSpedizione);
-
+                    int esito=-1;
+                    if(isAdmin){
+                        if(email.length()<=40 && email.contains("@")
+                                && nome.length()<=40 && nome.matches("[\\p{L}\\s']+")
+                                && cognome.length()<=40 && cognome.matches("[\\p{L}\\s']+")
+                                && password.length()>=8 && password.length()<=40
+                                && badge.length()==20 && badge.matches("[0-9]+"))
+                            esito = ControllerAccesso.creaNuovoAmministratore(email, nome, cognome, password, badge);
+                    } else {
+                        if(email.length()<=40 && email.contains("@")
+                                && nome.length()<=40 && nome.matches("[\\p{L}\\s']+")
+                                && cognome.length()<=40 && cognome.matches("[\\p{L}\\s']+")
+                                && password.length()>=8 && password.length()<=40
+                                && indirizzoSpedizione.length()<=100 && indirizzoSpedizione.length()>=5)
+                            esito = ControllerAccesso.creaNuovoCliente(email, nome, cognome, password, indirizzoSpedizione);
+                    }
                     if(esito== ControllerAccesso.AMM_CREATO){
                         labelEsito.setText("Amministratore registrato con successo.");
-                    }
-                    if(esito== ControllerAccesso.CLIE_CREATO){
+                    } else if(esito== ControllerAccesso.CLIE_CREATO){
                         labelEsito.setText("Cliente registrato con successo.");
+                    } else {
+                        labelEsito.setText("Errore dimensione campi.");
                     }
                 }
             }

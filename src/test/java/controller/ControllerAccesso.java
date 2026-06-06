@@ -1,5 +1,7 @@
 package controller;
 
+import entity.UserFacade;
+
 public class ControllerAccesso {
     public static final int AMM_CREATO=0;
     public static final int CLIE_CREATO=1;
@@ -10,11 +12,15 @@ public class ControllerAccesso {
     public static final int UTENTE_CLIE=4;
 
     public static int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){
-        return AMM_CREATO;//per farlo contento
+        UserFacade userFacade=new UserFacade();
+        return userFacade.creaNuovoAmministratore(email, nome, cognome, password, badge);//per farlo contento
     }
     public static int creaNuovoCliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
-        return CLIE_CREATO;//per farlo contento
+        UserFacade userFacade=new UserFacade();
+        return userFacade.creaNuovoCliente(email, nome, cognome, password, indirizzoSpedizione);
     }
+
+
     public static boolean verificaProfiloCliente(String email, String password){
         return CLIE_VER;
     }

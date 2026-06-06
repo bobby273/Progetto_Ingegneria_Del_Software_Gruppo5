@@ -50,9 +50,8 @@ public class MainframeAccesso {
         MainframeAccesso mainframe= new MainframeAccesso();
         frame.setContentPane(mainframe.MainPanel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(1000, 1200);
+        frame.setSize(500, 400);
         frame.setResizable(false);
-        frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
     }
