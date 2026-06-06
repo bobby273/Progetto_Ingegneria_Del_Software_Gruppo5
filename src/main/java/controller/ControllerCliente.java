@@ -23,4 +23,24 @@ public class ControllerCliente {
         //Metodo controller richiamato dal boundary  FrameStoricoOrdini
         return this.cliente.visualizzaElencoOrdini();
     }
+
+    public Ordine richiediDettaglioOrdine(Ordine ordineSelezionato){
+        //Metodo controller richiamato dal boundary FrameDettaglioOrdine
+        return ordineSelezionato;
+    }
+
+    public boolean richiediAnnullamentoOrdine(Ordine ordineDaAnnullare) {
+        // REGOLA: posso annullare qualsiasi ordine non consegnatp
+        if (ordineDaAnnullare.getStato() != Stato.CONSEGNATO) {
+            return false;
+        }
+        boolean successo = this.cliente.annullaOrdine(ordineDaAnnullare);
+
+        if (successo) {
+            // TODO: per quando avremo il database
+            System.out.println("Attendi");
+        }
+
+        return successo;
+    }
 }
