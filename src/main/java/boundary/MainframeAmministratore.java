@@ -24,7 +24,14 @@ public class MainframeAmministratore extends JFrame {
         //setting per avere finestra a scorrimento (amazon-style)
         CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
+        creaProdottoButton.addActionListener(e -> {
+            FrameCreaProdotto frameCrea = new FrameCreaProdotto();
+            frameCrea.setVisible(true);
+            frameCrea.setLocationRelativeTo(null); // Lo centra sullo schermo
+        });
+
         fillCatalogo();
+
 
         setVisible(true);
     }
@@ -39,6 +46,9 @@ public class MainframeAmministratore extends JFrame {
             panelProdotto.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createEmptyBorder(5, 5, 5, 5),
                     BorderFactory.createEtchedBorder()
+
+            //TODO: qui andrebbe la parte di dtabase e si passa direttamente il prodotto al costruttore di gestisci prodotto
+
             ));
 
             panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
@@ -48,23 +58,43 @@ public class MainframeAmministratore extends JFrame {
             String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
                     "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
 
+
             JLabel lblInfo = new JLabel(testoHtml);
             JPanel panelButtons = new JPanel(new GridLayout(1,2, 5, 0));
-            JButton btnInfo = new JButton("Altre info");
-            JButton btnModifica = new JButton("Modifica");
-            panelButtons.add(btnInfo);
-            panelButtons.add(btnModifica);
+            JButton btnGestione = new JButton("Gestisci");
+            JButton btnRimuovi = new JButton("Rimuovi");
+            panelButtons.add(btnGestione);
+            panelButtons.add(btnRimuovi);
+
+            // ... dentro il ciclo for dello stub nel Main Frame ... TODO:sistemare
+            String nomeProd = "Prodotto <" + i + ">";
+            String catProd = "Elettronica";
+            String prezzoProd = "29.99";
+            String descProd = "Descrizione mock del prodotto " + i;
+            String qtaProd = "15";
+            boolean isDisp = true;
+            boolean isScon = false;
+
+            btnGestione.addActionListener(e -> {
+                // Passiamo tutti i campi al costruttore della schermata di gestione
+                FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
+                        nomeProd, catProd, prezzoProd, descProd, qtaProd, isDisp, isScon
+                );
+                frameGestione.setVisible(true);
+                frameGestione.setLocationRelativeTo(null);
+            });
 
 
             final int idProdotto = i;
-            btnInfo.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
-            btnModifica.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modifica prodotto " + idProdotto));
+            btnGestione.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
+            btnRimuovi.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modifica prodotto " + idProdotto));
 
             panelProdotto.add(lblInfo, BorderLayout.CENTER);
             panelProdotto.add(panelButtons, BorderLayout.EAST);
 
             CatalogoPane.add(panelProdotto);
             CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+
         }
 
         CatalogoPane.revalidate();
