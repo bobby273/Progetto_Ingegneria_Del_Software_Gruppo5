@@ -1,5 +1,8 @@
 package entity;
 
+import jakarta.persistence.MappedSuperclass;
+
+@MappedSuperclass
 public class Utente {
     private String email;
     private String nome;
@@ -14,6 +17,12 @@ public class Utente {
         this.password=password;
     }
 
+    public String getNome() {
+        return nome;
+    }
+    public String getCognome() {
+        return cognome;
+    }
 
     // l'unico get utile è quello dell'email in quanto serve per la visualizzazione degli ordini personali
     public String getEmail() {

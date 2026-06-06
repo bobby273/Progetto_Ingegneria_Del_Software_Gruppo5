@@ -10,7 +10,7 @@
 
         <properties>
 
-            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/"/>
+            <property name="jakarta.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/db_pinguini"/>
             <property name="jakarta.persistence.jdbc.user" value="pinguini"/>
             <property name="jakarta.persistence.jdbc.password" value="4dita"/>
             <property name="jakarta.persistence.jdbc.driver" value="com.mysql.cj.jdbc.Driver"/>

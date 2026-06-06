@@ -41,12 +41,12 @@ public class Cliente extends Utente{
         StoricoOrdini storico = StoricoOrdini.getInstance();
         List<Ordine> tuttiGliOrdini= storico.getOrdini();
         for (Ordine ordine : tuttiGliOrdini) {
-            if(ordine.getCliente().getEmail().equals(this.email)){
+            if(ordine.getCliente().getEmail().equals(this.getEmail())){
                 ordiniPersonali.add(ordine);
             };
         }
         //parte di stampa degli ordini
-        System.out.println("Elenco ordini del cliente: "+this.nome+"\t"+this.cognome+"\n");
+        System.out.println("Elenco ordini del cliente: "+this.getNome()+"\t"+this.getCognome()+"\n");
         System.out.println("----------------------------------------\n");
         if (ordiniPersonali.isEmpty()) {
             System.out.println("Non hai ancora effettuato alcun ordine");
@@ -83,4 +83,5 @@ public class Cliente extends Utente{
         System.out.println("==================================================");
 
     }
+
 }
