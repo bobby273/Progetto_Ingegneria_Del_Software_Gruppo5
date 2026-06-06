@@ -32,6 +32,8 @@ public class Cliente extends Utente{
         return true;
     }
 
+
+
     public List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
