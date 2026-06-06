@@ -1,6 +1,5 @@
 package entity;
 
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.time.LocalDateTime;
 import Exceptions.ErroreDisponibilitaException;
@@ -31,7 +30,7 @@ public class Ordine {
         if(prodottiInCarrello.isEmpty()) return null;
         ArrayList<OrdineContiene> prodottiInOrdine = new ArrayList<>();
         for (CarrelloContiene carrelloContiene : prodottiInCarrello) {
-            if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQuantita())) {
+            if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getQuantita(), carrelloContiene.getProdotto()));
             } else {
                 throw new ErroreDisponibilitaException("quantità desiderata non disponibile");
