@@ -7,6 +7,7 @@ import jakarta.persistence.*;
  @Entity
 public class Carrello {
 
+     //Attributi
      @Id
      private final String mailUtente;
 
@@ -14,6 +15,7 @@ public class Carrello {
      private ArrayList<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
      //CarrelloContiene = RigaCarrello {quantità + prodotto}
 
+     //Costruttori
      public Carrello(String mailUtente) {
         this.mailUtente = mailUtente;
         this.prodottiContenuti = new ArrayList<>();
@@ -24,6 +26,7 @@ public class Carrello {
          this.prodottiContenuti = new ArrayList<>();
      }
 
+     //Metodi
      public void aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
          for(CarrelloContiene riga : prodottiContenuti) {
              if(riga.getProdotto().getNome().equals(prodotto.getNome())){ //Se trovo il prodotto nel carrello
@@ -43,8 +46,8 @@ public class Carrello {
 
      public ArrayList<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
-    }
-    public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
+     }
+     public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
         this.prodottiContenuti = prodottiContenuti;
     }
 }
