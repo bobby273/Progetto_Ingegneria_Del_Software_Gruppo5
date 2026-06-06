@@ -12,7 +12,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-
+//TODO: verificarne la funzionalità
 public class FrameStoricoOrdini extends JFrame {
     //variabili per il GUI Designer
     private JPanel StoricoOrdiniPane;
