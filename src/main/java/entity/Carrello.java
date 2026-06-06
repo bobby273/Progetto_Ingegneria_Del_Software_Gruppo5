@@ -9,7 +9,7 @@ public class Carrello {
 
      //Attributi
      @Id
-     private final String mailUtente;
+     private final String mailUtente; //Id di utente è la sua mail (univoco)
 
      @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
      private ArrayList<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
