@@ -11,10 +11,10 @@ public class Cliente {
     private String cognome;
     private List<Ordine> ordiniPersonali;
 
-    boolean  annullaOrdine(Ordine ordine){
+    boolean annullaOrdine(Ordine ordine){
         if(ordine == null) return false;
         if(!ordiniPersonali.contains(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
-
+        return false;
     }
 }

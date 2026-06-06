@@ -33,6 +33,7 @@ public class MainframeCliente extends JFrame {
         CatalogoPane.removeAll();
 
         //TODO: Sto simulando stub, qua ci andrà la lista vera
+        //TODO: Va aggiunta la gestione di catalogo vuoto!
         //visualizzazione dei prodotti
         for (int i = 0; i < 20; i++) {
             JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
