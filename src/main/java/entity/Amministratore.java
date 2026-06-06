@@ -19,4 +19,12 @@ public class Amministratore extends Utente{
         super(email, nome, cognome, password);
         this.badge=badge;
     }
+
+    //metodo che vedrà poi Roberta <3
+    boolean annullaOrdine(Ordine ordine){
+        if(ordine == null) return false;
+        if(!ordiniPersonali.contains(ordine)) return false;
+        ordine.setStato(Stato.ANNULLATO);
+        return true;
+    }
 }
