@@ -1,6 +1,7 @@
 package entity;
 
 //import StubPagamento.InterfacciaPagamento;
+import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,7 @@ public class Amministratore extends Utente{
         this.badge=badge;
     }
 
-   /* public boolean annullaOrdine(String id_ordine) {
+   public boolean annullaOrdine(String id_ordine) {
         StoricoOrdini storicoOrdini = StoricoOrdini.getInstance();
         Ordine ordine = storicoOrdini.cercaOrdinePerId(id_ordine);
         if(ordine == null) return false;
@@ -29,10 +30,8 @@ public class Amministratore extends Utente{
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
         ordine.setStato(Stato.ANNULLATO);
-        //InterfacciaPagamento.RimborsaOrdine(ordine);
-        //invio notifiche
+        InterfacciaPagamento.RimborsaOrdine(ordine);
+        StoricoOrdini.getInstance().inviaNotifiche();
         return true;
     }
-quindi a
-     TODO: da scommentare*/
 }
