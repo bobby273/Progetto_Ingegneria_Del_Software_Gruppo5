@@ -66,9 +66,31 @@ public class ControllerAmministratore {
         if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
             return adminFacade.getTuttiIProdotti();
         }
-
         // Deleghiamo il lavoro alla Facade
         return adminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    }
+
+
+    //metodo per "formattare" i dati ottenuti e darli alla GUI
+    public static List<String[]> ricercaFormattata(String categoriaRicerca, String elementoDaCercare) {
+        ControllerAmministratore controller = new ControllerAmministratore();
+        List<Prodotto> prodotti = controller.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        //impacchetto i risultati come succede nell'esempio
+        List<String[]> datiPronti = new java.util.ArrayList<>();
+        if (prodotti != null) {
+            for (Prodotto p : prodotti) {
+                datiPronti.add(new String[]{
+                        p.getNome(),
+                        p.getCategoria(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getDescrizione(),
+                        String.valueOf(p.getQtaDisponibile()),
+                        String.valueOf(p.IsScontato()),
+                        String.valueOf(p.IsScontato())
+                });
+            }
+        }
+        return datiPronti;
     }
 
     public String getStato(String id_ordine){

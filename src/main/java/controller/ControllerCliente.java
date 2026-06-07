@@ -108,6 +108,29 @@ public class ControllerCliente {
     }
 
 
+    //metodo per "formattare" i dati ottenuti e darli alla GUI
+    public static List<String[]> ricercaFormattata(String categoriaRicerca, String elementoDaCercare) {
+        ControllerCliente controller = new ControllerCliente();
+        List<Prodotto> prodotti = controller.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        //impacchetto i risultati come succede nell'esempio
+        List<String[]> datiPronti = new java.util.ArrayList<>();
+        if (prodotti != null) {
+            for (Prodotto p : prodotti) {
+                datiPronti.add(new String[]{
+                        p.getNome(),
+                        p.getCategoria(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getDescrizione(),
+                        String.valueOf(p.getQtaDisponibile()),
+                        String.valueOf(p.IsScontato()),
+                        String.valueOf(p.IsScontato())
+                });
+            }
+        }
+        return datiPronti;
+    }
+
+
     public String getStato(String id_ordine){
         return clientFacade.getStato(id_ordine);
     }
