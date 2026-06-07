@@ -41,7 +41,6 @@ public class MainframeCliente extends JFrame {
 
         VediCarrello.addActionListener(e -> {
             new FrameCarrello();
-            setVisible(true);
         });
 
 
