@@ -14,7 +14,7 @@ import Exceptions.ErroreDisponibilitaException;
 public class Ordine {
     //Attributi
     @Id
-    private String id;
+    private String id_ordine;
 
     private Stato stato;
     private float totale;
@@ -32,7 +32,7 @@ public class Ordine {
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
         this.cliente = cliente;
         this.indirizzoSpedizione = indirizzoSpedizione;
-        this.id = generaID();
+        this.id_ordine = generaID();
         this.totale = 0;
         this.prodottiContenuti = new ArrayList<>();
         this.prodottiContenuti = aggiungiDaCarrello(carrello);
@@ -50,7 +50,7 @@ public class Ordine {
             if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(),carrelloContiene.getQuantita(), this));
             } else {
-                throw new ErroreDisponibilitaException("quantità desiderata non disponibile");
+                System.out.println("quantità desiderata del prodotto "+carrelloContiene.getProdotto().getNome()+" non disponibile");
             }
         }
         return prodottiInOrdine;
@@ -89,7 +89,7 @@ public class Ordine {
     }
 
     String getId() {
-        return id;
+        return id_ordine;
     }
 
     float calcolaTotale() {

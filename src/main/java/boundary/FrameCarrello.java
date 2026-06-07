@@ -6,8 +6,11 @@ import com.intellij.uiDesigner.core.Spacer;
 import controller.ControllerCliente;
 
 import javax.swing.*;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.util.List;
+import java.util.Locale;
 
 
 public class FrameCarrello extends JFrame {
@@ -45,13 +48,21 @@ public class FrameCarrello extends JFrame {
         List<String[]> prodotti = ControllerCliente.getCarrelloBreve();
 
         if (prodotti == null || prodotti.isEmpty()) {
-            panelCarrello.add(new JLabel("Carrello vuoto"));
+            JLabel lblVuoto = new JLabel("Nessun prodotto nel catalogo al momento", SwingConstants.CENTER);
+            lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            lblVuoto.setForeground(Color.GRAY);
+            lblVuoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            panelCarrello.add(Box.createVerticalGlue());
+            panelCarrello.add(lblVuoto);
+            panelCarrello.add(Box.createVerticalGlue());
         } else {
             for (String[] p : prodotti) {
                 JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
+                panelProdotto.setBackground(Color.WHITE);
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createEmptyBorder(10, 10, 10, 10),
-                        BorderFactory.createEtchedBorder()
+                        BorderFactory.createLineBorder(new Color(220,220,220), 1, true),
+                        BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 ));
                 panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 
@@ -62,14 +73,18 @@ public class FrameCarrello extends JFrame {
                 String categoria = p[3];
                 String quantita = p[4];
 
-                String testoHtml = "<html><h3 style='margin:0;'>" + nome + " <span style='font-size:10px; color:gray'>(" + categoria + ")</span></h3>" +
-                        "<p style='margin:0;'><i>" + descrizione + "</i></p>" +
-                        "<p style='margin:0; margin-top:5px;'>Prezzo: <b>" + prezzo + " €</b> | Quantità nel carrello: <b>" + quantita + "</b></p></html>";
+                String testoHtml = "<html><div style='width: 350px; font-family: Segoe UI;'>" +
+                        "<h3 style='margin:0; color:#2c3e50;'>" + nome + " <span style='font-size:10px; color:#bdc3c7'>(" + categoria + ")</span></h3>" +
+                        "<p style='margin:4px 0 8px 0; color:#7f8c8d;'>" + descrizione + "</p>" +
+                        "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b></p>" +
+                        "</div></html>";
 
                 JLabel lblInfo = new JLabel(testoHtml);
                 JButton btnRimuovi = new JButton("Rimuovi dal carrello");
-                btnRimuovi.setBackground(Color.RED);
-                btnRimuovi.setForeground(Color.WHITE);
+                btnRimuovi.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnRimuovi.setBackground(new Color(230, 230, 230)); // Rosso
+                btnRimuovi.setForeground(new Color(192, 57, 43));
+                btnRimuovi.setFocusPainted(false);
 
                 //Action per la rimozione (btnRimuovi)
                 btnRimuovi.addActionListener(e -> {
@@ -79,6 +94,7 @@ public class FrameCarrello extends JFrame {
                         if (rimosso) {
                             JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
                             fillCarrello(); // Ricarica la grafica per far sparire il pannello
+                            scrollPane.getVerticalScrollBar().setUnitIncrement(16);
                         } else {
                             JOptionPane.showMessageDialog(this, "Errore nella rimozione.", "Errore", JOptionPane.ERROR_MESSAGE);
                         }
@@ -112,7 +128,12 @@ public class FrameCarrello extends JFrame {
     private void $$$setupUI$$$() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setBackground(new Color(-657931));
         final JLabel label1 = new JLabel();
+        label1.setBackground(new Color(-13877680));
+        Font label1Font = this.$$$getFont$$$("Segoe UI", Font.BOLD, 18, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setForeground(new Color(-13877680));
         label1.setText("Prodotti presenti nel carrello");
         contentPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
@@ -127,7 +148,30 @@ public class FrameCarrello extends JFrame {
     /**
      * @noinspection ALL
      */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
+    }
+
+    /**
+     * @noinspection ALL
+     */
     public JComponent $$$getRootComponent$$$() {
         return contentPanel;
     }
+
 }

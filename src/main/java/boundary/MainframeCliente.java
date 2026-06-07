@@ -33,6 +33,8 @@ public class MainframeCliente extends JFrame {
 
         fillCatalogo();
 
+        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
         VediCarrello.addActionListener(e -> {
             new FrameCarrello();
             setVisible(true);
@@ -53,7 +55,7 @@ public class MainframeCliente extends JFrame {
                     frameStoricoOrdini.setVisible(true);
 
 
-                }else{
+                } else {
 
                     frameStoricoOrdini.toFront();
                     frameStoricoOrdini.requestFocus();
@@ -69,29 +71,42 @@ public class MainframeCliente extends JFrame {
         //Chiama database con controller (restituisce lista di array di stringhe: [0]=Nome, [1]=Descrizione)
         List<String[]> prodotti = ControllerCliente.getCatalogoBreve();
 
-        if(prodotti==null || prodotti.isEmpty()){
-            CatalogoPane.add(new JLabel("Catalogo vuoto -- Riprova più tardi"));
-        }
-        else{
-            for(String[] p : prodotti){
-                JPanel panelProdotto = new JPanel(new BorderLayout(15,10));
+        if (prodotti == null || prodotti.isEmpty()) {
+            JLabel lblVuoto = new JLabel("Nessun prodotto nel catalogo al momento", SwingConstants.CENTER);
+            lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            lblVuoto.setForeground(Color.GRAY);
+            lblVuoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+            CatalogoPane.add(Box.createVerticalGlue());
+            CatalogoPane.add(lblVuoto);
+            CatalogoPane.add(Box.createVerticalGlue());
+        } else {
+            for (String[] p : prodotti) {
+                JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
+                panelProdotto.setBackground(Color.WHITE);
                 //Estetica
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createEmptyBorder(5,5,5,5),
-                        BorderFactory.createEtchedBorder()
+                        BorderFactory.createLineBorder(new Color(220,220,220), 1, true),
+                        BorderFactory.createEmptyBorder(12, 15, 12, 15)
                 ));
 
-                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE,80));
+                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
 
                 //I dati veri e propri spacchettati
                 String nomeProdotto = p[0];
                 String descrizioneProdotto = p[1];
-                String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
-                        "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
+                String testoHtml = "<html><div style='width: 350px;'>" +
+                        "<h3 style='margin:0; color:#2c3e50; font-family: Segoe UI;'>" + nomeProdotto + "</h3>" +
+                        "<p style='margin:4px 0 0 0; color:#7f8c8d; font-family: Segoe UI;'>" + descrizioneProdotto + "</p>" +
+                        "</div></html>";
 
                 //Scriviamo
                 JLabel lblInfo = new JLabel(testoHtml);
                 JButton btnInfo = new JButton("Altre info");
+                btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnInfo.setBackground(new Color(230, 230, 230)); // Azzurro moderno
+                btnInfo.setForeground(new Color(44,62,80));
+                btnInfo.setFocusPainted(false); // Toglie il brutto bordino di selezione
 
                 // Button
                 btnInfo.addActionListener(e -> {
@@ -138,6 +153,7 @@ public class MainframeCliente extends JFrame {
     private void $$$setupUI$$$() {
         contentPanel = new JPanel();
         contentPanel.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setBackground(new Color(-657931));
         VediCarrello = new JButton();
         VediCarrello.setText("Visualizzazione carrello");
         contentPanel.add(VediCarrello, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

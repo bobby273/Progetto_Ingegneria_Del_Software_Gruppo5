@@ -36,22 +36,27 @@ public class Cliente extends Utente{
 
 
     //Metodi
-    void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        try{
-            Ordine ordine = new Ordine(this, "aspe",this.carrello);
-            float totale = ordine.calcolaTotale();
-            boolean pagamentoEffettuato = ordine.PagaOrdine(num_carta,CCV,meseScadenza,annoScadenza, ordine.getId(), totale);
-            if(pagamentoEffettuato) {
-                ordiniPersonali.add(ordine);
-                StoricoOrdini.getInstance().aggiungiOrdine(ordine);
-                //in questo modo, l'ordine appena instanziato verrà aggiunto automaticamente allo Storico
-            }else{
-                System.out.println("Pagamento non approvato");
-                Ordine.elimina(ordine);
-            }
-        } catch (ErroreDisponibilitaException e) {
-            throw new ErroreDisponibilitaException("Ordine non valido, non ti è stato addebitato nulla");
+    Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        Ordine ordine = new Ordine(this, indirizzo,this.carrello);
+        if(ordine.getProdottiContenuti().isEmpty()){
+            Ordine.elimina(ordine);
+            return null;
         }
+        float totale = ordine.calcolaTotale();
+        boolean pagamentoEffettuato = ordine.PagaOrdine(num_carta,CCV,meseScadenza,annoScadenza, ordine.getId(), totale);
+        if(pagamentoEffettuato) {
+            ordiniPersonali.add(ordine);
+            StoricoOrdini.getInstance().aggiungiOrdine(ordine);
+            //in questo modo, l'ordine appena instanziato verrà aggiunto automaticamente allo Storico
+
+            for(OrdineContiene c : ordine.getProdottiContenuti()){
+                Catalogo.getInstance().modificaQuantita(c.getProdotto().getNome(),(c.getProdotto().getQtaDisponibile() - c.getQuantita()));
+            }
+        }else{
+            System.out.println("Pagamento non approvato");
+            Ordine.elimina(ordine);
+        }
+        return ordine;
     }
 
 
