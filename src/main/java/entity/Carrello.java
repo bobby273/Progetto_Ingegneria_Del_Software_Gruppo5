@@ -12,7 +12,7 @@ public class Carrello {
      private final String mailUtente; //Id di utente è la sua mail (univoco)
 
      @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-     private ArrayList<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
+     private List<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
      //CarrelloContiene = RigaCarrello {quantità + prodotto}
 
      //Costruttori
@@ -50,7 +50,7 @@ public class Carrello {
         return mailUtente;
      }
 
-     public ArrayList<CarrelloContiene> getProdottiContenuti() {
+     public List<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
      }
      public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {

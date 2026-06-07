@@ -1,8 +1,8 @@
 package entity;
 
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
+@Entity
 public class OrdineContiene {
     @Id
     private String ordine_id;
