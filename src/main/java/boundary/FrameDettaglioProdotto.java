@@ -3,6 +3,7 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import controller.ControllerCliente;
 
 import javax.swing.*;
 import java.awt.*;
@@ -55,26 +56,33 @@ public class FrameDettaglioProdotto extends JFrame {
 
             if (qtaDesiderata > 0) {
                 //Quantità inserita valida; si procede al controller
-                //boolean esito = //TODO: metodo controller apposito
+                esito = ControllerCliente.AggiungiAlCarrello(nomeProdotto, qtaDesiderata);
 
+                if(esito){
+                    //tutto ok, aggiorna la visualizzazione del carrello
+                    lblEsito.setText("Aggiunto al carrello!");
+                    spinnerQtaDesiderataProdotto.setValue(0);
+                    lblEsito.setForeground(Color.GREEN);
+                    lblEsito.setVisible(true);
 
-                lblEsito.setText("Aggiunto al carrello!");
-                spinnerQtaDesiderataProdotto.setValue(0);
-                lblEsito.setForeground(Color.GREEN);
-                lblEsito.setVisible(true);
-
-                JOptionPane.showMessageDialog(
-                        null,
-                        "Prodotto ok",
-                        "Conferma aggiunta al carrello",
-                        JOptionPane.INFORMATION_MESSAGE
-                );
-                esito=true;
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Prodotto ok",
+                            "Conferma aggiunta al carrello",
+                            JOptionPane.INFORMATION_MESSAGE
+                    );
+                }
+                else{
+                    JOptionPane.showMessageDialog(
+                            null,
+                            "Errore! Condizioni verificate, ma qualcosa è andato storto!",
+                            "Errore aggiunta al carrello",
+                            JOptionPane.ERROR_MESSAGE
+                    );
+                }
 
             } else {
                 //Quantità inserita non valida
-
-
                 lblEsito.setText("ERRORE! Quantità inserita non valida!");
                 lblEsito.setForeground(Color.RED);
                 spinnerQtaDesiderataProdotto.setValue(0);
@@ -87,6 +95,13 @@ public class FrameDettaglioProdotto extends JFrame {
                         JOptionPane.ERROR_MESSAGE
                 );
             }
+        }
+        else{
+            //prodotto non presente nel catalogo
+            lblEsito.setText("ERRORE! Prodotto non presente nel catalogo o non valido!");
+            lblEsito.setForeground(Color.RED);
+            spinnerQtaDesiderataProdotto.setValue(0);
+            lblEsito.setVisible(true);
         }
         return esito;
     }

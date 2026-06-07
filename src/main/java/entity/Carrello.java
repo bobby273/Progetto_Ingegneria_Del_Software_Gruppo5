@@ -7,23 +7,27 @@ import jakarta.persistence.*;
  @Entity
 public class Carrello {
 
+     //Attributi
      @Id
-     private final String mailUtente;
+     private final String mailUtente; //Id di utente è la sua mail (univoco)
 
      @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
      private ArrayList<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
      //CarrelloContiene = RigaCarrello {quantità + prodotto}
 
+     //Costruttori
      public Carrello(String mailUtente) {
         this.mailUtente = mailUtente;
         this.prodottiContenuti = new ArrayList<>();
      }
 
+     //un carrello senza utente non esiste, dà errore se non lo si mette ma non ha logico senso????????
      public Carrello() {
          this.mailUtente = null;
          this.prodottiContenuti = new ArrayList<>();
      }
 
+     //Metodi
      public void aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
          for(CarrelloContiene riga : prodottiContenuti) {
              if(riga.getProdotto().getNome().equals(prodotto.getNome())){ //Se trovo il prodotto nel carrello
@@ -43,8 +47,8 @@ public class Carrello {
 
      public ArrayList<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
-    }
-    public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
+     }
+     public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
         this.prodottiContenuti = prodottiContenuti;
     }
 }
