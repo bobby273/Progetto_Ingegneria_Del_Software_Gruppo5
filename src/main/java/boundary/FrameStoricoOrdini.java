@@ -58,7 +58,11 @@ public class FrameStoricoOrdini extends JFrame {
     }
 
     private void mostraDettagliOrdine(Ordine ordineSelezionato){
-        setTitle("Aspetto per farlo");
+        FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, ordineSelezionato);
+        //passiamo controller (di tipo cliente) in quanto questo metodo è riservato puramente al frameCliente
+        frameDettaglio.setLocationRelativeTo(this);
+        frameDettaglio.setVisible(true);
+
     }
 
 
