@@ -25,7 +25,6 @@ public class MainframeCliente extends JFrame {
     private ControllerCliente controllerCliente;
 
     private String emailUtente = "";
-    public static final int AMMINISTRATORE=7;
     public static final int CLIENTE=8;
 
     public MainframeCliente(String emailUtente) {

@@ -21,7 +21,6 @@ public class MainframeAmministratore extends JFrame {
     private JPanel CatalogoPane;
     private String emailUtente = "";
     public static final int AMMINISTRATORE=7;
-    public static final int CLIENTE=8;
 
 
     public MainframeAmministratore(String emailUtente) {
