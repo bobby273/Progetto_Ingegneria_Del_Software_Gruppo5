@@ -2,12 +2,13 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
+import controller.ControllerCliente;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.util.List;
 
 
 public class MainframeAmministratore extends JFrame {
@@ -19,6 +20,7 @@ public class MainframeAmministratore extends JFrame {
     private JButton creaProdottoButton;
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
+    private ControllerAmministratore controllerAmministratore;
 
     public MainframeAmministratore() {
         setTitle("Benvenuto amministratore");
@@ -30,6 +32,10 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
         String messaggioDlc = "Buy the DLC, you broke ass!";
+
+        if (this.controllerAmministratore == null) {
+            this.controllerAmministratore = new ControllerAmministratore();
+        }
 
         visualizzaDettaglioOrdineButton.addActionListener(e ->
                 JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
@@ -43,9 +49,16 @@ public class MainframeAmministratore extends JFrame {
                 JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
         );
 
-        cercaProdottoButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-        );
+        cercaProdottoButton.addActionListener(e -> {
+            System.out.println("Tasto ricerca Admin cliccato! Tento l'apertura...");
+            try {
+                // Chiama il metodo statico per Admin, passandogli il controller e la callback
+                FrameRicercaProdotti.apri_form_ricerca_admin(controllerAmministratore, risultati -> mostraRisultatiRicerca(risultati));
+            } catch (Exception ex) {
+                System.out.println("Errore apertura ricerca Admin:");
+                ex.printStackTrace();
+            }
+        });
 
         creaProdottoButton.addActionListener(e -> {
             FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
@@ -179,6 +192,52 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.repaint();
     }
 
+
+    //metodo per mostrare i risultati della ricerca
+    public void mostraRisultatiRicerca(List<String[]> prodottiFiltrati) {
+        CatalogoPane.removeAll();
+        if (prodottiFiltrati == null || prodottiFiltrati.isEmpty()) {
+            JLabel lblVuoto = new JLabel("Nessun prodotto trovato per i criteri inseriti.", SwingConstants.CENTER);
+            lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            lblVuoto.setForeground(Color.GRAY);
+            lblVuoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+            CatalogoPane.add(Box.createVerticalGlue());
+            CatalogoPane.add(lblVuoto);
+            CatalogoPane.add(Box.createVerticalGlue());
+        } else {
+            for (String[] p : prodottiFiltrati) {
+                JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
+                panelProdotto.setBackground(Color.WHITE);
+                // Estetica
+                panelProdotto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
+                        BorderFactory.createEmptyBorder(12, 15, 12, 15)
+                ));
+                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+                String nomeProdotto = p[0];
+                String descrizioneProdotto = p[1];
+                String testoHtml = "<html><div style='width: 350px;'>" +
+                        "<h3 style='margin:0; color:#2c3e50; font-family: Segoe UI;'>" + nomeProdotto + "</h3>" +
+                        "<p style='margin:4px 0 0 0; color:#7f8c8d; font-family: Segoe UI;'>" + descrizioneProdotto + "</p>" +
+                        "</div></html>";
+                JLabel lblInfo = new JLabel(testoHtml);
+                JButton btnInfo = new JButton("Altre info");
+                btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+                btnInfo.setBackground(new Color(230, 230, 230));
+                btnInfo.setForeground(new Color(44, 62, 80));
+                btnInfo.setFocusPainted(false);
+                btnInfo.addActionListener(e -> {
+                    ControllerCliente.apriDettaglioProdotto(nomeProdotto);
+                });
+                panelProdotto.add(lblInfo, BorderLayout.CENTER);
+                panelProdotto.add(btnInfo, BorderLayout.EAST);
+                CatalogoPane.add(panelProdotto);
+                CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
+        }
+        CatalogoPane.revalidate();
+        CatalogoPane.repaint();
+    }
 
     public JFrame apriUIAmm() {
         try {
