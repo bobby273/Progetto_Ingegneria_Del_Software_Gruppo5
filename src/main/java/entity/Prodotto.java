@@ -86,4 +86,8 @@ public class Prodotto {
     public float getPrezzo() {
         return prezzo;
     }
+
+    public boolean IsScontato() {
+        return isScontato;
+    }
 }

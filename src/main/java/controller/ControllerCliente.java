@@ -3,6 +3,9 @@ package controller;
 //import StubPagamento.InterfacciaPagamento;
 import entity.ClientFacade; //per comunicare con livello entity
 import entity.Cliente;
+import entity.Prodotto;
+
+import java.util.List;
 
 public class ControllerCliente {
 
@@ -29,6 +32,11 @@ public class ControllerCliente {
 
     public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
         clientFacade.creaOrdine(cliente, indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    }
+
+    //Per accedere all'intero catalogo --> facade
+    public static List<Prodotto> getTuttiIProdotti(){
+        return clientFacade.getTuttiIProdotti();
     }
 
 

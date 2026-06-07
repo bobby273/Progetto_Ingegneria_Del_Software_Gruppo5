@@ -2,6 +2,8 @@ package entity;
 
 //import StubPagamento.InterfacciaPagamento;
 import database.GestorePersistenza;
+
+import java.util.List;
 import java.util.Map;
 
 import java.util.Map;
@@ -43,6 +45,11 @@ public class ClientFacade {
         }
         return false;
 
+    }
+
+    //metodo per accedere al catalogo (visualizza tutti i prodotti)
+    public List<Prodotto> getTuttiIProdotti(){
+        return Catalogo.getInstance().getTuttiIProdotti();
     }
 }
 
