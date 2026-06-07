@@ -10,14 +10,14 @@ import java.util.Map;
 public class AdminFacade {
 
     private final GestorePersistenza gp = new GestorePersistenza();
-    private String amministratore_badge;
+    private String mailAmministratore;
 
-    public AdminFacade(String badge_admin){
-        this.amministratore_badge = badge_admin;
+    public AdminFacade(String mailUser){
+        this.mailAmministratore = mailUser;
     }
 
     public boolean annullaOrdine(String id_ordine){
-        Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("badge", amministratore_badge));
+        Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
         boolean annullato = amministratore.annullaOrdine(id_ordine);
         Ordine aggiorna=null;
         if(annullato){
@@ -90,7 +90,7 @@ public class AdminFacade {
     }
 
     //proviamo a filtrare direttamente nella AdminFacade.
-    public List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
+    public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
         List<Prodotto> prodottiTrovati;
 
         if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {

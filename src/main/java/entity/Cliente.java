@@ -1,6 +1,5 @@
 package entity;
 
-import Exceptions.ErroreDisponibilitaException;
 //import StubPagamento.InterfacciaPagamento;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
@@ -54,6 +53,9 @@ public class Cliente extends Utente{
             }
         }else{
             System.out.println("Pagamento non approvato");
+            for(OrdineContiene c : ordine.getProdottiContenuti()){
+                carrello.aggiungiOAggiornaProdotto(c.getProdotto(),c.getQuantita());
+            }
             Ordine.elimina(ordine);
         }
         return ordine;

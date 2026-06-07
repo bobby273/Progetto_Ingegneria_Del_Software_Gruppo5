@@ -15,7 +15,11 @@ public class ControllerAmministratore {
     private static final String badge = "123456";
     private GestorePersistenza gp;
     //Attributi
-    private static AdminFacade adminFacade = new AdminFacade(badge);
+    private static AdminFacade adminFacade;
+
+    public ControllerAmministratore(String mailUtente) {
+        this.adminFacade = new AdminFacade(mailUtente);
+    }
 
     public boolean annullaOrdine(String id_ordine) {
         return adminFacade.annullaOrdine(id_ordine);
@@ -64,7 +68,7 @@ public class ControllerAmministratore {
 
     //metodo per ricevere i dati dalla client Facade e passarli alla GUI frameRicercaProdotto
     public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return adminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        return AdminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
 
 

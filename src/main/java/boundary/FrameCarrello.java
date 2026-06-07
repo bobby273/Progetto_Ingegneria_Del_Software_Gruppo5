@@ -19,7 +19,7 @@ public class FrameCarrello extends JFrame {
     private JScrollPane scrollPane;
     private JPanel panelCarrello;
 
-    public FrameCarrello() {
+    public FrameCarrello(String emailUtente) {
         //design
         setTitle("Il tuo carrello");
         setContentPane(contentPanel);
@@ -31,18 +31,19 @@ public class FrameCarrello extends JFrame {
         panelCarrello.setLayout(new BoxLayout(panelCarrello, BoxLayout.Y_AXIS));
 
         //Riempimento
-        fillCarrello();
+        fillCarrello(emailUtente);
         setVisible(true);
 
     }
 
-    /*//Per testare se la schermata va
+    /*
+    //Per testare se la schermata va
     public static void main(String[] args) {
-        new FrameCarrello();
+        new FrameCarrello("r.giove@gmail.com");
     }
-    */
+*/
 
-    private void fillCarrello() {
+    private void fillCarrello(String emailUtente) {
         panelCarrello.removeAll();
 
         List<String[]> prodotti = ControllerCliente.getCarrelloBreve();
@@ -93,7 +94,7 @@ public class FrameCarrello extends JFrame {
                         boolean rimosso = ControllerCliente.rimuoviProdottoDalCarrello(nome);
                         if (rimosso) {
                             JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
-                            fillCarrello(); // Ricarica la grafica per far sparire il pannello
+                            fillCarrello(emailUtente); // Ricarica la grafica per far sparire il pannello
                             scrollPane.getVerticalScrollBar().setUnitIncrement(16);
                         } else {
                             JOptionPane.showMessageDialog(this, "Errore nella rimozione.", "Errore", JOptionPane.ERROR_MESSAGE);
@@ -106,6 +107,24 @@ public class FrameCarrello extends JFrame {
                 panelCarrello.add(panelProdotto);
                 panelCarrello.add(Box.createRigidArea(new Dimension(0, 10)));
             }
+
+            JButton btnProcediOrdine = new JButton("Procedi all'ordine");
+            btnProcediOrdine.setAlignmentX(Component.CENTER_ALIGNMENT);
+            btnProcediOrdine.setFont(new Font("Segoe UI", Font.BOLD, 14));
+            btnProcediOrdine.setBackground(new Color(41, 128, 185)); // Blu
+            btnProcediOrdine.setForeground(Color.WHITE);
+            btnProcediOrdine.setFocusPainted(false);
+            btnProcediOrdine.setCursor(new Cursor(Cursor.HAND_CURSOR));
+            btnProcediOrdine.setMaximumSize(new Dimension(250, 40));
+
+            btnProcediOrdine.addActionListener(e -> {
+                // Apre il frame per completare l'ordine
+                new FrameCreaOrdine(emailUtente);
+            });
+
+            panelCarrello.add(Box.createRigidArea(new Dimension(0, 20))); // Spazio sopra
+            panelCarrello.add(btnProcediOrdine);
+            panelCarrello.add(Box.createRigidArea(new Dimension(0, 20))); // Spazio sotto
         }
         panelCarrello.revalidate();
         panelCarrello.repaint();

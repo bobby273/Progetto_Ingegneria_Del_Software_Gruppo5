@@ -12,18 +12,19 @@ public class ClientFacade {
 
     //Attributi
     private final GestorePersistenza gp = new GestorePersistenza();
-    private Cliente cliente; //TODO: Va rimosso
+    private String mailUtente;
 
 
     //Costruttori
-    public ClientFacade(String mailUtente){ //TODO: Va rimosso
-        cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+    public ClientFacade(String mailUtente){
+        this.mailUtente=mailUtente;
     }
 
     public ClientFacade(){}
 
     //Metodi
     public boolean annullaOrdine(String id_ordine) {
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
         boolean annullato = cliente.annullaOrdine(id_ordine);
         Ordine aggiorna=null;
         if(annullato){
@@ -34,6 +35,7 @@ public class ClientFacade {
     }
 
     public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
         Ordine o = cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
         gp.salva(o);
         return o==null;
