@@ -5,6 +5,7 @@ import entity.ClientFacade; //per comunicare con livello entity
 import entity.Cliente;
 import entity.Prodotto;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerCliente {
@@ -39,5 +40,37 @@ public class ControllerCliente {
         return clientFacade.getTuttiIProdotti();
     }
 
+    //Spacchettamento e impacchettamento per evitare che Boundary debba importare Prodotto
+    public static List<String[]> getCatalogoBreve() {
+        List<Prodotto> prodotti = clientFacade.getTuttiIProdotti();
+        List<String[]> catalogoBreve = new ArrayList<>();
 
+        if (prodotti != null) {
+            for (Prodotto p : prodotti) {
+                catalogoBreve.add(new String[]{p.getNome(), p.getDescrizione()});
+            }
+        }
+        return catalogoBreve;
+    }
+
+    public static void apriDettaglioProdotto(String nomeProdotto) {
+        Prodotto p = clientFacade.ricercaProdotto(nomeProdotto);
+
+        if (p != null) {
+            new boundary.FrameDettaglioProdotto(
+                    p.getNome(),
+                    p.getPrezzo(),
+                    p.getCategoria(),
+                    p.getQtaDisponibile(),
+                    p.IsScontato(),
+                    p.getDescrizione()
+            );
+        }
+    }
+
+    // Metodo per far verificare alla Boundary se un prodotto esiste (permettere stampa di mess errore apposito [testing])
+    public static boolean esisteProdotto(String nomeProdotto) {
+        // Verifico mediante metodo Facade
+        return clientFacade.ricercaProdotto(nomeProdotto) != null;
+    }
 }

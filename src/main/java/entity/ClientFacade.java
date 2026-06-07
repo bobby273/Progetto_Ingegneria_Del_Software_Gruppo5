@@ -51,5 +51,9 @@ public class ClientFacade {
     public List<Prodotto> getTuttiIProdotti(){
         return Catalogo.getInstance().getTuttiIProdotti();
     }
+
+    public Prodotto ricercaProdotto(String nomeProdotto) {
+        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+    }
 }
 

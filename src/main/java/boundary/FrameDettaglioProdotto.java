@@ -9,7 +9,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import entity.Prodotto;
 
 public class FrameDettaglioProdotto extends JFrame {
 
@@ -25,15 +24,15 @@ public class FrameDettaglioProdotto extends JFrame {
     private JLabel lblEsito;
 
     //costruttore per definire impostazioni finestra e invocare il metodo fillProdotto()
-    public FrameDettaglioProdotto(Prodotto prodottoSelezionato) {
+    public FrameDettaglioProdotto(String nome, float prezzo, String categoria, int qtaDisp, boolean isScontato, String descrizione) {
         lblEsito.setVisible(false);
-        setTitle("Visualizzazione prodotto: " + prodottoSelezionato.getNome());
+        setTitle("Visualizzazione prodotto: " + nome);
         setContentPane(panelProdotto);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(700, 500);
         setLocationRelativeTo(null);
 
-        fillProdotto(prodottoSelezionato);
+        fillProdotto(nome, prezzo, categoria, qtaDisp, isScontato, descrizione);
 
         setVisible(true);
 
@@ -51,25 +50,34 @@ public class FrameDettaglioProdotto extends JFrame {
         });
     }
 
-    private void fillProdotto(Prodotto prodottoSelezionato){
-        lblNomeProdotto.setText(prodottoSelezionato.getNome());
-        lblPrezzoProdotto.setText(String.valueOf(prodottoSelezionato.getPrezzo()) + " €");
-        lblCategoriaProdotto.setText(prodottoSelezionato.getCategoria());
-        lblQtaDispProdotto.setText(String.valueOf(prodottoSelezionato.getQtaDisponibile()));
+    private void fillProdotto(String nome, float prezzo, String categoria, int qtaDisp, boolean isScontato, String descrizione){
+        lblNomeProdotto.setText(nome);
+        lblPrezzoProdotto.setText(String.valueOf(prezzo) + " €");
+        lblCategoriaProdotto.setText(categoria);
+        lblQtaDispProdotto.setText(String.valueOf(qtaDisp));
 
-        if(prodottoSelezionato.IsScontato()){
+        if(isScontato){
             lblScontatoProdotto.setText("Sì");
         }
         else{
             lblScontatoProdotto.setText("No");
         }
-        txtAreaDescrizioneProdotto.setText(prodottoSelezionato.getDescrizione());
+        txtAreaDescrizioneProdotto.setText(descrizione);
 
     }
 
     private boolean checkInput(String nomeProdotto, int qtaDesiderata){
         boolean esito = false;
-        if(!nomeProdotto.isEmpty() && nomeProdotto.length() < 1000){//TODO: Nome non presente in catalogo
+        if(!nomeProdotto.isEmpty() && nomeProdotto.length() < 1000){
+
+            if(!ControllerCliente.esisteProdotto(nomeProdotto)){
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Errore! Non presente nel catalogo!",
+                        "Errore aggiunta al carrello",
+                        JOptionPane.ERROR_MESSAGE);
+                return false; // Interrompiamo tutto subito
+            }
 
             if (qtaDesiderata > 0) {
                 //Quantità inserita valida; si procede al controller

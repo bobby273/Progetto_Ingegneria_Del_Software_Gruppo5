@@ -155,6 +155,13 @@ public class FrameCreaProdotto extends JFrame {
             if (successo) {
                 JOptionPane.showMessageDialog(this, "Prodotto salvato con successo!");
                 this.dispose();
+            } else {
+                // Caso 2: Fallimento (Chiave primaria duplicata rilevata da Hibernate)
+                JOptionPane.showMessageDialog(this,
+                        "Errore: Impossibile creare il prodotto.\nUn articolo con il nome '" + nome + "' è già presente nel catalogo!",
+                        "Errore Duplicato",
+                        JOptionPane.ERROR_MESSAGE);
+                // NON facciamo la dispose(), così l'admin può correggere il nome senza perdere gli altri dati già scritti
             }
         });
     }
