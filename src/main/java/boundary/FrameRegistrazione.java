@@ -27,6 +27,8 @@ public class FrameRegistrazione {
     private JLabel indSpedLabel;
     private JLabel profImgTxt;
 
+    private JFrame FrameAccesso;
+
     public FrameRegistrazione() {
         checkBoxAdmin.setSelected(false);
         textFieldBadge.setVisible(false);
@@ -63,10 +65,36 @@ public class FrameRegistrazione {
                                                 }
                                                 if (esito == ControllerAccesso.AMM_CREATO) {
                                                     labelEsito.setText("Amministratore registrato con successo.");
+                                                    if (FrameAccesso == null || !FrameAccesso.isDisplayable()) {
+                                                        FrameAccesso formacc = new FrameAccesso();
+                                                        FrameAccesso = formacc.apriFormAcc();
+                                                        FrameAccesso.setLocationRelativeTo(null);
+                                                        FrameAccesso.setVisible(true);
+                                                    } else {
+                                                        FrameAccesso.toFront();
+                                                        FrameAccesso.requestFocus();
+                                                    }
+                                                    java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(registrazionePane);
+                                                    if (finestraAttuale != null) {
+                                                        finestraAttuale.dispose();
+                                                    }
                                                 } else if (esito == ControllerAccesso.AMM_EXS) {
                                                     labelEsito.setText("Amministratore gia' registrato con queste credenziali.");
                                                 } else if (esito == ControllerAccesso.CLIE_CREATO) {
                                                     labelEsito.setText("Cliente registrato con successo.");
+                                                    if (FrameAccesso == null || !FrameAccesso.isDisplayable()) {
+                                                        FrameAccesso formacc = new FrameAccesso();
+                                                        FrameAccesso = formacc.apriFormAcc();
+                                                        FrameAccesso.setLocationRelativeTo(null);
+                                                        FrameAccesso.setVisible(true);
+                                                    } else {
+                                                        FrameAccesso.toFront();
+                                                        FrameAccesso.requestFocus();
+                                                    }
+                                                    java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(registrazionePane);
+                                                    if (finestraAttuale != null) {
+                                                        finestraAttuale.dispose();
+                                                    }
                                                 } else if (esito == ControllerAccesso.CLIE_EXS) {
                                                     labelEsito.setText("Cliente gia' registrato con queste credenziali.");
                                                 } else {

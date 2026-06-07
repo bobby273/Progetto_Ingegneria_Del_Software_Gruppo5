@@ -180,14 +180,14 @@ public class MainframeAmministratore extends JFrame {
     }
 
 
-    public static void main(String[] args) {
+    public JFrame apriUIAmm() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        new MainframeAmministratore();
+        return new MainframeAmministratore();
     }
 
     {

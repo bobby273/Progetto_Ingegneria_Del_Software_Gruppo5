@@ -37,8 +37,9 @@ public class MainframeAccesso {
         AccessoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                JFrame frameMain = (JFrame) SwingUtilities.getWindowAncestor(MainPanel);
                 if (FrameAccesso == null || !FrameAccesso.isDisplayable()) {
-                    FrameAccesso formacc = new FrameAccesso();
+                    FrameAccesso formacc = new FrameAccesso(frameMain);
                     FrameAccesso = formacc.apriFormAcc();
                     FrameAccesso.setLocationRelativeTo(null);
                     FrameAccesso.setVisible(true);
@@ -59,6 +60,11 @@ public class MainframeAccesso {
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     {
