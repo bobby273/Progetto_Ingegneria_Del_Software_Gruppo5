@@ -2,9 +2,13 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
+import controller.ControllerCliente;
+import entity.Prodotto;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import java.awt.*;
+import java.util.List;
 
 public class MainframeCliente extends JFrame {
     private JPanel contentPanel;
@@ -35,7 +39,7 @@ public class MainframeCliente extends JFrame {
         //TODO: Sto simulando stub, qua ci andrà la lista vera
         //TODO: Va aggiunta la gestione di catalogo vuoto!
         //visualizzazione dei prodotti
-        for (int i = 0; i < 20; i++) {
+        /*for (int i = 0; i < 20; i++) {
             JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
             panelProdotto.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createEmptyBorder(5, 5, 5, 5),
@@ -60,6 +64,46 @@ public class MainframeCliente extends JFrame {
 
             CatalogoPane.add(panelProdotto);
             CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+        }*/
+
+        //Chiama database con controller
+        List<Prodotto> prodotti = ControllerCliente.getTuttiIProdotti();
+
+        if(prodotti==null || prodotti.isEmpty()){
+            CatalogoPane.add(new JLabel("Catalogo vuoto -- Riprova più tardi"));
+        }
+        else{
+            for(Prodotto p : prodotti){
+                JPanel panelProdotto = new JPanel(new BorderLayout(15,10));
+                //Estetica
+                panelProdotto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(5,5,5,5),
+                        BorderFactory.createEtchedBorder()
+                ));
+
+                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE,80));
+
+                //I dati veri e propri
+                String nomeProdotto = p.getNome();
+                String descrizioneProdotto = p.getDescrizione();
+                String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
+                        "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
+
+                //Scriviamo
+                JLabel lblInfo = new JLabel(testoHtml);
+                JButton btnInfo = new JButton("Altre info");
+
+                // Button
+                btnInfo.addActionListener(e -> {
+                    new FrameDettaglioProdotto(p); //Chiamata a FrameDettaglioPrdotto
+                });
+
+                panelProdotto.add(lblInfo, BorderLayout.CENTER);
+                panelProdotto.add(btnInfo, BorderLayout.EAST);
+
+                CatalogoPane.add(panelProdotto);
+                CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
         }
 
         CatalogoPane.revalidate();
