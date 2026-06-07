@@ -2,6 +2,7 @@ package entity;
 
 import Exceptions.ErroreDisponibilitaException;
 //import StubPagamento.InterfacciaPagamento;
+import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -60,8 +61,8 @@ public class Cliente extends Utente{
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
         ordine.setStato(Stato.ANNULLATO);
-        //InterfacciaPagamento.RimborsaOrdine(ordine);
-        //invio notifiche
+        InterfacciaPagamento.RimborsaOrdine(ordine);
+        StoricoOrdini.getInstance().inviaNotifiche();
         return true;
     }
 

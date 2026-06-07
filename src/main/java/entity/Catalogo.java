@@ -4,6 +4,7 @@ import database.GestorePersistenza;
 import database.JpaUtil;
 import jakarta.persistence.EntityManager;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -153,4 +154,19 @@ public class Catalogo {
         return gp.salva(nuovoProdotto);
     }
 
+
+    public List<Prodotto> ricercaProdotto(String campoDiRicerca, String testoDigitato) {
+
+        GestorePersistenza gestore = new GestorePersistenza();
+        final List<String> CAMPI_RICERCA_AMMESSI = Arrays.asList("nome", "categoria", "descrizione");
+
+        // 1. Controllo di sicurezza per evitare che utenti da terminale possano cercare su campi non ammessi.
+        if (!CAMPI_RICERCA_AMMESSI.contains(campoDiRicerca)) {
+            // Se il campo non è tra quelli ammessi, lanciamo un'eccezione o restituiamo null/lista vuota
+            throw new IllegalArgumentException("Campo di ricerca non valido: " + campoDiRicerca);
+        }
+
+        // 2. Se è tutto ok, deleghiamo al gestore del prof
+        return gestore.cercaPerCampo(Prodotto.class, campoDiRicerca, testoDigitato);
+    }
 }

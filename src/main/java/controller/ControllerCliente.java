@@ -27,8 +27,8 @@ public class ControllerCliente {
 
     }
 
-    public boolean annullaOrdine(Cliente cliente, String id_ordine){
-        return clientFacade.annullaOrdine(cliente, id_ordine);
+    public boolean richiediannullamentoOrdine(String id_ordine){
+        return clientFacade.annullaOrdine (id_ordine);
     }
 
     public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
