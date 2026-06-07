@@ -5,17 +5,17 @@ import entity.ClientFacade; //per comunicare con livello entity
 import entity.Cliente;
 import entity.Prodotto;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerCliente {
 
-    //Attributi
-    private static ClientFacade clientFacade = new ClientFacade();
-
     //TODO: simulo la mail di cliente attuale
     private static final String MAIL_CLIENTE = "fornataro.ma@gmail.com";
 
+    //Attributi
+    private static ClientFacade clientFacade = new ClientFacade(MAIL_CLIENTE);
 
     //Metodi esposti
     public static boolean AggiungiAlCarrello(String NomeProdotto, int qtaDesiderata){
@@ -23,16 +23,16 @@ public class ControllerCliente {
 
         System.out.println("Eseguendo UC: AggiungiProdottoAlCarrello per "+ MAIL_CLIENTE);
         //Metodo controller richiamato dal boundary FrameDettaglioProdotto
-        return clientFacade.aggiungiOAggiornaProdottoACarrello(MAIL_CLIENTE, NomeProdotto, qtaDesiderata);
+        return clientFacade.aggiungiOAggiornaProdottoACarrello(NomeProdotto, qtaDesiderata);
 
     }
 
-    public boolean richiediannullamentoOrdine(String id_ordine){
-        return clientFacade.annullaOrdine (id_ordine);
+    public boolean annullaOrdine(String id_ordine){
+        return clientFacade.annullaOrdine(id_ordine);
     }
 
     public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        clientFacade.creaOrdine(cliente, indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+        clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
     }
 
     //Per accedere all'intero catalogo --> facade
@@ -82,4 +82,31 @@ public class ControllerCliente {
         // Deleghiamo il lavoro alla Facade
         return clientFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
+
+
+    public String getStato(String id_ordine){
+        return clientFacade.getStato(id_ordine);
+    }
+
+    public float getTotale(String id_ordine){
+        return clientFacade.getTotale(id_ordine);
+    }
+
+    public LocalDateTime getDataConferma(String id_ordine){
+        return clientFacade.getDataConferma(id_ordine);
+    }
+
+    public String getIndirizzoSpedizione(String id_ordine){
+        return clientFacade.getIndirizzoSpedizione(id_ordine);
+    }
+
+    public ArrayList<String> getProdottiEQuantita(String id_ordine){
+        return clientFacade.getProdottoEQuantita(id_ordine);
+    }
+
+    public Long getIdCliente(String id_ordine){
+        return clientFacade.getIdClienteDaIdOrdine(id_ordine);
+    }
+
+
 }

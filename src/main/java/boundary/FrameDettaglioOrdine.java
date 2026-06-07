@@ -4,13 +4,21 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
 import controller.ControllerCliente;
+import entity.Cliente;
 import entity.Ordine;
+import entity.OrdineContiene;
 import entity.Stato;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 //TODO: testare la funzionalità
 
@@ -32,22 +40,38 @@ public class FrameDettaglioOrdine extends JFrame {
 
     private boolean isAmministratore; //sarà il nostro modo per riconoscere
     // se questa frame è stata aperta da FrameCliente o da FrameAmministratore
-    private Ordine ordineSelezionato;
+    private String id_ordineSelezionato;
+    private String stato;
+    private float totale;
+    private LocalDateTime dataConferma;
+    private String indirizzoSpedizione;
+    private ArrayList<String> ProdottiEQuantita;
+    private Long id_cliente;
 
     //costruttore della boundary
-    public FrameDettaglioOrdine(ControllerCliente controller, Ordine ordine) {
+    public FrameDettaglioOrdine(ControllerCliente controller, String id_ordine) {
         this.controllerCliente = controller;
         this.isAmministratore = false;
-        this.ordineSelezionato = ordine;
-
+        this.id_ordineSelezionato = id_ordine;
+        this.stato = controllerCliente.getStato(id_ordine);
+        this.totale = controllerCliente.getTotale(id_ordine);
+        this.dataConferma = controllerCliente.getDataConferma(id_ordine);
+        this.indirizzoSpedizione = controllerCliente.getIndirizzoSpedizione(id_ordine);
+        this.ProdottiEQuantita = controllerCliente.getProdottiEQuantita(id_ordine);
+        this.id_cliente= controllerCliente.getIdCliente(id_ordine);
         apriFrame();
     }
 
-    public FrameDettaglioOrdine(ControllerAmministratore controller, Ordine ordine) {
+    public FrameDettaglioOrdine(ControllerAmministratore controller, String id_ordine) {
         this.controllerAmministratore = controller;
         this.isAmministratore = true;
-        this.ordineSelezionato = ordine;
-
+        this.id_ordineSelezionato = id_ordine;
+        this.stato = controller.getStato(id_ordine);
+        this.totale = controller.getTotale(id_ordine);
+        this.dataConferma = controller.getDataConferma(id_ordine);
+        this.indirizzoSpedizione = controller.getIndirizzoSpedizione(id_ordine);
+        this.ProdottiEQuantita = controller.getProdottiEQuantita(id_ordine);
+        this.id_cliente= controller.getIdCliente(id_ordine);
         apriFrame();
     }
 
@@ -84,9 +108,9 @@ public class FrameDettaglioOrdine extends JFrame {
 
                     // CONTROLLO DEL RUOLO: Scegliamo a quale controller chiedere l'annullamento
                     if (isAmministratore) {
-                        successo = controllerAmministratore.richiediAnnullamentoOrdine(ordineSelezionato);
+                        successo = controllerAmministratore.annullaOrdine(id_ordineSelezionato);
                     } else {
-                        successo = controllerCliente.richiediAnnullamentoOrdine(ordineSelezionato);
+                        successo = controllerCliente.annullaOrdine(id_ordineSelezionato);
                     }
 
                     if (successo) {

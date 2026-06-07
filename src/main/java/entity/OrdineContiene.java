@@ -26,6 +26,7 @@ public class OrdineContiene {
     public int getQuantita() {
         return quantità;
     }
+
     public void setQuantita(int quantita) {
         this.quantità = quantita;
     }

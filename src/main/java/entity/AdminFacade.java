@@ -1,12 +1,23 @@
 package entity;
 
+import database.GestorePersistenza;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class AdminFacade {
 
-    public boolean annullaOrdine(Amministratore amministratore, String id_ordine){
-        return true ;
-        //amministratore.annullaOrdine(id_ordine); TODO:scommentare, il true è un placeholder
+    private final GestorePersistenza gp = new GestorePersistenza();
+    private Amministratore amministratore;
+
+    public AdminFacade(Long id_admin){
+        this.amministratore = gp.trovaPerId(Amministratore.class, id_admin);
+    }
+
+    public boolean annullaOrdine(String id_ordine){
+        return amministratore.annullaOrdine(id_ordine);
     }
 
     public static boolean creaProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
@@ -73,6 +84,43 @@ public class AdminFacade {
 
     public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
         return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    }
+
+    public Long getIdClienteDaIdOrdine(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        return o.getIdCliente();
+    }
+
+    public String getStato(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        return o.getStato().toString();
+    }
+
+    public float getTotale(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        return o.getTotale();
+    }
+
+    public LocalDateTime getDataConferma(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        return o.getDataConferma();
+    }
+
+    public String getIndirizzoSpedizione(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        return o.getIndirizzoSpedizione();
+    }
+
+    public ArrayList<String> getProdottoEQuantita(String id_ordine){
+        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+        ArrayList<OrdineContiene> pc=o.getProdottiContenuti();
+        ArrayList<String> prodotti = new  ArrayList<>();
+        for(OrdineContiene c:pc){
+            prodotti.add(c.getProdotto().getNome());
+            prodotti.add(String.valueOf(c.getQuantita()));
+        }
+
+        return prodotti;
     }
 
 }

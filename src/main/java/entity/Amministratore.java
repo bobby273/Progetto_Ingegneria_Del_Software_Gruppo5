@@ -29,8 +29,8 @@ public class Amministratore extends Utente{
         if(ordine.getStato()==Stato.CONSEGNATO
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
+        if(!InterfacciaPagamento.RimborsaOrdine(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
-        InterfacciaPagamento.RimborsaOrdine(ordine);
         StoricoOrdini.getInstance().inviaNotifiche();
         return true;
     }

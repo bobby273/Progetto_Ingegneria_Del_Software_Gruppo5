@@ -54,14 +54,18 @@ public class Cliente extends Utente{
         }
     }
 
+    Long getId(){
+        return id;
+    }
+
     boolean annullaOrdine(String id_ordine){
         Ordine ordine = cercaOrdine(id_ordine);
         if(ordine == null) return false;
         if(ordine.getStato()==Stato.CONSEGNATO
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
+        if(!InterfacciaPagamento.RimborsaOrdine(ordine))return false;
         ordine.setStato(Stato.ANNULLATO);
-        InterfacciaPagamento.RimborsaOrdine(ordine);
         StoricoOrdini.getInstance().inviaNotifiche();
         return true;
     }

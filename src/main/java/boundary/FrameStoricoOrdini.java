@@ -21,7 +21,7 @@ public class FrameStoricoOrdini extends JFrame {
 
     //variabili per la logica BCED
     private ControllerCliente controller;
-    private List<Ordine> listaOrdiniAttuali;
+    private List<String> lista_id_Ordini;
 
     //costruttore della boundary
     public FrameStoricoOrdini(ControllerCliente controller){
@@ -49,16 +49,16 @@ public class FrameStoricoOrdini extends JFrame {
                     int rigaSelezionata = tabellaOrdini.getSelectedRow();
 
                     if (rigaSelezionata != -1){
-                        Ordine ordineSelezionato = listaOrdiniAttuali.get(rigaSelezionata);
-                        mostraDettagliOrdine(ordineSelezionato);
+                        String id_ordineSelezionato = lista_id_Ordini.get(rigaSelezionata);
+                        mostraDettagliOrdine(id_ordineSelezionato);
                     }
                 }
             }
         });
     }
 
-    private void mostraDettagliOrdine(Ordine ordineSelezionato){
-        FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, ordineSelezionato);
+    private void mostraDettagliOrdine(String id_ordineSelezionato){
+        FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato);
         //passiamo controller (di tipo cliente) in quanto questo metodo è riservato puramente al frameCliente
         frameDettaglio.setLocationRelativeTo(this);
         frameDettaglio.setVisible(true);
