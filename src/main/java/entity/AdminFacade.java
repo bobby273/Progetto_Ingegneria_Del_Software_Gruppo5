@@ -10,14 +10,21 @@ import java.util.Map;
 public class AdminFacade {
 
     private final GestorePersistenza gp = new GestorePersistenza();
-    private Amministratore amministratore;
+    private String amministratore_badge;
 
-    public AdminFacade(Long id_admin){
-        this.amministratore = gp.trovaPerId(Amministratore.class, id_admin);
+    public AdminFacade(String badge_admin){
+        this.amministratore_badge = badge_admin;
     }
 
     public boolean annullaOrdine(String id_ordine){
-        return amministratore.annullaOrdine(id_ordine);
+        Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("badge", amministratore_badge));
+        boolean annullato = amministratore.annullaOrdine(id_ordine);
+        Ordine aggiorna=null;
+        if(annullato){
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            aggiorna = gp.aggiorna(o);
+        }
+        return (aggiorna !=null);
     }
 
     public static boolean creaProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {

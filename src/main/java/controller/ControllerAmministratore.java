@@ -12,10 +12,10 @@ import java.util.List;
 public class ControllerAmministratore {
 
     //TODO: SIMULO BADGE
-    private static final Long id_amministratore= java.lang.Long.valueOf(001);
+    private static final String badge = "123456";
     private GestorePersistenza gp;
     //Attributi
-    private static AdminFacade adminFacade = new AdminFacade(id_amministratore);
+    private static AdminFacade adminFacade = new AdminFacade(badge);
 
     public boolean annullaOrdine(String id_ordine) {
         return adminFacade.annullaOrdine(id_ordine);
