@@ -11,7 +11,7 @@ public class ControllerAmministratore {
     //Attributi
     private static AdminFacade adminFacade = new AdminFacade();
 
-    public boolean annullaOrdine(Amministratore amministratore, String id_ordine) {
+    public boolean richiediAnnullamentoOrdine(Amministratore amministratore, String id_ordine) {
         return adminFacade.annullaOrdine(amministratore, id_ordine);
     }
 
@@ -56,3 +56,4 @@ public class ControllerAmministratore {
         return AdminFacade.rimuoviProdotto(nomeProdotto);
     }
     }
+
