@@ -1,5 +1,6 @@
 package entity;
 
+import StubPagamento.InterfacciaPagamento;
 import database.GestorePersistenza;
 
 import java.util.Map;
@@ -9,12 +10,18 @@ public class ClientFacade {
     //Attributi
     private final GestorePersistenza gp = new GestorePersistenza();
 
-    public boolean annullaOrdine(Cliente cliente, Ordine ordine){
-        boolean done = cliente.annullaOrdine(ordine);
-        return false;
+    //Metodi
+
+    public boolean annullaOrdine(Cliente cliente, String id_ordine){
+        return cliente.annullaOrdine(id_ordine);
     }
 
-    //Metodi
+    public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    }
+
+
+    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
     public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 

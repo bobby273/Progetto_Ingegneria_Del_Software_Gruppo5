@@ -48,4 +48,7 @@ public class Prodotto {
     //Metodi
 
 
+    public float getPrezzo() {
+        return prezzo;
+    }
 }

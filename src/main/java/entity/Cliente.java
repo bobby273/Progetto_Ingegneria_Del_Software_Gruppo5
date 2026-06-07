@@ -1,10 +1,10 @@
 package entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import Exceptions.ErroreDisponibilitaException;
+import StubPagamento.InterfacciaPagamento;
+import jakarta.persistence.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -17,22 +17,61 @@ public class Cliente extends Utente{
     private byte immagineProfilo;
     private List<Ordine> ordiniPersonali;
 
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
+    private Carrello carrello;
+
+
     public Cliente(){}
 
     public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         super(email, nome, cognome, password);
         this.indirizzoSpedizione=indirizzoSpedizione;
+        this.ordiniPersonali=new ArrayList<Ordine>();
+        this.carrello = new Carrello(email);
     }
 
+    void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        try{
+            Ordine ordine = new Ordine(this, "aspe",this.carrello);
+            float totale = ordine.calcolaTotale();
+            boolean pagamentoEffettuato = ordine.PagaOrdine(num_carta,CCV,meseScadenza,annoScadenza, ordine.getId(), totale);
+            if(pagamentoEffettuato) {
+                ordiniPersonali.add(ordine);
+                StoricoOrdini.getInstance().aggiungiOrdine(ordine);
+                //in questo modo, l'ordine appena instanziato verrà aggiunto automaticamente allo Storico
+            }else{
+                System.out.println("Pagamento non approvato");
+                Ordine.elimina(ordine);
+            }
+        } catch (ErroreDisponibilitaException e) {
+            throw new ErroreDisponibilitaException("Ordine non valido, non ti è stato addebitato nulla");
+        }
+    }
 
-    boolean annullaOrdine(Ordine ordine){
+    boolean annullaOrdine(String id_ordine){
+        Ordine ordine = cercaOrdine(id_ordine);
         if(ordine == null) return false;
-        if(!ordiniPersonali.contains(ordine)) return false;
+        if(ordine.getStato()==Stato.CONSEGNATO
+                || ordine.getStato()==Stato.SPEDITO
+                || ordine.getStato()==Stato.ANNULLATO) return false;
         ordine.setStato(Stato.ANNULLATO);
+        InterfacciaPagamento.RimborsaOrdine(ordine);
+        //invio notifiche
         return true;
     }
 
-    public List<Ordine> visualizzaElencoOrdini() {
+    private Ordine cercaOrdine(String id_ordine){
+        Ordine cercato = null;
+        for(Ordine ordine : ordiniPersonali){
+            if(ordine.getId()==id_ordine) {
+                cercato = ordine;
+                break;
+            }
+        }
+        return cercato;
+    }
+
+    List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
         //successivamente, li passo ad ordiniPersonali, ovvero la lista visualizzabile dalla singola istanza di Cliente
@@ -52,7 +91,7 @@ public class Cliente extends Utente{
             System.out.println("Non hai ancora effettuato alcun ordine");
         } else {
             for (Ordine o: ordiniPersonali){
-                System.out.println("ID:"+o.id+"\t Costo totale:"+o.totale+ "\t Stato Ordine" +o.stato+"\n");
+                System.out.println("ID:"+o.getId()+"\t Costo totale:"+o.getTotale()+ "\t Stato Ordine" +o.getStato()+"\n");
                 //questa è la visualizzazione "ridotta" degli ordini: la visualizzazione di tutti gli attributi
                 //dell'ordine avviene quando l'utente clicca sullo specifico ordine e avvia quindi
                 // il metodo visualizzaInfoOrdine()
@@ -74,12 +113,12 @@ public class Cliente extends Utente{
         System.out.println("==================================================");
         System.out.println("             DETTAGLIO COMPLETO ORDINE            ");
         System.out.println("==================================================");
-        System.out.println("ID ORDINE:            " + ordineSelezionato.id);
-        System.out.println("TOTALE PAGATO:        €" + ordineSelezionato.totale);
-        System.out.println("OGGETTI ACQUISTATI" + ordineSelezionato.prodottiContenuti);
-        System.out.println("STATO ATTUALE:        " + ordineSelezionato.stato);
-        System.out.println("DATA CONFERMA:        " + ordineSelezionato.dataConferma);
-        System.out.println("INDIRIZZO SPEDIZIONE: " + ordineSelezionato.indirizzoSpedizione);
+        System.out.println("ID ORDINE:            " + ordineSelezionato.getId());
+        System.out.println("TOTALE PAGATO:        €" + ordineSelezionato.getTotale());
+        System.out.println("OGGETTI ACQUISTATI" + ordineSelezionato.getProdottiContenuti());
+        System.out.println("STATO ATTUALE:        " + ordineSelezionato.getStato());
+        System.out.println("DATA CONFERMA:        " + ordineSelezionato.getDataConferma());
+        System.out.println("INDIRIZZO SPEDIZIONE: " + ordineSelezionato.getIndirizzoSpedizione());
         System.out.println("==================================================");
 
     }

@@ -21,6 +21,7 @@ public class Carrello {
         this.prodottiContenuti = new ArrayList<>();
      }
 
+     //un carrello senza utente non esiste, dà errore se non lo si mette ma non ha logico senso????????
      public Carrello() {
          this.mailUtente = null;
          this.prodottiContenuti = new ArrayList<>();

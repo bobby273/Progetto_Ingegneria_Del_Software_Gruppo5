@@ -1,6 +1,8 @@
 package controller;
 
+import StubPagamento.InterfacciaPagamento;
 import entity.ClientFacade; //per comunicare con livello entity
+import entity.Cliente;
 
 public class ControllerCliente {
 
@@ -20,4 +22,14 @@ public class ControllerCliente {
         return clientFacade.aggiungiOAggiornaProdottoACarrello(MAIL_CLIENTE, NomeProdotto, qtaDesiderata);
 
     }
+
+    public boolean annullaOrdine(Cliente cliente, String id_ordine){
+        return clientFacade.annullaOrdine(cliente, id_ordine);
+    }
+
+    public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        clientFacade.creaOrdine(cliente, indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    }
+
+
 }
