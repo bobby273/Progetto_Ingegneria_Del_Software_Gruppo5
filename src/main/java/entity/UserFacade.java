@@ -30,4 +30,13 @@ public class UserFacade {
         RegistroUtenti regUt = new RegistroUtenti();
         return regUt.verificaProfiloCliente(email, password);
     }
+
+    public boolean verificaEsistenzaCliente(String email) {
+        RegistroUtenti regUt = new RegistroUtenti();
+        return regUt.verificaEsistenzaCliente(email);
+    }
+    public boolean verificaEsistenzaAmministratore(String email) {
+        RegistroUtenti regUt = new RegistroUtenti();
+        return regUt.verificaEsistenzaAmministratore(email);
+    }
 }

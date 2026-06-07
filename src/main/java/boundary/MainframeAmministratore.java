@@ -7,7 +7,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import static controller.ControllerAccesso.checkLogin;
 
 
 public class MainframeAmministratore extends JFrame {
@@ -19,51 +19,61 @@ public class MainframeAmministratore extends JFrame {
     private JButton creaProdottoButton;
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
+    private String emailUtente = "";
+    public static final int AMMINISTRATORE=7;
+    public static final int CLIENTE=8;
 
-    public MainframeAmministratore() {
+
+    public MainframeAmministratore(String emailUtente) {
+        this.emailUtente=emailUtente;
         setTitle("Benvenuto amministratore");
         setContentPane(contentPane);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        // Setting per avere la finestra a scorrimento (amazon-style)
-        CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+        if(checkLogin(emailUtente, AMMINISTRATORE)!=AMMINISTRATORE)
+        {
+            JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+        } else {
+            // Setting per avere la finestra a scorrimento (amazon-style)
+            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-        String messaggioDlc = "Buy the DLC, you broke ass!";
+            String messaggioDlc = "Buy the DLC, you broke ass!";
 
-        visualizzaDettaglioOrdineButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-        );
+            visualizzaDettaglioOrdineButton.addActionListener(e ->
+                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+            );
 
-        consultaAndamentoButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-        );
+            consultaAndamentoButton.addActionListener(e ->
+                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+            );
 
-        visualizzaOrdiniRicevutiButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-        );
+            visualizzaOrdiniRicevutiButton.addActionListener(e ->
+                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+            );
 
-        cercaProdottoButton.addActionListener(e ->
-                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-        );
+            cercaProdottoButton.addActionListener(e ->
+                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+            );
 
-        creaProdottoButton.addActionListener(e -> {
-            FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
-            frameCreazione.setVisible(true);
-            frameCreazione.setLocationRelativeTo(null);
+            creaProdottoButton.addActionListener(e -> {
+                FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
+                frameCreazione.setVisible(true);
+                frameCreazione.setLocationRelativeTo(null);
 
-            frameCreazione.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosed(WindowEvent windowEvent) {
-                    fillCatalogo();
-                }
+                frameCreazione.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent windowEvent) {
+                        fillCatalogo();
+                    }
+                });
             });
-        });
 
-        // Primo riempimento del catalogo
-        fillCatalogo();
+            // Primo riempimento del catalogo
+            fillCatalogo();
 
-        setVisible(true);
+            setVisible(true);
+        }
     }
 
     private void fillCatalogo() {
@@ -187,7 +197,7 @@ public class MainframeAmministratore extends JFrame {
             e.printStackTrace();
         }
 
-        return new MainframeAmministratore();
+        return new MainframeAmministratore(emailUtente);
     }
 
     {

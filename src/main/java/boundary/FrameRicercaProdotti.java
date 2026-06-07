@@ -26,6 +26,7 @@ public class FrameRicercaProdotti extends JFrame {
     // se questa frame è stata aperta da FrameCliente o da FrameAmministratore
 
     private Consumer<List<String[]>> onRisultatiTrovati;
+
     //costruttore
     public FrameRicercaProdotti(ControllerCliente controller, Consumer<List<String[]>> callbackRisultati) {
         this.controllerCliente = controller;
@@ -120,7 +121,7 @@ public class FrameRicercaProdotti extends JFrame {
         label2.setText("Cerca per:");
         MainPane.add(label2, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         btnCerca = new JButton();
-        btnCerca.setText("Button");
+        btnCerca.setText("Cerca");
         MainPane.add(btnCerca, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         cmbCategoriaRicerca = new JComboBox();
         MainPane.add(cmbCategoriaRicerca, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));

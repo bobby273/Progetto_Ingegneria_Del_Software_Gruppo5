@@ -10,6 +10,8 @@ public class ControllerAccesso {
     public static final int UTENTE_CLIE=4;
     public static final int AMM_EXS=5;
     public static final int CLIE_EXS=6;
+    public static final int AMMINISTRATORE=7;
+    public static final int CLIENTE=8;
 
     public static int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){
         UserFacade userFacade=new UserFacade();
@@ -39,5 +41,25 @@ public class ControllerAccesso {
                 return UTENTE_CLIE;
         } else
             return UTENTE_AMM;
+    }
+
+    public static boolean checkEsistenzaCliente(String email){
+        UserFacade userFacade=new UserFacade();
+        return userFacade.verificaEsistenzaCliente(email);
+    }
+
+    public static boolean checkEsistenzaAmministratore(String email){
+        UserFacade userFacade=new UserFacade();
+        return userFacade.verificaEsistenzaAmministratore(email);
+    }
+
+    public static int checkLogin(String email, int tipo){
+        if(!checkEsistenzaAmministratore(email)){
+            if(!checkEsistenzaCliente(email))
+                return -1;
+            else
+                return CLIENTE;
+        } else
+            return AMMINISTRATORE;
     }
 }

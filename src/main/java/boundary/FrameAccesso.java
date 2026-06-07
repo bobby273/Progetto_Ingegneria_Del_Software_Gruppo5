@@ -35,6 +35,8 @@ public class FrameAccesso {
             public void actionPerformed(ActionEvent e) {
                 String email = textFieldEmail.getText();
                 String password = passwordField.getText();
+                //per il check del login
+                String emailUtente = email;
                 int esito = -1;
                 if (email.length() <= 40 && password.length() <= 40 && password.length() >= 8 && email.contains("@")) {
                     esito = ControllerAccesso.checkTipoUtente(email, password);
@@ -42,7 +44,7 @@ public class FrameAccesso {
                         //chiamata alla frame di admin
                         labelEsito.setText("Amministratore");
                         if (MainframeAmministratore == null || !MainframeAmministratore.isDisplayable()) {
-                            new MainframeAmministratore();
+                            new MainframeAmministratore(emailUtente);
                         } else {
                             MainframeAmministratore.toFront();
                             MainframeAmministratore.requestFocus();
@@ -58,7 +60,7 @@ public class FrameAccesso {
                         //chiamata alla frame di cliente
                         labelEsito.setText("Cliente");
                         if (MainframeCliente == null || !MainframeCliente.isDisplayable()) {
-                            new MainframeCliente();
+                            new MainframeCliente(emailUtente);
                         } else {
                             MainframeCliente.toFront();
                             MainframeCliente.requestFocus();

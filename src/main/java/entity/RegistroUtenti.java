@@ -39,4 +39,13 @@ public class RegistroUtenti {
         return clt !=null;
     }
 
+    public boolean verificaEsistenzaCliente(String email){
+        Cliente clt= gestorePers.cercaPrimoPerCampi(Cliente.class, Map.of("email",email));
+        return clt !=null;
+    }
+
+    public boolean verificaEsistenzaAmministratore(String email){
+        Amministratore admin= gestorePers.cercaPrimoPerCampi(Amministratore.class, Map.of("email",email));
+        return admin !=null;
+    }
 }

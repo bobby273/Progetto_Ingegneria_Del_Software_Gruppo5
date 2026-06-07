@@ -11,6 +11,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
 
+import static controller.ControllerAccesso.checkLogin;
+
 public class MainframeCliente extends JFrame {
     private JPanel contentPanel;
     private JButton VediCarrello;
@@ -22,55 +24,64 @@ public class MainframeCliente extends JFrame {
     private JFrame frameStoricoOrdini;
     private ControllerCliente controllerCliente;
 
-    public MainframeCliente() {
+    private String emailUtente = "";
+    public static final int AMMINISTRATORE=7;
+    public static final int CLIENTE=8;
+
+    public MainframeCliente(String emailUtente) {
+        this.emailUtente=emailUtente;
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        if(checkLogin(emailUtente, CLIENTE)!=CLIENTE)
+        {
+            JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //setting per avere finestra a scorrimento (amazon-style)
+            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-        //setting per avere finestra a scorrimento (amazon-style)
-        CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+            fillCatalogo();
 
-        fillCatalogo();
+            CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
-
-        if (this.controllerCliente == null) {
-            this.controllerCliente = new ControllerCliente();
-        }
-
-        VediCarrello.addActionListener(e -> {
-            new FrameCarrello();
-        });
-
-        RicercaProdotto.addActionListener(e -> {
-
-            FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
-
-        });
-        VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
-
-                    FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
-
-                    frameStoricoOrdini.setLocationRelativeTo(null);
-
-                    frameStoricoOrdini.setVisible(true);
-
-
-                } else {
-
-                    frameStoricoOrdini.toFront();
-                    frameStoricoOrdini.requestFocus();
-
-                }
+            if (this.controllerCliente == null) {
+                this.controllerCliente = new ControllerCliente();
             }
-        });
 
-        setVisible(true);
+            VediCarrello.addActionListener(e -> {
+                new FrameCarrello();
+            });
+
+            RicercaProdotto.addActionListener(e -> {
+
+                FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
+
+            });
+            VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+
+                    if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
+
+                        FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
+
+                        frameStoricoOrdini.setLocationRelativeTo(null);
+
+                        frameStoricoOrdini.setVisible(true);
+
+
+                    } else {
+
+                        frameStoricoOrdini.toFront();
+                        frameStoricoOrdini.requestFocus();
+
+                    }
+                }
+            });
+
+            setVisible(true);
+        }
     }
 
 
@@ -187,7 +198,7 @@ public class MainframeCliente extends JFrame {
             e.printStackTrace();
         }
 
-        return new MainframeCliente();
+        return new MainframeCliente(emailUtente);
     }
 
 
