@@ -12,6 +12,7 @@ import Exceptions.ErroreDisponibilitaException;
 
 @Entity
 public class Ordine {
+    //Attributi
     @Id
     private String id;
 

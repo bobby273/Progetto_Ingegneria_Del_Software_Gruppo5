@@ -10,14 +10,16 @@ import java.awt.*;
 import java.util.List;
 
 
-public class FrameCarrello extends JFrame{
+public class FrameCarrello extends JFrame {
 
+    private JPanel contentPanel;
     private JScrollPane scrollPane;
     private JPanel panelCarrello;
 
-    public FrameCarrello(){
+    public FrameCarrello() {
         //design
         setTitle("Il tuo carrello");
+        setContentPane(contentPanel);
         setSize(800, 600);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -31,15 +33,20 @@ public class FrameCarrello extends JFrame{
 
     }
 
-    private void fillCarrello(){
+    /*//Per testare se la schermata va
+    public static void main(String[] args) {
+        new FrameCarrello();
+    }
+    */
+
+    private void fillCarrello() {
         panelCarrello.removeAll();
 
         List<String[]> prodotti = ControllerCliente.getCarrelloBreve();
 
-        if(prodotti == null || prodotti.isEmpty()){
+        if (prodotti == null || prodotti.isEmpty()) {
             panelCarrello.add(new JLabel("Carrello vuoto"));
-        }
-        else {
+        } else {
             for (String[] p : prodotti) {
                 JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
@@ -103,17 +110,24 @@ public class FrameCarrello extends JFrame{
      * @noinspection ALL
      */
     private void $$$setupUI$$$() {
-        final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel = new JPanel();
+        contentPanel.setLayout(new GridLayoutManager(2, 2, new Insets(0, 0, 0, 0), -1, -1));
         final JLabel label1 = new JLabel();
         label1.setText("Prodotti presenti nel carrello");
-        panel1.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPanel.add(label1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
-        panel1.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        contentPanel.add(spacer1, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
         scrollPane = new JScrollPane();
-        panel1.add(scrollPane, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        contentPanel.add(scrollPane, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         panelCarrello = new JPanel();
         panelCarrello.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         scrollPane.setViewportView(panelCarrello);
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    public JComponent $$$getRootComponent$$$() {
+        return contentPanel;
     }
 }

@@ -54,9 +54,6 @@ public class Cliente extends Utente{
         }
     }
 
-    Long getId(){
-        return id;
-    }
 
     boolean annullaOrdine(String id_ordine){
         Ordine ordine = cercaOrdine(id_ordine);
@@ -81,6 +78,9 @@ public class Cliente extends Utente{
         return cercato;
     }
 
+    Long getId(){
+        return id;
+    }
     List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
