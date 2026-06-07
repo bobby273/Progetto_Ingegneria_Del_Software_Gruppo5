@@ -129,7 +129,7 @@ public class Cliente extends Utente{
 
     }
 
-    public boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
+    boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
         boolean esito = false;
         if(this.carrello == null){
             System.out.println("Errore [CLIENTE] : il carrello non esiste");
@@ -138,6 +138,25 @@ public class Cliente extends Utente{
             esito = this.carrello.aggiungiOAggiornaProdotto(prodotto, qtaDesiderata);
         }
         return esito;
+    }
+
+    //Duale del metodo aggiungiProdottoACarrello
+    boolean rimuoviProdottoDalCarrello(Prodotto prodotto){
+        if(this.carrello == null){
+            System.out.println("Errore [CLIENTE] : il carrello non esiste");
+            return false;
+        }
+        else{
+            return this.carrello.rimuoviProdotto(prodotto);
+        }
+    }
+
+    //crea una copia del contenuto del carrello
+    List<CarrelloContiene> getProdottiCarrello(){
+        if(this.carrello != null){
+            return this.carrello.getProdottiContenuti(); //ho così ottenuto i prodotti interni al carrello, non il carrello stesso
+        }
+        return new ArrayList<>();
     }
 
 

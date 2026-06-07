@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ExcludeFromValidation">
     <file url="file://$PROJECT_DIR$/src/main/java/entity/Cliente.java" />
+    <file url="file://$PROJECT_DIR$/src/main/java/boundary/FrameDettaglioOrdine.java" />
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="KubernetesApiProvider"><![CDATA[{}]]></component>

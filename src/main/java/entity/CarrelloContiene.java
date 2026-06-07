@@ -34,4 +34,8 @@ public class CarrelloContiene {
     public Prodotto getProdotto() {
         return prodotto;
     }
+
+    float getPrezzo(){
+        return prodotto.getPrezzo();
+    }
 }

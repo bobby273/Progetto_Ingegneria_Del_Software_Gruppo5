@@ -3,6 +3,7 @@ package entity;
 //import StubPagamento.InterfacciaPagamento;
 import database.GestorePersistenza;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -22,7 +23,6 @@ public class ClientFacade {
     }
 
 
-    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
     public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
@@ -45,13 +45,8 @@ public class ClientFacade {
 
     }
 
-    public Prodotto ricercaProdotto(String nomeProdotto) {
+    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
         return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-    }
-
-
-    public List<Prodotto> getTuttiIProdotti(){
-        return Catalogo.getInstance().getTuttiIProdotti();
     }
 
 
@@ -59,5 +54,34 @@ public class ClientFacade {
         return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
 
+    //Manuel: per ottenere prodotti da visualizzare in catalogo
+    public List<Prodotto> getTuttiIProdotti(){
+        return Catalogo.getInstance().getTuttiIProdotti();
+    }
+
+    //Manuel: per ottenere prodotti da visualizzare nel carrello
+    public List<CarrelloContiene> getProdottiNelCarrello(String mailUtente){
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+        if(cliente != null){
+            return cliente.getProdottiCarrello();
+        }
+        return new ArrayList<>();
+    }
+
+    //Manuel: per rimuovere prodotti dal carrello
+    public boolean rimuoviProdottoDalCarrello(String mailUtente, String nomeProdotto){
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+        if(cliente != null){
+            Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+
+            boolean esitoRimozione = cliente.rimuoviProdottoDalCarrello(prodotto);
+
+            if(esitoRimozione){
+                gp.aggiorna(cliente);
+                return true;
+            }
+        }
+        return false;
+    }
 }
 

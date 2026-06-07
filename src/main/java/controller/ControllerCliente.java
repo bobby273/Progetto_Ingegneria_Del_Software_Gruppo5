@@ -1,6 +1,7 @@
 package controller;
 
 //import StubPagamento.InterfacciaPagamento;
+import entity.CarrelloContiene;
 import entity.ClientFacade; //per comunicare con livello entity
 import entity.Cliente;
 import entity.Prodotto;
@@ -27,8 +28,13 @@ public class ControllerCliente {
 
     }
 
+    public static boolean rimuoviProdottoDalCarrello(String NomeProdotto){
+        return clientFacade.rimuoviProdottoDalCarrello(MAIL_CLIENTE, NomeProdotto);
+    }
+
     public boolean richiediannullamentoOrdine(String id_ordine){
-        return clientFacade.annullaOrdine (id_ordine);
+        //return clientFacade.annullaOrdine (id_ordine); TODO: Ho dovuto commentare perchè la firma è sbagliata, non so come correggere
+        return false;
     }
 
     public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
@@ -40,7 +46,7 @@ public class ControllerCliente {
         return clientFacade.getTuttiIProdotti();
     }
 
-    //Spacchettamento e impacchettamento per evitare che Boundary debba importare Prodotto
+    //Spacchettamento e impacchettamento (catalogo e carrello) per evitare che Boundary debba importare Prodotto
     public static List<String[]> getCatalogoBreve() {
         List<Prodotto> prodotti = clientFacade.getTuttiIProdotti();
         List<String[]> catalogoBreve = new ArrayList<>();
@@ -51,6 +57,25 @@ public class ControllerCliente {
             }
         }
         return catalogoBreve;
+    }
+
+    public static List<String[]> getCarrelloBreve() {
+        List<CarrelloContiene> itemsInseriti = clientFacade.getProdottiNelCarrello(MAIL_CLIENTE);
+        List<String[]> carrelloBreve = new ArrayList<>();
+
+        if(itemsInseriti != null){
+            for(CarrelloContiene item : itemsInseriti) {
+                Prodotto p = item.getProdotto();
+                carrelloBreve.add(new String[]{
+                        p.getNome(),
+                        p.getDescrizione(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getCategoria(),
+                        String.valueOf(item.getQuantita())
+                });
+            }
+        }
+        return carrelloBreve;
     }
 
     public static void apriDettaglioProdotto(String nomeProdotto) {
@@ -83,3 +108,5 @@ public class ControllerCliente {
         return clientFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
 }
+
+

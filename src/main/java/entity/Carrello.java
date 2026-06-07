@@ -16,7 +16,7 @@ public class Carrello {
      //CarrelloContiene = RigaCarrello {quantità + prodotto}
 
      //Costruttori
-     public Carrello(String mailUtente) {
+     Carrello(String mailUtente) {
         this.mailUtente = mailUtente;
         this.prodottiContenuti = new ArrayList<>();
      }
@@ -28,7 +28,7 @@ public class Carrello {
      }
 
      //Metodi
-     public boolean aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
+     boolean aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
 
          //<-- Qui se volessi inserire su check sulle quantità lo metterei, ma abbiamo deciso che non serve
 
@@ -45,15 +45,28 @@ public class Carrello {
          return true;
      }
 
+     //Duale di aggiungi e aggiorna | true->ha rimosso, false->non ha rimosso
+     boolean rimuoviProdotto(Prodotto prodotto) {
+         boolean esito=false;
+         for(CarrelloContiene riga : prodottiContenuti) {
+             if(riga.getProdotto().getNome().equals(prodotto.getNome())){
+                 prodottiContenuti.remove(riga);
+                 esito=true;
+                 break;
+             }
+         }
+         return esito;
+     }
+
      //Getter + setter
-     public String getMailUtente() {
+     String getMailUtente() {
         return mailUtente;
      }
 
-     public List<CarrelloContiene> getProdottiContenuti() {
+     List<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
      }
-     public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
+     void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
         this.prodottiContenuti = prodottiContenuti;
     }
 }
