@@ -24,25 +24,32 @@ public class MainframeCliente extends JFrame {
     private JFrame frameStoricoOrdini;
     private ControllerCliente controllerCliente;
 
-    public MainframeCliente() {
+    private String emailUtente = "";
+    public static final int CLIENTE=8;
+
+    public MainframeCliente(String emailUtente) {
         //design della finestra
+        this.emailUtente=emailUtente;
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //setting per avere finestra a scorrimento (amazon-style)
-        CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+        if(checkLogin(emailUtente, CLIENTE)!=CLIENTE) {
+            JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+        } else {
+            //setting per avere finestra a scorrimento (amazon-style)
+            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-        fillCatalogo();
+            fillCatalogo();
 
-        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+            //Click del bottone carrello
+            CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-        //Click del bottone carrello
-        if (this.controllerCliente == null) {
-            this.controllerCliente = new ControllerCliente();
+            if (this.controllerCliente == null) {
+                this.controllerCliente = new ControllerCliente();
+            }
         }
-
             VediCarrello.addActionListener(e -> {
                 new FrameCarrello();
             });
@@ -190,7 +197,6 @@ public class MainframeCliente extends JFrame {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return new MainframeCliente(emailUtente);
     }
 
