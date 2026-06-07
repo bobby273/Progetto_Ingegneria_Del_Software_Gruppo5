@@ -48,11 +48,11 @@ public class MainframeAmministratore extends JFrame {
         );
 
         creaProdottoButton.addActionListener(e -> {
-            FrameCreaProdotto frameCrea = new FrameCreaProdotto();
-            frameCrea.setVisible(true);
-            frameCrea.setLocationRelativeTo(null);
+            FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
+            frameCreazione.setVisible(true);
+            frameCreazione.setLocationRelativeTo(null);
 
-            frameCrea.addWindowListener(new WindowAdapter() {
+            frameCreazione.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosed(WindowEvent windowEvent) {
                     fillCatalogo();
@@ -70,9 +70,9 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.removeAll();
 
         // Riceviamo una lista di array di stringhe dal Controller
-        java.util.List<String[]> listaVeriProdotti = ControllerAmministratore.ottieniListaProdotti();
+        java.util.List<String[]> listaCatalogo = ControllerAmministratore.ottieniListaProdotti();
 
-        if (listaVeriProdotti.isEmpty()) {
+        if (listaCatalogo.isEmpty()) {
             // Forziamo il BorderLayout per questo ramo
             CatalogoPane.setLayout(new BorderLayout());
 
@@ -104,7 +104,7 @@ public class MainframeAmministratore extends JFrame {
         }
         else {
             CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
-            for (String[] dati : listaVeriProdotti) {
+            for (String[] dati : listaCatalogo) {
 
                 JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
@@ -119,10 +119,9 @@ public class MainframeAmministratore extends JFrame {
                 String prezzoProdotto = dati[2];
                 String descrizioneProdotto = dati[3];
                 String qtaProdotto = dati[4];
+                boolean isDisponibile = Boolean.parseBoolean(dati[5]);
+                boolean isScontato = Boolean.parseBoolean(dati[6]);
 
-                // Per i booleani di visualizzazione, facciamo controlli logici veloci dalle stringhe
-                boolean isDisponibile = Integer.parseInt(qtaProdotto) > 0;
-                boolean isScontato = false;
 
                 String testoHtml = "<html><h3 style='margin:0; color:#2c3e50;'>" + nomeProdotto + "</h3>" +
                         "<p style='margin:0; font-size:11px; color:#7f8c8d;'>" + descrizioneProdotto + "</p>" +

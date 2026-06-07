@@ -61,7 +61,9 @@ public class AdminFacade {
                     p.getCategoria(),       // index 1
                     String.format("%.2f", p.getPrezzo()), // index 2
                     p.getDescrizione(),     // index 3
-                    String.valueOf(p.getQtaDisponibile()) // index 4
+                    String.valueOf(p.getQtaDisponibile()), // index 4
+                    String.valueOf(p.isDisponibile()),            // Index 5 <-- AGGIUNTO REALE DAL DB
+                    String.valueOf(p.isScontato())
             };
             listaDatiGrezzi.add(datiProdotto);
         }
