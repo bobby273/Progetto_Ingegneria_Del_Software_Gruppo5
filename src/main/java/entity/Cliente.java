@@ -1,7 +1,7 @@
 package entity;
 
 import Exceptions.ErroreDisponibilitaException;
-import StubPagamento.InterfacciaPagamento;
+//import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;
@@ -15,12 +15,15 @@ public class Cliente extends Utente{
 
     private String indirizzoSpedizione;
     private byte immagineProfilo;
+
+
     private List<Ordine> ordiniPersonali;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private Carrello carrello;
 
 
+    //Costruttori
     public Cliente(){}
 
     public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
@@ -30,6 +33,8 @@ public class Cliente extends Utente{
         this.carrello = new Carrello(email);
     }
 
+
+    //Metodi
     void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
         try{
             Ordine ordine = new Ordine(this, "aspe",this.carrello);
@@ -55,7 +60,7 @@ public class Cliente extends Utente{
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
         ordine.setStato(Stato.ANNULLATO);
-        InterfacciaPagamento.RimborsaOrdine(ordine);
+        //InterfacciaPagamento.RimborsaOrdine(ordine);
         //invio notifiche
         return true;
     }
@@ -63,7 +68,7 @@ public class Cliente extends Utente{
     private Ordine cercaOrdine(String id_ordine){
         Ordine cercato = null;
         for(Ordine ordine : ordiniPersonali){
-            if(ordine.getId()==id_ordine) {
+            if(ordine.getId().equals(id_ordine)) {
                 cercato = ordine;
                 break;
             }
@@ -122,5 +127,17 @@ public class Cliente extends Utente{
         System.out.println("==================================================");
 
     }
+
+    public boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
+        boolean esito = false;
+        if(this.carrello == null){
+            System.out.println("Errore [CLIENTE] : il carrello non esiste");
+        }
+        else{
+            esito = this.carrello.aggiungiOAggiornaProdotto(prodotto, qtaDesiderata);
+        }
+        return esito;
+    }
+
 
 }

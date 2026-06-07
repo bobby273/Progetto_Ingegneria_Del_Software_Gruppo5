@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.time.LocalDateTime;
 
 import Exceptions.ErroreDisponibilitaException;
-import StubPagamento.InterfacciaPagamento;
+//import StubPagamento.InterfacciaPagamento;
 
 //@Entity
 public class Ordine {
@@ -116,6 +116,6 @@ public class Ordine {
 
     //stub
     public boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
-        return InterfacciaPagamento.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, id_ordine, totale);
+        return /*InterfacciaPagamento.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, id_ordine, totale);*/ false;
     }
 }

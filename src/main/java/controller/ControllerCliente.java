@@ -1,6 +1,6 @@
 package controller;
 
-import StubPagamento.InterfacciaPagamento;
+//import StubPagamento.InterfacciaPagamento;
 import entity.ClientFacade; //per comunicare con livello entity
 import entity.Cliente;
 
@@ -18,7 +18,7 @@ public class ControllerCliente {
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
         System.out.println("Eseguendo UC: AggiungiProdottoAlCarrello per "+ MAIL_CLIENTE);
-        //Metodo controller richiamatato dal boundary FrameDettaglioProdotto
+        //Metodo controller richiamato dal boundary FrameDettaglioProdotto
         return clientFacade.aggiungiOAggiornaProdottoACarrello(MAIL_CLIENTE, NomeProdotto, qtaDesiderata);
 
     }

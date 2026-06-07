@@ -1,6 +1,6 @@
 package entity;
 
-import StubPagamento.InterfacciaPagamento;
+//import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -29,7 +29,7 @@ public class Amministratore extends Utente{
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
         ordine.setStato(Stato.ANNULLATO);
-        InterfacciaPagamento.RimborsaOrdine(ordine);
+        //InterfacciaPagamento.RimborsaOrdine(ordine);
         //invio notifiche
         return true;
     }

@@ -28,16 +28,21 @@ public class Carrello {
      }
 
      //Metodi
-     public void aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
+     public boolean aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
+
+         //<-- Qui se volessi inserire su check sulle quantità lo metterei, ma abbiamo deciso che non serve
+
          for(CarrelloContiene riga : prodottiContenuti) {
-             if(riga.getProdotto().getNome().equals(prodotto.getNome())){ //Se trovo il prodotto nel carrello
+             if(riga.getProdotto().getNome().equals(prodotto.getNome())){
+                 //Se trovo il prodotto nel carrello, aggiorno quantità
                  riga.setQuantita(riga.getQuantita() + qtaDesiderata);
-                 return;
+                 return true;
              }
          }
          //Se non esiste già il prodotto
          CarrelloContiene nuovo = new CarrelloContiene(prodotto, qtaDesiderata);
          prodottiContenuti.add(nuovo);
+         return true;
      }
 
      //Getter + setter
