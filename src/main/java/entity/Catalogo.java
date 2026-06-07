@@ -29,7 +29,7 @@ public class Catalogo {
     //Metodi
 
     List<Prodotto> getTuttiIProdotti() {
-        database.GestorePersistenza gp = new database.GestorePersistenza();
+        gp = new database.GestorePersistenza();
         // Passando una mappa vuota, il tuo GestorePersistenza estrae l'intera tabella da MySQL
         return gp.cercaPerCampi(Prodotto.class, java.util.Map.of());
     }
