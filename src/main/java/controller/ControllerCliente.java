@@ -1,10 +1,7 @@
 package controller;
 
 //import StubPagamento.InterfacciaPagamento;
-import entity.CarrelloContiene;
 import entity.ClientFacade; //per comunicare con livello entity
-import entity.Cliente;
-import entity.Prodotto;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,7 +13,7 @@ public class ControllerCliente {
     private static final String MAIL_CLIENTE = "fornataro.ma@gmail.com";
 
     //Attributi
-    private static ClientFacade clientFacade = new ClientFacade(MAIL_CLIENTE);
+    private static ClientFacade clientFacade = new ClientFacade();
 
     //Metodi esposti
     public static boolean AggiungiAlCarrello(String NomeProdotto, int qtaDesiderata){
@@ -36,58 +33,37 @@ public class ControllerCliente {
         return clientFacade.annullaOrdine(id_ordine);
     }
 
-    public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    public void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza); //TODO: Andrebbe aggiunto MAIL_CLIENTE come primo parametro
     }
 
-    //Per accedere all'intero catalogo --> facade
-    public static List<Prodotto> getTuttiIProdotti(){
+    //Per accedere all'intero catalogo --> facade (che spacchetta i dati)
+    /*TODO: public static List<Prodotto> getTuttiIProdotti(){
         return clientFacade.getTuttiIProdotti();
-    }
+        --> note to self: rimosso e sostituito con metodo getCatalogoBreve() [ora è in Facade]
+    }*/
 
     //Spacchettamento e impacchettamento (catalogo e carrello) per evitare che Boundary debba importare Prodotto
     public static List<String[]> getCatalogoBreve() {
-        List<Prodotto> prodotti = clientFacade.getTuttiIProdotti();
-        List<String[]> catalogoBreve = new ArrayList<>();
-
-        if (prodotti != null) {
-            for (Prodotto p : prodotti) {
-                catalogoBreve.add(new String[]{p.getNome(), p.getDescrizione()});
-            }
-        }
-        return catalogoBreve;
+        return clientFacade.getCatalogoBreve();
     }
 
     public static List<String[]> getCarrelloBreve() {
-        List<CarrelloContiene> itemsInseriti = clientFacade.getProdottiNelCarrello(MAIL_CLIENTE);
-        List<String[]> carrelloBreve = new ArrayList<>();
-
-        if(itemsInseriti != null){
-            for(CarrelloContiene item : itemsInseriti) {
-                Prodotto p = item.getProdotto();
-                carrelloBreve.add(new String[]{
-                        p.getNome(),
-                        p.getDescrizione(),
-                        String.valueOf(p.getPrezzo()),
-                        p.getCategoria(),
-                        String.valueOf(item.getQuantita())
-                });
-            }
-        }
-        return carrelloBreve;
+        return clientFacade.getCarrelloBreve(MAIL_CLIENTE);
     }
 
     public static void apriDettaglioProdotto(String nomeProdotto) {
-        Prodotto p = clientFacade.ricercaProdotto(nomeProdotto);
+        Object[] prodotto = clientFacade.getDettagliProdotto(nomeProdotto);
 
-        if (p != null) {
+        if (prodotto != null) {
+            //Ricezione dalla Facade
             new boundary.FrameDettaglioProdotto(
-                    p.getNome(),
-                    p.getPrezzo(),
-                    p.getCategoria(),
-                    p.getQtaDisponibile(),
-                    p.IsScontato(),
-                    p.getDescrizione()
+                    (String) prodotto[0],
+                    (float) prodotto[1],
+                    (String) prodotto[2],
+                    (int) prodotto[3],
+                    (boolean) prodotto[4],
+                    (String) prodotto[5]
             );
         }
     }
@@ -95,16 +71,12 @@ public class ControllerCliente {
     // Metodo per far verificare alla Boundary se un prodotto esiste (permettere stampa di mess errore apposito [testing])
     public static boolean esisteProdotto(String nomeProdotto) {
         // Verifico mediante metodo Facade
-        return clientFacade.ricercaProdotto(nomeProdotto) != null;
+        return clientFacade.esisteProdotto(nomeProdotto);
     }
 
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-            return clientFacade.getTuttiIProdotti();
-        }
-
-        // Deleghiamo il lavoro alla Facade
-        return clientFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    // Nel ControllerCliente: Passacarte per la ricerca
+    public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        return clientFacade.ricercaProdottoInCatalogoBreve(categoriaRicerca, elementoDaCercare);
     }
 
 

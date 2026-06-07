@@ -65,29 +65,29 @@ public class Prodotto {
 
     }
 
-    public void setScontato(boolean scontato) {
+    void setScontato(boolean scontato) {
         isScontato = scontato;
     }
 
-    public boolean isDisponibile() {
+    boolean isDisponibile() {
         return isDisponibile;
     }
 
-    public boolean isScontato() {
+    boolean isScontato() {
         return isScontato;
     }
-    public String getCategoria() {
+    String getCategoria() {
         return categoria;
     }
-    public String getDescrizione() {
+    String getDescrizione() {
         return descrizione;
     }
 
-    public float getPrezzo() {
+    float getPrezzo() {
         return prezzo;
     }
 
-    public boolean IsScontato() {
+    boolean IsScontato() {
         return isScontato;
     }
 }
