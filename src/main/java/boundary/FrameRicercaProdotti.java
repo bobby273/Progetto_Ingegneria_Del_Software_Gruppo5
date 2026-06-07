@@ -123,11 +123,16 @@ public class FrameRicercaProdotti extends JFrame {
         btnCerca = new JButton();
         btnCerca.setText("Cerca");
         MainPane.add(btnCerca, new GridConstraints(2, 0, 1, 3, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        cmbCategoriaRicerca = new JComboBox();
-        MainPane.add(cmbCategoriaRicerca, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         txtElementoDaCercare = new JTextField();
         txtElementoDaCercare.setText("");
         MainPane.add(txtElementoDaCercare, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
+        cmbCategoriaRicerca = new JComboBox();
+        final DefaultComboBoxModel defaultComboBoxModel1 = new DefaultComboBoxModel();
+        defaultComboBoxModel1.addElement("nome");
+        defaultComboBoxModel1.addElement("categoria");
+        defaultComboBoxModel1.addElement("descrizione");
+        cmbCategoriaRicerca.setModel(defaultComboBoxModel1);
+        MainPane.add(cmbCategoriaRicerca, new GridConstraints(0, 2, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
