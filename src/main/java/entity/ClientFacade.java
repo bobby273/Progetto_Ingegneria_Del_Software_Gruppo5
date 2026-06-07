@@ -128,14 +128,40 @@ public class ClientFacade {
         return Catalogo.getInstance().ricercaProdotto(nomeProdotto) != null;
     }
 
+
+    //proviamo a filtrare direttamente nella clientFacade.
+    public List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
+        List<Prodotto> prodottiTrovati;
+
+        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
+        } else {
+            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        }
+
+        List<String[]> risultati = new ArrayList<>();
+        if (prodottiTrovati != null) {
+            for (Prodotto p : prodottiTrovati) {
+                risultati.add(new String[]{
+                        p.getNome(),
+                        p.getDescrizione(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getDescrizione(),
+                        String.valueOf(p.getQtaDisponibile()),
+                        String.valueOf(p.IsScontato())
+                });
+            }
+        } return risultati;
+    }
+
     public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
         return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
     }
 
-
+    /*TRY: probabilmente va eliminato
     public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
         return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-    }
+    }*/
 
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){

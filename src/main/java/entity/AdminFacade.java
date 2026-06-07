@@ -89,8 +89,29 @@ public class AdminFacade {
         return Catalogo.getInstance().getTuttiIProdotti();
     }
 
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    //proviamo a filtrare direttamente nella AdminFacade.
+    public List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
+        List<Prodotto> prodottiTrovati;
+
+        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
+        } else {
+            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        }
+
+        List<String[]> risultati = new ArrayList<>();
+        if (prodottiTrovati != null) {
+            for (Prodotto p : prodottiTrovati) {
+                risultati.add(new String[]{
+                        p.getNome(),
+                        p.getDescrizione(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getDescrizione(),
+                        String.valueOf(p.getQtaDisponibile()),
+                        String.valueOf(p.IsScontato())
+                });
+            }
+        } return risultati;
     }
 
     public Long getIdClienteDaIdOrdine(String id_ordine){

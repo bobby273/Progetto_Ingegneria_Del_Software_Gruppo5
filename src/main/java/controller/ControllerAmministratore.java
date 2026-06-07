@@ -62,36 +62,11 @@ public class ControllerAmministratore {
         return AdminFacade.rimuoviProdotto(nomeProdotto);
     }
 
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-            return adminFacade.getTuttiIProdotti();
-        }
-        // Deleghiamo il lavoro alla Facade
+    //metodo per ricevere i dati dalla client Facade e passarli alla GUI frameRicercaProdotto
+    public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
         return adminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
 
-
-    //metodo per "formattare" i dati ottenuti e darli alla GUI
-    public static List<String[]> ricercaFormattata(String categoriaRicerca, String elementoDaCercare) {
-        ControllerAmministratore controller = new ControllerAmministratore();
-        List<Prodotto> prodotti = controller.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-        //impacchetto i risultati come succede nell'esempio
-        List<String[]> datiPronti = new java.util.ArrayList<>();
-        if (prodotti != null) {
-            for (Prodotto p : prodotti) {
-                datiPronti.add(new String[]{
-                        p.getNome(),
-                        p.getCategoria(),
-                        String.valueOf(p.getPrezzo()),
-                        p.getDescrizione(),
-                        String.valueOf(p.getQtaDisponibile()),
-                        String.valueOf(p.IsScontato()),
-                        String.valueOf(p.IsScontato())
-                });
-            }
-        }
-        return datiPronti;
-    }
 
     public String getStato(String id_ordine){
         return adminFacade.getStato(id_ordine);

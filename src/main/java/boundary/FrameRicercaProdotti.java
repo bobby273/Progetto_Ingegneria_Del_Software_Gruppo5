@@ -56,9 +56,9 @@ public class FrameRicercaProdotti extends JFrame {
 
                 List<String[]> righe;
                 if (isAdmin) {
-                    righe = ControllerAmministratore.ricercaFormattata(categoria, parolaChiave);
+                    righe = ControllerAmministratore.ricercaProdottoInCatalogo(categoria, parolaChiave);
                 } else {
-                    righe = ControllerCliente.ricercaFormattata(categoria, parolaChiave);
+                    righe = ControllerCliente.ricercaProdottoInCatalogo(categoria, parolaChiave);
                 }
                 onRisultatiTrovati.accept(righe);
                 JFrame frameAttuale = (JFrame) SwingUtilities.getWindowAncestor(MainPane);

@@ -24,48 +24,43 @@ public class MainframeCliente extends JFrame {
     private JFrame frameStoricoOrdini;
     private ControllerCliente controllerCliente;
 
-    private String emailUtente = "";
-    public static final int CLIENTE=8;
-
-    public MainframeCliente(String emailUtente) {
-        this.emailUtente=emailUtente;
+    public MainframeCliente() {
+        //design della finestra
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        if(checkLogin(emailUtente, CLIENTE)!=CLIENTE)
-        {
-            JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
-        } else {
-            //setting per avere finestra a scorrimento (amazon-style)
-            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-            fillCatalogo();
+        //setting per avere finestra a scorrimento (amazon-style)
+        CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-            CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        fillCatalogo();
 
-            if (this.controllerCliente == null) {
-                this.controllerCliente = new ControllerCliente();
-            }
+        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+        //Click del bottone carrello
+        if (this.controllerCliente == null) {
+            this.controllerCliente = new ControllerCliente();
+        }
 
             VediCarrello.addActionListener(e -> {
                 new FrameCarrello();
             });
 
-            RicercaProdotto.addActionListener(e -> {
+        RicercaProdotto.addActionListener(e -> {
 
-                FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
+            FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
 
-            });
-            VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
+        });
+        VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
-                    if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
+                if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
 
-                        FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
+                    FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
 
-                        frameStoricoOrdini.setLocationRelativeTo(null);
+                    frameStoricoOrdini.setLocationRelativeTo(null);
 
                         frameStoricoOrdini.setVisible(true);
 
@@ -75,12 +70,11 @@ public class MainframeCliente extends JFrame {
                         frameStoricoOrdini.toFront();
                         frameStoricoOrdini.requestFocus();
 
-                    }
                 }
-            });
+            }
+        });
 
-            setVisible(true);
-        }
+        setVisible(true);
     }
 
 
