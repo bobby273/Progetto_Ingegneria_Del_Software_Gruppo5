@@ -20,12 +20,20 @@ public class ClientFacade {
         cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
     }
 
-    public boolean annullaOrdine(String id_ordine){
-        return cliente.annullaOrdine(id_ordine);
+    public boolean annullaOrdine(String id_ordine) {
+        boolean annullato = cliente.annullaOrdine(id_ordine);
+        Ordine aggiorna=null;
+        if(annullato){
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            aggiorna = gp.aggiorna(o);
+        }
+        return (aggiorna!=null);
     }
 
-    public void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        Ordine o = cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+        gp.salva(o);
+        return o==null;
     }
 
 
