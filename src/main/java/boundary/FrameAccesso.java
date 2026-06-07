@@ -18,6 +18,16 @@ public class FrameAccesso {
     private JButton accediButton;
     private JPanel accessoPane;
     private JLabel labelEsito;
+    private JFrame frameMain;
+    private JFrame MainframeCliente;
+    private JFrame MainframeAmministratore;
+    private JPanel MainPanel;
+
+    public FrameAccesso(JFrame frameMain) {
+        this();
+        this.frameMain = frameMain;
+    }
+
 
     public FrameAccesso() {
         accediButton.addActionListener(new ActionListener() {
@@ -31,12 +41,39 @@ public class FrameAccesso {
                     if (esito == ControllerAccesso.UTENTE_AMM) {
                         //chiamata alla frame di admin
                         labelEsito.setText("Amministratore");
+                        if (MainframeAmministratore == null || !MainframeAmministratore.isDisplayable()) {
+                            new MainframeAmministratore();
+                        } else {
+                            MainframeAmministratore.toFront();
+                            MainframeAmministratore.requestFocus();
+                        }
+                        if (frameMain != null) {
+                            frameMain.dispose();
+                        }
+                        java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(accessoPane);
+                        if (finestraAttuale != null) {
+                            finestraAttuale.dispose();
+                        }
                     } else if (esito == ControllerAccesso.UTENTE_CLIE) {
                         //chiamata alla frame di cliente
                         labelEsito.setText("Cliente");
+                        if (MainframeCliente == null || !MainframeCliente.isDisplayable()) {
+                            new MainframeCliente();
+                        } else {
+                            MainframeCliente.toFront();
+                            MainframeCliente.requestFocus();
+                        }
+                        if (frameMain != null) {
+                            frameMain.dispose();
+                        }
+                        java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(accessoPane);
+                        if (finestraAttuale != null) {
+                            finestraAttuale.dispose();
+                        }
+
                     } else
                         //chiamata a frame di errore?
-                        labelEsito.setText("Utente non trovato");
+                        labelEsito.setText("Utente non trovato, riprova.");
                 } else
                     labelEsito.setText("Errore dimensione campi.");
             }
