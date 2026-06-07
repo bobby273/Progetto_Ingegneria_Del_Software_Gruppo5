@@ -7,6 +7,8 @@ import controller.ControllerCliente;
 import javax.swing.*;
 import javax.swing.border.Border;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 
 public class MainframeCliente extends JFrame {
@@ -17,6 +19,8 @@ public class MainframeCliente extends JFrame {
     private JButton VisualizzaDettaglioOrdine;
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
+    private JFrame frameStoricoOrdini;
+    private ControllerCliente controllerCliente;
 
     public MainframeCliente() {
         setTitle("Benvenuto cliente");
@@ -35,6 +39,28 @@ public class MainframeCliente extends JFrame {
         });
 
         setVisible(true);
+
+        VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+                if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
+
+                    FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
+
+                    frameStoricoOrdini.setLocationRelativeTo(null);
+
+                    frameStoricoOrdini.setVisible(true);
+
+
+                }else{
+
+                    frameStoricoOrdini.toFront();
+                    frameStoricoOrdini.requestFocus();
+
+                }
+            }
+        });
     }
 
     private void fillCatalogo() {

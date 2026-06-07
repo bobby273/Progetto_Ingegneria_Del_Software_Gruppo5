@@ -76,6 +76,10 @@ public class Ordine {
         return cliente;
     }
 
+    Long getIdCliente(){
+        return cliente.getId();
+    }
+
     public void setStato(Stato stato) {
         this.stato=stato;
     }

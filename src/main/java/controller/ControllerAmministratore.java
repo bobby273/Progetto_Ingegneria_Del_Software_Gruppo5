@@ -5,14 +5,20 @@ import entity.Amministratore;
 import database.GestorePersistenza;
 import entity.Prodotto;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ControllerAmministratore {
-    //Attributi
-    private static AdminFacade adminFacade = new AdminFacade();
 
-    public boolean richiediAnnullamentoOrdine(Amministratore amministratore, String id_ordine) {
-        return adminFacade.annullaOrdine(amministratore, id_ordine);
+    //TODO: SIMULO BADGE
+    private static final Long id_amministratore= java.lang.Long.valueOf(001);
+    private GestorePersistenza gp;
+    //Attributi
+    private static AdminFacade adminFacade = new AdminFacade(id_amministratore);
+
+    public boolean annullaOrdine(String id_ordine) {
+        return adminFacade.annullaOrdine(id_ordine);
     }
 
     public static java.util.List<String[]> ottieniListaProdotti() {
@@ -64,5 +70,30 @@ public class ControllerAmministratore {
         // Deleghiamo il lavoro alla Facade
         return adminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
+
+    public String getStato(String id_ordine){
+        return adminFacade.getStato(id_ordine);
+    }
+
+    public float getTotale(String id_ordine){
+        return adminFacade.getTotale(id_ordine);
+    }
+
+    public LocalDateTime getDataConferma(String id_ordine){
+        return adminFacade.getDataConferma(id_ordine);
+    }
+
+    public String getIndirizzoSpedizione(String id_ordine){
+        return adminFacade.getIndirizzoSpedizione(id_ordine);
+    }
+
+    public ArrayList<String> getProdottiEQuantita(String id_ordine){
+        return adminFacade.getProdottoEQuantita(id_ordine);
+    }
+
+    public Long getIdCliente(String id_ordine){
+        return adminFacade.getIdClienteDaIdOrdine(id_ordine);
+    }
+
 }
 
