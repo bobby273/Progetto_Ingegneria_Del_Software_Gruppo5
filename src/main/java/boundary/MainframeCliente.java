@@ -35,16 +35,15 @@ public class MainframeCliente extends JFrame {
 
         CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+        if (this.controllerCliente == null) {
+            this.controllerCliente = new ControllerCliente();
+        }
+
         VediCarrello.addActionListener(e -> {
             new FrameCarrello();
             setVisible(true);
         });
 
-        setVisible(true);
-
-        if (this.controllerCliente == null) {
-            this.controllerCliente = new ControllerCliente();
-        }
 
         RicercaProdotto.addActionListener(e -> {
             FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
@@ -70,6 +69,8 @@ public class MainframeCliente extends JFrame {
                 }
             }
         });
+
+        setVisible(true);
     }
 
     private void fillCatalogo() {
