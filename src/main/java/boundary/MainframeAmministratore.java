@@ -1,9 +1,14 @@
 package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import controller.ControllerAmministratore;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+
 
 public class MainframeAmministratore extends JFrame {
     public JPanel contentPane;
@@ -21,9 +26,23 @@ public class MainframeAmministratore extends JFrame {
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        //setting per avere finestra a scorrimento (amazon-style)
+        // Setting per avere la finestra a scorrimento (amazon-style)
         CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
+        creaProdottoButton.addActionListener(e -> {
+            FrameCreaProdotto frameCrea = new FrameCreaProdotto();
+            frameCrea.setVisible(true);
+            frameCrea.setLocationRelativeTo(null);
+
+            frameCrea.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosed(WindowEvent windowEvent) {
+                    fillCatalogo();
+                }
+            });
+        });
+
+        // Primo riempimento del catalogo
         fillCatalogo();
 
         setVisible(true);
@@ -32,33 +51,72 @@ public class MainframeAmministratore extends JFrame {
     private void fillCatalogo() {
         CatalogoPane.removeAll();
 
-        //TODO: Sto simulando stub, qua ci andrà la lista vera con il vero fill
-        //visualizzazione dei prodotti
-        for (int i = 0; i < 20; i++) {
+        // Riceviamo una lista di array di stringhe dal Controller
+        java.util.List<String[]> listaVeriProdotti = ControllerAmministratore.ottieniListaProdotti();
+
+        for (String[] dati : listaVeriProdotti) {
+
             JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
             panelProdotto.setBorder(BorderFactory.createCompoundBorder(
                     BorderFactory.createEmptyBorder(5, 5, 5, 5),
                     BorderFactory.createEtchedBorder()
             ));
-
             panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
 
-            String nomeProdotto = "Prodotto <" + i + ">";
-            String descrizioneProdotto = "Descrizione prodotto <" + i + ">";
-            String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
-                    "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
+            // Estraiamo i dati dall'array usando gli indici stabiliti nella Facade
+            String nomeProdotto = dati[0];
+            String categoriaProdotto = dati[1];
+            String prezzoProdotto = dati[2];
+            String descrizioneProdotto = dati[3];
+            String qtaProdotto = dati[4];
+
+            // Per i booleani di visualizzazione, facciamo controlli logici veloci dalle stringhe
+            boolean isDisponibile = Integer.parseInt(qtaProdotto) > 0;
+            boolean isScontato = false;
+
+            String testoHtml = "<html><h3 style='margin:0; color:#2c3e50;'>" + nomeProdotto + "</h3>" +
+                    "<p style='margin:0; font-size:11px; color:#7f8c8d;'>" + descrizioneProdotto + "</p>" +
+                    "<b style='color:#27ae60;'>" + prezzoProdotto + " €</b> - Qta: " + qtaProdotto + "</html>";
 
             JLabel lblInfo = new JLabel(testoHtml);
-            JPanel panelButtons = new JPanel(new GridLayout(1,2, 5, 0));
-            JButton btnInfo = new JButton("Altre info");
-            JButton btnModifica = new JButton("Modifica");
-            panelButtons.add(btnInfo);
-            panelButtons.add(btnModifica);
 
+            JPanel panelButtons = new JPanel(new GridLayout(1, 2, 5, 0));
+            JButton btnGestione = new JButton("Gestisci");
+            JButton btnRimuovi = new JButton("Rimuovi");
+            panelButtons.add(btnGestione);
+            panelButtons.add(btnRimuovi);
 
-            final int idProdotto = i;
-            btnInfo.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
-            btnModifica.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modifica prodotto " + idProdotto));
+            btnRimuovi.addActionListener(e -> {
+                int risposta = JOptionPane.showConfirmDialog(this,
+                        "Sei sicuro di voler eliminare permanentemente " + nomeProdotto + " dal catalogo?",
+                        "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+
+                if (risposta == JOptionPane.YES_OPTION) {
+                    boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
+                    if (eliminato) {
+                        JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
+                        fillCatalogo();
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Errore nell'eliminazione.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    }
+                }
+            });
+
+            btnGestione.addActionListener(e -> {
+                // Passiamo le stringhe estratte direttamente al costruttore
+                FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
+                        nomeProdotto, categoriaProdotto, prezzoProdotto, descrizioneProdotto, qtaProdotto, isDisponibile, isScontato
+                );
+                frameGestione.setVisible(true);
+                frameGestione.setLocationRelativeTo(null);
+
+                frameGestione.addWindowListener(new WindowAdapter() {
+                    @Override
+                    public void windowClosed(WindowEvent windowEvent) {
+                        fillCatalogo();
+                    }
+                });
+            });
 
             panelProdotto.add(lblInfo, BorderLayout.CENTER);
             panelProdotto.add(panelButtons, BorderLayout.EAST);
@@ -71,58 +129,7 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.repaint();
     }
 
-    /* IL VERO FILL CATALOGO
-    import javax.persistence.EntityManager;
-import java.util.List;
 
-private void fillCatalogo() {
-    CatalogoPane.removeAll();
-
-    // 1. Apriamo l'EntityManager tramite il tuo JpaUtil
-    EntityManager em = JpaUtil.getEntityManager();
-
-    try {
-        // 2. Facciamo la query (nota: "Prodotto" è il nome della classe Java, non della tabella!)
-        List<Prodotto> listaProdotti = em.createQuery("SELECT p FROM Prodotto p", Prodotto.class)
-                                         .getResultList();
-
-        // 3. Cicliamo sugli oggetti invece che sul ResultSet
-        for (Prodotto p : listaProdotti) {
-
-            // Creazione riga (identica a prima, ma usiamo p.getNome() invece di rs.getString("nome"))
-            JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
-            panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                    BorderFactory.createEtchedBorder()
-            ));
-            panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 50));
-
-            JLabel lblNome = new JLabel("<html><h3 style='margin:0;'>" + p.getNome() + "</h3></html>");
-            JButton btnModifica = new JButton("Modifica");
-
-            btnModifica.addActionListener(e -> {
-                System.out.println("Modifico il prodotto: " + p.getNome());
-                // Qui ora puoi passare l'intero oggetto Prodotto p alla finestra di modifica!
-            });
-
-            panelProdotto.add(lblNome, BorderLayout.CENTER);
-            panelProdotto.add(btnModifica, BorderLayout.EAST);
-
-            CatalogoPane.add(panelProdotto);
-            CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
-        }
-
-    } catch (Exception e) {
-        e.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Errore JPA: " + e.getMessage());
-    } finally {
-        em.close(); // Fondamentale: chiudiamo sempre l'EntityManager
-    }
-
-    CatalogoPane.revalidate();
-    CatalogoPane.repaint();
-}
-     */
     public static void main(String[] args) {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

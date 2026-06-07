@@ -44,8 +44,46 @@ public class Prodotto {
     }
 
 
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
-    //Metodi
+    public void setDescrizione(String descrizione) {
+        this.descrizione = descrizione;
+    }
 
+    public void setDisponibile(boolean disponibile) {
+        isDisponibile = disponibile;
+    }
 
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setPrezzo(float prezzo) {
+        this.prezzo = prezzo;
+
+    }
+
+    public void setScontato(boolean scontato) {
+        isScontato = scontato;
+    }
+
+    public boolean isDisponibile() {
+        return isDisponibile;
+    }
+
+    public boolean isScontato() {
+        return isScontato;
+    }
+    public String getCategoria() {
+        return categoria;
+    }
+    public String getDescrizione() {
+        return descrizione;
+    }
+
+    public float getPrezzo() {
+        return prezzo;
+    }
 }

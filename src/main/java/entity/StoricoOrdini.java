@@ -22,7 +22,7 @@ public class StoricoOrdini {
 
 
     // scriviamo ora i modi per aggiungere e rimuovere ordini nella nostra lista
-    // aggiungiOrdini servirà per ogni instanza di Ordine, mentre rimuovere verrà chiamata da annullaOrdine()
+    //aggiungiOrdini servirà per ogni instanza di Ordine, mentre rimuovere verrà chiamata da annullaOrdine()
 
     public void aggiungiOrdine(Ordine ordineDaAggiungere){
         if (ordineDaAggiungere != null && this.ordini.contains(ordineDaAggiungere)) {
@@ -46,7 +46,9 @@ public class StoricoOrdini {
             System.out.println("La lista è vuota: il sistema non ha ricevuto alcun ordine");
         } else {
             for (Ordine o: ordini){
-                System.out.println("ID:"+o.id+"\t Costo totale:"+o.totale+ "\t Cliente:" + o.cliente+"\tOggetti contenuti:"+o.prodottiContenuti+ "\t Stato Ordine" +o.stato+"\t Data Conferma Ordine:" +o.dataConferma+ "\t Indirizzo Spedizione:"+o.indirizzoSpedizione+"\n");
+                //System.out.println("ID:"+o.id+"\t Costo totale:"+o.totale+ "\t Cliente:" + o.cliente+"\tOggetti contenuti:"+o.prodottiContenuti+ "\t Stato Ordine" +o.stato+"\t Data Conferma Ordine:" +o.dataConferma+ "\t Indirizzo Spedizione:"+o.indirizzoSpedizione+"\n");
+                //unico dubbio:quando il cliente userà questo metodo per visualizzare i propri ordini,
+                //cosa mostrerà data conferma ordine? conviene inserire lì il tasto di conferma?
             }
         }
 
@@ -66,5 +68,9 @@ public class StoricoOrdini {
 
     public void inviaNotifiche(){
         System.out.println("Notifiche inviate"); //stub generico che funziona da placeholder della vera funzione
+    }
+
+    public Ordine cercaOrdinePerId(String idOrdine) {
+        return null;
     }
 }

@@ -12,7 +12,7 @@ public class Carrello {
      private final String mailUtente; //Id di utente è la sua mail (univoco)
 
      @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-     private ArrayList<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
+     private List<CarrelloContiene> prodottiContenuti; // =righe della tabella carrello
      //CarrelloContiene = RigaCarrello {quantità + prodotto}
 
      //Costruttori
@@ -21,22 +21,28 @@ public class Carrello {
         this.prodottiContenuti = new ArrayList<>();
      }
 
+     //un carrello senza utente non esiste, dà errore se non lo si mette ma non ha logico senso????????
      public Carrello() {
          this.mailUtente = null;
          this.prodottiContenuti = new ArrayList<>();
      }
 
      //Metodi
-     public void aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
+     public boolean aggiungiOAggiornaProdotto(Prodotto prodotto, int qtaDesiderata) {
+
+         //<-- Qui se volessi inserire su check sulle quantità lo metterei, ma abbiamo deciso che non serve
+
          for(CarrelloContiene riga : prodottiContenuti) {
-             if(riga.getProdotto().getNome().equals(prodotto.getNome())){ //Se trovo il prodotto nel carrello
+             if(riga.getProdotto().getNome().equals(prodotto.getNome())){
+                 //Se trovo il prodotto nel carrello, aggiorno quantità
                  riga.setQuantita(riga.getQuantita() + qtaDesiderata);
-                 return;
+                 return true;
              }
          }
          //Se non esiste già il prodotto
          CarrelloContiene nuovo = new CarrelloContiene(prodotto, qtaDesiderata);
          prodottiContenuti.add(nuovo);
+         return true;
      }
 
      //Getter + setter
@@ -44,7 +50,7 @@ public class Carrello {
         return mailUtente;
      }
 
-     public ArrayList<CarrelloContiene> getProdottiContenuti() {
+     public List<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
      }
      public void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {

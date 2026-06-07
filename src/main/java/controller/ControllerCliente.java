@@ -1,48 +1,35 @@
 package controller;
 
-import entity.ClientFacade;
-import java.util.List;
-
-//in teoria queste librerie vanno levate quando avremo ultimato clientFacade
-import entity.Ordine;
-import entity.Stato;
+//import StubPagamento.InterfacciaPagamento;
+import entity.ClientFacade; //per comunicare con livello entity
+import entity.Cliente;
 
 public class ControllerCliente {
-    //costruttore
-    //TODO: verificarne la correttezza
-    private ClientFacade cliente;
-    public ControllerCliente(ClientFacade cliente) {
-        this.cliente = cliente;
-    }
 
+    //Attributi
+    private static ClientFacade clientFacade = new ClientFacade();
+
+    //TODO: simulo la mail di cliente attuale
+    private static final String MAIL_CLIENTE = "fornataro.ma@gmail.com";
+
+
+    //Metodi esposti
     public static boolean AggiungiAlCarrello(String NomeProdotto, int qtaDesiderata){
-        //Metodo controller richiamatato dal boundary FrameDettaglioProdotto
-        //TODO: implementare logica per cui, se già presente aggiorno la qtà nel carrello, altrimenti aggiungo al carrello
-        return false;
+        //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
+
+        System.out.println("Eseguendo UC: AggiungiProdottoAlCarrello per "+ MAIL_CLIENTE);
+        //Metodo controller richiamato dal boundary FrameDettaglioProdotto
+        return clientFacade.aggiungiOAggiornaProdottoACarrello(MAIL_CLIENTE, NomeProdotto, qtaDesiderata);
+
     }
 
-    public List<Ordine> richiediElencoOrdini() {
-        //Metodo controller richiamato dal boundary  FrameStoricoOrdini
-        return this.cliente.visualizzaElencoOrdini();
+    public boolean annullaOrdine(Cliente cliente, String id_ordine){
+        return clientFacade.annullaOrdine(cliente, id_ordine);
     }
 
-    public Ordine richiediDettaglioOrdine(Ordine ordineSelezionato){
-        //Metodo controller richiamato dal boundary FrameDettaglioOrdine
-        return ordineSelezionato;
+    public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        clientFacade.creaOrdine(cliente, indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
     }
 
-    public boolean richiediAnnullamentoOrdine(Ordine ordineDaAnnullare) {
-        // REGOLA: posso annullare qualsiasi ordine non consegnatp
-        if (ordineDaAnnullare.getStato() != Stato.CONSEGNATO) {
-            return false;
-        }
-        boolean successo = this.cliente.annullaOrdine(ordineDaAnnullare);
 
-        if (successo) {
-            // TODO: per quando avremo il database
-            System.out.println("Attendi");
-        }
-
-        return successo;
-    }
 }

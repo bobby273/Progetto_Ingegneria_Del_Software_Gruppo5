@@ -1,20 +1,48 @@
 package entity;
-import java.util.List;
+
+//import StubPagamento.InterfacciaPagamento;
+import database.GestorePersistenza;
+import java.util.Map;
+
+import java.util.Map;
 
 public class ClientFacade {
-    //costruttore per permettere la comunicazione col controller
-    private Cliente cliente;
-    public ClientFacade(Cliente cliente) {
-        this.cliente = cliente;
+
+    //Attributi
+    private final GestorePersistenza gp = new GestorePersistenza();
+
+    //Metodi
+
+    public boolean annullaOrdine(Cliente cliente, String id_ordine){
+        return cliente.annullaOrdine(id_ordine);
     }
 
-    public boolean annullaOrdine(Ordine ordine){
-        boolean done = cliente.annullaOrdine(ordine);
+    public void creaOrdine(Cliente cliente, String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
+    }
+
+
+    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
+    public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
+        //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
+
+        //Delego ricerca del prodotto all'informatione expert [catalogo]
+        Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+
+        //Non essendovi un I.F. di clienti, accedo direttamente mediante gp
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+
+        if(prodotto != null && cliente != null){
+
+            boolean esitoAggiunta = cliente.aggiungiProdottoACarrello(prodotto, qtaDesiderata);
+
+            if(esitoAggiunta){
+                gp.aggiorna(cliente);
+                return true;
+            }
+        }
         return false;
-    }
 
-    public List<Ordine> visualizzaElencoOrdini(){
-        return cliente.visualizzaElencoOrdini();
     }
-
 }
+
