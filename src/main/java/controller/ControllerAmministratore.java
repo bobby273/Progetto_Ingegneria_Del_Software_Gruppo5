@@ -15,6 +15,10 @@ public class ControllerAmministratore {
         return adminFacade.annullaOrdine(amministratore, id_ordine);
     }
 
+    public static java.util.List<String[]> ottieniListaProdotti() {
+        return entity.AdminFacade.getListaProdottiPerScorrimento();
+    }
+
     public static boolean creaNuovoProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
         System.out.println("CONTROLLER: Richiesta creazione prodotto. Delego alla Facade...");
         return AdminFacade.creaProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);

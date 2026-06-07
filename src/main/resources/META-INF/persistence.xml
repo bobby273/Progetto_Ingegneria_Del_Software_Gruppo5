@@ -7,6 +7,7 @@
 
         <class>entity.Amministratore</class>
         <class>entity.Cliente</class>
+        <class>entity.Prodotto</class>
 
         <properties>
 
