@@ -2,13 +2,16 @@ package entity;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.List;
+
+import jakarta.persistence.*;
 
 import Exceptions.ErroreDisponibilitaException;
 //import StubPagamento.InterfacciaPagamento;
 
-//@Entity
+@Entity
 public class Ordine {
-    //@Id
+    @Id
     private String id;
 
     private Stato stato;
@@ -16,12 +19,12 @@ public class Ordine {
     private LocalDateTime dataConferma;
     private String indirizzoSpedizione;
 
-    /*
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)*/
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private ArrayList<OrdineContiene> prodottiContenuti;
 
 
-    //@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Cliente cliente;
 
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
@@ -38,7 +41,7 @@ public class Ordine {
     }
 
     private ArrayList<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
-        ArrayList<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
+        List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
         if(prodottiInCarrello.isEmpty()) return null;
         ArrayList<OrdineContiene> prodottiInOrdine = new ArrayList<>();
         for (CarrelloContiene carrelloContiene : prodottiInCarrello) {

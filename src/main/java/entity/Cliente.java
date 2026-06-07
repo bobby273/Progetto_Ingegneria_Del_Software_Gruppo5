@@ -16,7 +16,7 @@ public class Cliente extends Utente{
     private String indirizzoSpedizione;
     private byte immagineProfilo;
 
-
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Ordine> ordiniPersonali;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
