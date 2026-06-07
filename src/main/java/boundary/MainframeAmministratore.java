@@ -29,6 +29,24 @@ public class MainframeAmministratore extends JFrame {
         // Setting per avere la finestra a scorrimento (amazon-style)
         CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
+        String messaggioDlc = "Buy the DLC, you broke ass!";
+
+        visualizzaDettaglioOrdineButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+        );
+
+        consultaAndamentoButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+        );
+
+        visualizzaOrdiniRicevutiButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+        );
+
+        cercaProdottoButton.addActionListener(e ->
+                JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+        );
+
         creaProdottoButton.addActionListener(e -> {
             FrameCreaProdotto frameCrea = new FrameCreaProdotto();
             frameCrea.setVisible(true);
