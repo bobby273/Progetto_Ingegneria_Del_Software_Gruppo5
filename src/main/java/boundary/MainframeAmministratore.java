@@ -39,9 +39,18 @@ public class MainframeAmministratore extends JFrame {
 
             String messaggioDlc = "Buy the DLC, you broke ass!";
 
-            visualizzaDettaglioOrdineButton.addActionListener(e ->
-                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-            );
+            visualizzaDettaglioOrdineButton.addActionListener(e -> {
+                // Richiede l'input all'utente e lo salva nella variabile id_ordine
+                String id_ordine = JOptionPane.showInputDialog(this, "Inserisci l'id dell'ordine:", "0");
+
+                // Controllo di sicurezza: verifica che l'utente non abbia premuto "Annulla" o inserito una stringa vuota
+                if (id_ordine != null && !id_ordine.trim().isEmpty()) {
+                    // Istanzia il nuovo frame passando il controller e l'ID appena recuperato
+                    FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(new ControllerAmministratore(emailUtente), id_ordine);
+                    frameDettaglio.setVisible(true);
+                    frameDettaglio.setLocationRelativeTo(null);
+                }
+            });
 
             consultaAndamentoButton.addActionListener(e ->
                     JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)

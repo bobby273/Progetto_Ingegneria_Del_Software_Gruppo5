@@ -13,7 +13,11 @@ public class ControllerCliente {
     private static final String MAIL_CLIENTE = "fornataro.ma@gmail.com";
 
     //Attributi
-    private static ClientFacade clientFacade = new ClientFacade();
+    private static ClientFacade clientFacade;
+
+    public ControllerCliente(String mailUtente){
+        this.clientFacade = new ClientFacade(mailUtente);
+    }
 
     //Metodi esposti
     public static boolean AggiungiAlCarrello(String NomeProdotto, int qtaDesiderata){
@@ -33,8 +37,8 @@ public class ControllerCliente {
         return clientFacade.annullaOrdine(id_ordine);
     }
 
-    public void creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza); //TODO: Andrebbe aggiunto MAIL_CLIENTE come primo parametro
+    public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        return clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza); //TODO: Andrebbe aggiunto MAIL_CLIENTE come primo parametro
     }
 
     //Per accedere all'intero catalogo --> facade (che spacchetta i dati)

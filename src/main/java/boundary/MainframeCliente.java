@@ -47,11 +47,11 @@ public class MainframeCliente extends JFrame {
             CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
             if (this.controllerCliente == null) {
-                this.controllerCliente = new ControllerCliente();
+                this.controllerCliente = new ControllerCliente(this.emailUtente);
             }
         }
             VediCarrello.addActionListener(e -> {
-                new FrameCarrello();
+                new FrameCarrello(emailUtente);
             });
 
         RicercaProdotto.addActionListener(e -> {

@@ -7,7 +7,6 @@ import java.util.List;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
 
-import Exceptions.ErroreDisponibilitaException;
 //import StubPagamento.InterfacciaPagamento;
 
 @Entity
@@ -49,6 +48,7 @@ public class Ordine {
         for (CarrelloContiene carrelloContiene : prodottiInCarrello) {
             if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(),carrelloContiene.getQuantita(), this));
+                carrello.rimuoviProdotto(carrelloContiene.getProdotto());
             } else {
                 System.out.println("quantità desiderata del prodotto "+carrelloContiene.getProdotto().getNome()+" non disponibile");
             }
