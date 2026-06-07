@@ -12,11 +12,11 @@ public class ClientFacade {
 
     //Attributi
     private final GestorePersistenza gp = new GestorePersistenza();
-    private Cliente cliente;
+    private Cliente cliente; //TODO: Va rimosso
 
     //Metodi
 
-    public ClientFacade(String mailUtente){
+    public ClientFacade(String mailUtente){ //TODO: Va rimosso
         cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
     }
 
@@ -30,11 +30,13 @@ public class ClientFacade {
 
 
     //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
-    public boolean aggiungiOAggiornaProdottoACarrello(String nomeProdotto, int qtaDesiderata){
+    public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
         //Delego ricerca del prodotto all'informatione expert [catalogo]
         Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
 
         if(prodotto != null && cliente != null){
 

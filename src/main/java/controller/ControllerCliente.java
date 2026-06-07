@@ -24,7 +24,7 @@ public class ControllerCliente {
 
         System.out.println("Eseguendo UC: AggiungiProdottoAlCarrello per "+ MAIL_CLIENTE);
         //Metodo controller richiamato dal boundary FrameDettaglioProdotto
-        return clientFacade.aggiungiOAggiornaProdottoACarrello(NomeProdotto, qtaDesiderata);
+        return clientFacade.aggiungiOAggiornaProdottoACarrello(MAIL_CLIENTE,NomeProdotto, qtaDesiderata);
 
     }
 
