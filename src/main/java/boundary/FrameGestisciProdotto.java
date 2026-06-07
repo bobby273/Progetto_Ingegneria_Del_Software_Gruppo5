@@ -2,6 +2,7 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import controller.ControllerAmministratore;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,13 +35,18 @@ public class FrameGestisciProdotto extends JFrame {
     private JLabel isScontatoLabel;
     private JTextField textQtaDisponibile;
 
+    private String nomeProdottoCorrente;
+
     public FrameGestisciProdotto(String nome, String categoria, String prezzo, String descrizione, String qta, boolean disponibile,boolean scontato) {
         $$$setupUI$$$();
         setContentPane(contentPane);
         setTitle("Gestione Prodotto: " + nome);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setSize(900, 600);
+        setLocationRelativeTo(null);
 
+
+        this.nomeProdottoCorrente = nome;
         // ==========================================
 // 1. POPOLAMENTO INIZIALE DEI CAMPI (Dati dallo Stub)
 // ==========================================
@@ -80,97 +86,179 @@ public class FrameGestisciProdotto extends JFrame {
             // ==========================================
 
             // MODIFICA NOME
-            modificaNomeButton.addActionListener(e -> {
-                String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Nome:", textNome.getText());
-                if (input != null) { // null significa che l'utente ha premuto "Annulla"
-                    String nuovoNome = input.trim();
-                    if (nuovoNome.isEmpty() || nuovoNome.length() > 1000) {
-                        JOptionPane.showMessageDialog(this, "Errore: Il nome non può essere vuoto o superare i 1000 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        textNome.setText(nuovoNome);
-                    }
+        modificaNomeButton.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Nome:", textNome.getText());
+            if (input != null) {
+                String nuovoNome = input.trim();
+
+                // Controllo Boundary Locale
+                if (nuovoNome.isEmpty() || nuovoNome.length() > 1000) {
+                    JOptionPane.showMessageDialog(this, "Errore: Il nome non può essere vuoto o superare i 1000 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            });
+
+                // Chiamata al controller
+                boolean successo = ControllerAmministratore.modificaNomeProdotto(this.nomeProdottoCorrente, nuovoNome);
+
+                if (successo) {
+                    textNome.setText(nuovoNome);
+                    this.nomeProdottoCorrente = nuovoNome; // Aggiorna il puntatore logico della finestra per i prossimi click!
+                    setTitle("Gestione Prodotto: " + this.nomeProdottoCorrente);
+                    JOptionPane.showMessageDialog(this, "Nome modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Errore: Il prodotto non esiste o il nuovo nome è già utilizzato.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
 
         // MODIFICA CATEGORIA (Con controllo alfabetico stringente)
+        // MODIFICA CATEGORIA (Pulito, chiama direttamente aggiornaProdotto)
         modificaCategoriaButton.addActionListener(e -> {
+            // 1. Chiediamo prima l'input all'utente
             String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Categoria:", textCategoria.getText());
+
             if (input != null) {
                 String nuovaCat = input.trim();
 
-                // Spiegazione Regex:
-                // ^[a-zA-ZÀ-ÿ\\s]+$ significa: dall'inizio (^) alla fine ($) accetta solo
-                // lettere minuscole/maiuscole (a-z, A-Z), lettere accentate italiane (À-ÿ) e spazi (\\s)
+                // 2. CONTROLLO BOUNDARY LOCALE (Lunghezza e Regex alfabetica)
                 if (nuovaCat.isEmpty() || nuovaCat.length() > 100) {
                     JOptionPane.showMessageDialog(this, "Errore: La categoria non può essere vuota o superare i 100 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
-                } else if (!nuovaCat.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
-                    JOptionPane.showMessageDialog(this, "Errore: La categoria deve contenere solo lettere. Numeri e simboli non sono consentiti.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                if (!nuovaCat.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
+                    JOptionPane.showMessageDialog(this, "Errore: La categoria deve contenere solo lettere. Numeri e simboli non consentiti.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                // 3. CHIAMATA DIRETTA AL METODO AGGIORNA PRODOTTO
+                // Passiamo lo stato attuale di tutta la GUI e la nuova categoria
+                boolean successo = ControllerAmministratore.modificaCategoriaProdotto(this.nomeProdottoCorrente, nuovaCat);
+
+                // 4. GESTIONE DELLA RISPOSTA (Dal Sequence Diagram)
+                if (successo) {
+                    textCategoria.setText(nuovaCat); // Aggiorna la grafica solo se il DB dà l'OK
+                    JOptionPane.showMessageDialog(this, "Categoria modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
                 } else {
-                    textCategoria.setText(nuovaCat);
+                    // Se il controller risponde false (perché il prodotto non esiste più nel DB)
+                    JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica. Il prodotto potrebbe essere stato rimosso.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
 
             // MODIFICA PREZZO
-            modificaPrezzoButton.addActionListener(e -> {
-                String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Prezzo:", textPrezzo.getText());
-                if (input != null) {
-                    String nuovoPrezzoStr = input.trim().replace(",", ".");
-                    try {
-                        double p = Double.parseDouble(nuovoPrezzoStr);
-                        if (p < 0) throw new NumberFormatException();
+        modificaPrezzoButton.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Prezzo:", textPrezzo.getText());
+            if (input != null) {
+                String nuovoPrezzoStr = input.trim().replace(",", ".");
+                try {
+                    float p = Float.parseFloat(nuovoPrezzoStr);
+                    if (p < 0) throw new NumberFormatException();
+
+                    boolean successo = ControllerAmministratore.modificaPrezzoProdotto(this.nomeProdottoCorrente, p);
+
+                    if (successo) {
                         textPrezzo.setText(nuovoPrezzoStr);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(this, "Errore: Inserire un numero decimale valido e maggiore o uguale a 0.", "Errore", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(this, "Prezzo modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
                     }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Errore: Inserire un numero decimale valido (>= 0).", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-            });
+            }
+        });
+
 
             // MODIFICA DESCRIZIONE
-            modificaDescrizioneButton.addActionListener(e -> {
-                String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Descrizione:", areaDescrizione.getText());
-                if (input != null) {
-                    String nuovaDesc = input.trim();
-                    if (nuovaDesc.length() > 1000) {
-                        JOptionPane.showMessageDialog(this, "Errore: La descrizione non può superare i 1000 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
-                    } else {
-                        areaDescrizione.setText(nuovaDesc.isEmpty() ? "" : nuovaDesc);
-                    }
+        modificaDescrizioneButton.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Descrizione:", areaDescrizione.getText());
+            if (input != null) {
+                String nuovaDesc = input.trim();
+
+                if (nuovaDesc.length() > 1000) {
+                    JOptionPane.showMessageDialog(this, "Errore: La descrizione non può superare i 1000 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
                 }
-            });
+
+                boolean successo = ControllerAmministratore.modificaDescrizioneProdotto(this.nomeProdottoCorrente, nuovaDesc);
+
+                if (successo) {
+                    areaDescrizione.setText(nuovaDesc);
+                    JOptionPane.showMessageDialog(this, "Descrizione modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
 
             // MODIFICA QUANTITÀ DISPONIBILE
-            modificaQtaDisponibileButton.addActionListener(e -> {
-                String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Quantità:", textQtaDisponibile.getText());
-                if (input != null) {
-                    String nuovaQtaStr = input.trim();
-                    try {
-                        int q = Integer.parseInt(nuovaQtaStr);
-                        if (q < 0) throw new NumberFormatException();
-                        textQtaDisponibile.setText(nuovaQtaStr);
-                    } catch (NumberFormatException ex) {
-                        JOptionPane.showMessageDialog(this, "Errore: Inserire un numero intero valido maggiore o uguale a 0.", "Errore", JOptionPane.ERROR_MESSAGE);
+        modificaQtaDisponibileButton.addActionListener(e -> {
+            String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Quantità:", textQtaDisponibile.getText());
+            if (input != null) {
+                try {
+                    int nuovaQta = Integer.parseInt(input.trim());
+                    if (nuovaQta < 0) throw new NumberFormatException();
+
+                    boolean successo = ControllerAmministratore.modificaQuantitaProdotto(this.nomeProdottoCorrente, nuovaQta);
+
+                    if (successo) {
+                        textQtaDisponibile.setText(String.valueOf(nuovaQta));
+                        JOptionPane.showMessageDialog(this, "Quantità modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
                     }
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "Errore: Inserire un numero intero valido (>= 0).", "Errore", JOptionPane.ERROR_MESSAGE);
                 }
-            });
+            }
+        });
+
 
             // MODIFICA IS DISPONIBILE (Dialogo a scelta multipla)
-            modificaIsDisponibileButton.addActionListener(e -> {
-                String[] opzioni = {"SI", "NO"};
-                int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è disponibile?", "Modifica Disponibilità",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opzioni, opzioni[0]);
-                if (scelta == 0) SIRadioButtonDisponibile.setSelected(true);
-                if (scelta == 1) NORadioButtonDisponibile.setSelected(true);
-            });
+        modificaIsDisponibileButton.addActionListener(e -> {
+            String[] opzioni = {"SI", "NO"};
+            int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è disponibile?", "Modifica Disponibilità",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opzioni, opzioni[0]);
+
+            if (scelta != JOptionPane.CLOSED_OPTION) { // Controlla che non abbia chiuso il pop-up con la X
+                boolean nuovaDisp = (scelta == 0); // Se sceglie "SI" (indice 0) è true, altrimenti false
+
+                boolean successo = ControllerAmministratore.modificaDisponibilitaProdotto(this.nomeProdottoCorrente, nuovaDisp);
+
+
+                if (successo) {
+                    if (nuovaDisp) SIRadioButtonDisponibile.setSelected(true);
+                    else NORadioButtonDisponibile.setSelected(true);
+                    JOptionPane.showMessageDialog(this, "Disponibilità modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+
 
             // MODIFICA IS SCONTATO
-            modificaIsScontatoButton.addActionListener(e -> {
-                String[] opzioni = {"SI", "NO"};
-                int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è scontato?", "Modifica Sconto",
-                        JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opzioni, opzioni[0]);
-                if (scelta == 0) SIRadioButtonScontato.setSelected(true);
-                if (scelta == 1) NORadioButtonScontato.setSelected(true);
-            });
+        modificaIsScontatoButton.addActionListener(e -> {
+            String[] opzioni = {"SI", "NO"};
+            int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è scontato?", "Modifica Sconto",
+                    JOptionPane.DEFAULT_OPTION, JOptionPane.QUESTION_MESSAGE, null, opzioni, opzioni[0]);
+
+            if (scelta != JOptionPane.CLOSED_OPTION) {
+                boolean nuovoSconto = (scelta == 0);
+
+                boolean successo = ControllerAmministratore.modificaScontoProdotto(this.nomeProdottoCorrente, nuovoSconto);
+
+                if (successo) {
+                    if (nuovoSconto) SIRadioButtonScontato.setSelected(true);
+                    else NORadioButtonScontato.setSelected(true);
+                    JOptionPane.showMessageDialog(this, "Stato sconto modificato con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
+                } else {
+                    JOptionPane.showMessageDialog(this, "Errore: Impossibile completare la modifica.", "Errore Modifica", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
 
             // ==========================================
             // 3. LOGICA TASTO ESCI

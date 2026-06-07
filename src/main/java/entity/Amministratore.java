@@ -1,6 +1,6 @@
 package entity;
 
-import StubPagamento.InterfacciaPagamento;
+// import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +21,7 @@ public class Amministratore extends Utente{
         this.badge=badge;
     }
 
-    public boolean annullaOrdine(String id_ordine) {
+  /*  public boolean annullaOrdine(String id_ordine) {
         StoricoOrdini storicoOrdini = StoricoOrdini.getInstance();
         Ordine ordine = storicoOrdini.cercaOrdinePerId(id_ordine);
         if(ordine == null) return false;
@@ -32,5 +32,5 @@ public class Amministratore extends Utente{
         InterfacciaPagamento.RimborsaOrdine(ordine);
         //invio notifiche
         return true;
-    }
+    } TODO:Scommentare */
 }

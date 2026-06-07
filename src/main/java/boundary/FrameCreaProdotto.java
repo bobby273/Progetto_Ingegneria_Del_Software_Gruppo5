@@ -2,6 +2,7 @@ package boundary;
 
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import controller.ControllerAmministratore;
 
 import javax.swing.*;
 import java.awt.*;
@@ -146,11 +147,15 @@ public class FrameCreaProdotto extends JFrame {
             boolean disponibile = SIRadioButtonDisponibile.isSelected();
             boolean scontato = SIRadioButtonScontato.isSelected();
 
-            // TODO: Qui inserirai la logica JPA per salvare il prodotto
-            JOptionPane.showMessageDialog(this, "Prodotto validato con successo! Pronto per il salvataggio.", "Successo", JOptionPane.INFORMATION_MESSAGE);
+            boolean successo = ControllerAmministratore.creaNuovoProdotto(
+                    nome, categoria, prezzoParsed, descrizione, qtaParsed,
+                    disponibile, scontato
+            );
 
-            // Chiude la finestra corrente tornando al pannello amministratore
-            this.dispose();
+            if (successo) {
+                JOptionPane.showMessageDialog(this, "Prodotto salvato con successo!");
+                this.dispose();
+            }
         });
     }
 

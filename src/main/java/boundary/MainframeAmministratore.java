@@ -1,9 +1,12 @@
 package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
+import controller.ControllerAmministratore;
 
 import javax.swing.*;
 import java.awt.*;
+
+
 
 public class MainframeAmministratore extends JFrame {
     public JPanel contentPane;
@@ -75,7 +78,27 @@ public class MainframeAmministratore extends JFrame {
             boolean isDisp = true;
             boolean isScon = false;
 
+
+
+            btnRimuovi.addActionListener(e -> {
+                int risposta = JOptionPane.showConfirmDialog(this, "Sei sicuro di voler eliminare " + nomeProdotto + "?", "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+
+                if (risposta == JOptionPane.YES_OPTION) {
+                    // Chiamata statica diretta!
+                    boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
+
+                    if (eliminato) {
+                        JOptionPane.showMessageDialog(this, "Prodotto rimosso dal catalogo.");
+                        // TODO:Qui in futuro faremo il refresh del catalogo richiamando fillCatalogo()
+                    }
+                }
+            });
+
+
+            final int idProdotto = i;
+
             btnGestione.addActionListener(e -> {
+                JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto);
                 // Passiamo tutti i campi al costruttore della schermata di gestione
                 FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
                         nomeProd, catProd, prezzoProd, descProd, qtaProd, isDisp, isScon
@@ -83,11 +106,6 @@ public class MainframeAmministratore extends JFrame {
                 frameGestione.setVisible(true);
                 frameGestione.setLocationRelativeTo(null);
             });
-
-
-            final int idProdotto = i;
-            btnGestione.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
-            btnRimuovi.addActionListener(e -> JOptionPane.showMessageDialog(this, "Modifica prodotto " + idProdotto));
 
             panelProdotto.add(lblInfo, BorderLayout.CENTER);
             panelProdotto.add(panelButtons, BorderLayout.EAST);
