@@ -67,4 +67,10 @@ public class ControllerCliente {
             );
         }
     }
+
+    // Metodo per far verificare alla Boundary se un prodotto esiste (permettere stampa di mess errore apposito [testing])
+    public static boolean esisteProdotto(String nomeProdotto) {
+        // Verifico mediante metodo Facade
+        return clientFacade.ricercaProdotto(nomeProdotto) != null;
+    }
 }

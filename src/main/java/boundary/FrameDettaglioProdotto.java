@@ -68,7 +68,16 @@ public class FrameDettaglioProdotto extends JFrame {
 
     private boolean checkInput(String nomeProdotto, int qtaDesiderata){
         boolean esito = false;
-        if(!nomeProdotto.isEmpty() && nomeProdotto.length() < 1000){//TODO: Nome non presente in catalogo
+        if(!nomeProdotto.isEmpty() && nomeProdotto.length() < 1000){
+
+            if(!ControllerCliente.esisteProdotto(nomeProdotto)){
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Errore! Non presente nel catalogo!",
+                        "Errore aggiunta al carrello",
+                        JOptionPane.ERROR_MESSAGE);
+                return false; // Interrompiamo tutto subito
+            }
 
             if (qtaDesiderata > 0) {
                 //Quantità inserita valida; si procede al controller
