@@ -23,6 +23,7 @@ public class MainframeCliente extends JFrame {
     private ControllerCliente controllerCliente;
 
     public MainframeCliente() {
+        //design della finestra
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
@@ -35,6 +36,7 @@ public class MainframeCliente extends JFrame {
 
         CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
+        //Click del bottone carrello
         VediCarrello.addActionListener(e -> {
             new FrameCarrello();
             setVisible(true);

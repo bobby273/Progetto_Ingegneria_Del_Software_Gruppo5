@@ -14,12 +14,15 @@ public class ClientFacade {
     private final GestorePersistenza gp = new GestorePersistenza();
     private Cliente cliente; //TODO: Va rimosso
 
-    //Metodi
 
+    //Costruttori
     public ClientFacade(String mailUtente){ //TODO: Va rimosso
         cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
     }
 
+    public ClientFacade(){}
+
+    //Metodi
     public boolean annullaOrdine(String id_ordine) {
         boolean annullato = cliente.annullaOrdine(id_ordine);
         Ordine aggiorna=null;
@@ -56,7 +59,73 @@ public class ClientFacade {
             }
         }
         return false;
+    }
+    //Manuel: per rimuovere prodotti dal carrello
+    public boolean rimuoviProdottoDalCarrello(String mailUtente, String nomeProdotto){
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+        if(cliente != null){
+            Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
 
+            boolean esitoRimozione = cliente.rimuoviProdottoDalCarrello(prodotto);
+
+            if(esitoRimozione){
+                gp.aggiorna(cliente);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    //Metodi di spacchettamento per garantire isolamento di prodotto
+    public List<String[]> getCatalogoBreve() {
+        List<Prodotto> prodotti = Catalogo.getInstance().getTuttiIProdotti();
+        List<String[]> catalogoBreve = new ArrayList<>();
+
+        if (prodotti != null) {
+            for (Prodotto p : prodotti) {
+                catalogoBreve.add(new String[]{p.getNome(), p.getDescrizione()});
+            }
+        }
+        return catalogoBreve;
+    }
+
+    public List<String[]> getCarrelloBreve(String mailUtente) {
+        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+        List<String[]> carrelloBreve = new ArrayList<>();
+
+        if (cliente != null && cliente.getProdottiCarrello() != null) {
+            for (CarrelloContiene item : cliente.getProdottiCarrello()) {
+                Prodotto p = item.getProdotto();
+                carrelloBreve.add(new String[]{
+                        p.getNome(),
+                        p.getDescrizione(),
+                        String.valueOf(p.getPrezzo()),
+                        p.getCategoria(),
+                        String.valueOf(item.getQuantita())
+                });
+            }
+        }
+        return carrelloBreve;
+    }
+
+        public Object[] getDettagliProdotto (String nomeProdotto){
+            Prodotto p = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+
+            if (p != null) {
+                return new Object[]{
+                        p.getNome(),
+                        p.getPrezzo(),
+                        p.getCategoria(),
+                        p.getQtaDisponibile(),
+                        p.IsScontato(),
+                        p.getDescrizione()
+                };
+            }
+            return null;
+        }
+
+    public boolean esisteProdotto(String nomeProdotto) {
+        return Catalogo.getInstance().ricercaProdotto(nomeProdotto) != null;
     }
 
     public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
@@ -82,21 +151,6 @@ public class ClientFacade {
         return new ArrayList<>();
     }
 
-    //Manuel: per rimuovere prodotti dal carrello
-    public boolean rimuoviProdottoDalCarrello(String mailUtente, String nomeProdotto){
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        if(cliente != null){
-            Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-
-            boolean esitoRimozione = cliente.rimuoviProdottoDalCarrello(prodotto);
-
-            if(esitoRimozione){
-                gp.aggiorna(cliente);
-                return true;
-            }
-        }
-        return false;
-    }
 
     public Long getIdClienteDaIdOrdine(String id_ordine){
         Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
@@ -133,6 +187,28 @@ public class ClientFacade {
         }
 
         return prodotti;
+    }
+
+    // Nella ClientFacade: Metodo per la ricerca che restituisce i dati pronti per la GUI
+    public List<String[]> ricercaProdottoInCatalogoBreve(String categoriaRicerca, String elementoDaCercare) {
+        List<Prodotto> prodottiTrovati;
+
+        // Se la ricerca è vuota, restituiamo tutto il catalogo
+        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti();
+        } else {
+            // Altrimenti deleghiamo al catalogo la ricerca specifica
+            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+        }
+
+        // Spacchettiamo i risultati per la Boundary
+        List<String[]> risultatiBrevi = new ArrayList<>();
+        if (prodottiTrovati != null) {
+            for (Prodotto p : prodottiTrovati) {
+                risultatiBrevi.add(new String[]{p.getNome(), p.getDescrizione()});
+            }
+        }
+        return risultatiBrevi;
     }
 
 }
