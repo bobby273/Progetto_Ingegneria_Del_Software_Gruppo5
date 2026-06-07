@@ -72,75 +72,108 @@ public class MainframeAmministratore extends JFrame {
         // Riceviamo una lista di array di stringhe dal Controller
         java.util.List<String[]> listaVeriProdotti = ControllerAmministratore.ottieniListaProdotti();
 
-        for (String[] dati : listaVeriProdotti) {
+        if (listaVeriProdotti.isEmpty()) {
+            // Forziamo il BorderLayout per questo ramo
+            CatalogoPane.setLayout(new BorderLayout());
 
-            JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
-            panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                    BorderFactory.createEtchedBorder()
-            ));
-            panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+            JPanel emptyPanel = new JPanel(new GridBagLayout());
+            emptyPanel.setBackground(CatalogoPane.getBackground());
 
-            // Estraiamo i dati dall'array usando gli indici stabiliti nella Facade
-            String nomeProdotto = dati[0];
-            String categoriaProdotto = dati[1];
-            String prezzoProdotto = dati[2];
-            String descrizioneProdotto = dati[3];
-            String qtaProdotto = dati[4];
+            GridBagConstraints gbc = new GridBagConstraints();
+            gbc.gridx = 0; gbc.gridy = 0;
+            gbc.insets = new Insets(6, 0, 6, 0);
+            gbc.anchor = GridBagConstraints.CENTER;
 
-            // Per i booleani di visualizzazione, facciamo controlli logici veloci dalle stringhe
-            boolean isDisponibile = Integer.parseInt(qtaProdotto) > 0;
-            boolean isScontato = false;
+            JLabel iconLabel = new JLabel("📦");
+            iconLabel.setFont(new Font("Segoe UI Emoji", Font.PLAIN, 56));
+            emptyPanel.add(iconLabel, gbc);
 
-            String testoHtml = "<html><h3 style='margin:0; color:#2c3e50;'>" + nomeProdotto + "</h3>" +
-                    "<p style='margin:0; font-size:11px; color:#7f8c8d;'>" + descrizioneProdotto + "</p>" +
-                    "<b style='color:#27ae60;'>" + prezzoProdotto + " €</b> - Qta: " + qtaProdotto + "</html>";
+            gbc.gridy = 1;
+            JLabel titleLabel = new JLabel("Il catalogo è vuoto");
+            titleLabel.setFont(new Font("Segoe UI", Font.BOLD, 18));
+            titleLabel.setForeground(new Color(44, 62, 80));
+            emptyPanel.add(titleLabel, gbc);
 
-            JLabel lblInfo = new JLabel(testoHtml);
+            gbc.gridy = 2;
+            JLabel subtitleLabel = new JLabel("Non ci sono articoli disponibili in questo momento.");
+            subtitleLabel.setFont(new Font("Segoe UI", Font.PLAIN, 13));
+            subtitleLabel.setForeground(new Color(127, 140, 141));
+            emptyPanel.add(subtitleLabel, gbc);
 
-            JPanel panelButtons = new JPanel(new GridLayout(1, 2, 5, 0));
-            JButton btnGestione = new JButton("Gestisci");
-            JButton btnRimuovi = new JButton("Rimuovi");
-            panelButtons.add(btnGestione);
-            panelButtons.add(btnRimuovi);
+            CatalogoPane.add(emptyPanel, BorderLayout.CENTER);
+        }
+        else {
+            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+            for (String[] dati : listaVeriProdotti) {
 
-            btnRimuovi.addActionListener(e -> {
-                int risposta = JOptionPane.showConfirmDialog(this,
-                        "Sei sicuro di voler eliminare permanentemente " + nomeProdotto + " dal catalogo?",
-                        "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+                JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
+                panelProdotto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                        BorderFactory.createEtchedBorder()
+                ));
+                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
 
-                if (risposta == JOptionPane.YES_OPTION) {
-                    boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
-                    if (eliminato) {
-                        JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
-                        fillCatalogo();
-                    } else {
-                        JOptionPane.showMessageDialog(this, "Errore nell'eliminazione.", "Errore", JOptionPane.ERROR_MESSAGE);
-                    }
-                }
-            });
+                // Estraiamo i dati dall'array usando gli indici stabiliti nella Facade
+                String nomeProdotto = dati[0];
+                String categoriaProdotto = dati[1];
+                String prezzoProdotto = dati[2];
+                String descrizioneProdotto = dati[3];
+                String qtaProdotto = dati[4];
 
-            btnGestione.addActionListener(e -> {
-                // Passiamo le stringhe estratte direttamente al costruttore
-                FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
-                        nomeProdotto, categoriaProdotto, prezzoProdotto, descrizioneProdotto, qtaProdotto, isDisponibile, isScontato
-                );
-                frameGestione.setVisible(true);
-                frameGestione.setLocationRelativeTo(null);
+                // Per i booleani di visualizzazione, facciamo controlli logici veloci dalle stringhe
+                boolean isDisponibile = Integer.parseInt(qtaProdotto) > 0;
+                boolean isScontato = false;
 
-                frameGestione.addWindowListener(new WindowAdapter() {
-                    @Override
-                    public void windowClosed(WindowEvent windowEvent) {
-                        fillCatalogo();
+                String testoHtml = "<html><h3 style='margin:0; color:#2c3e50;'>" + nomeProdotto + "</h3>" +
+                        "<p style='margin:0; font-size:11px; color:#7f8c8d;'>" + descrizioneProdotto + "</p>" +
+                        "<b style='color:#27ae60;'>" + prezzoProdotto + " €</b> - Qta: " + qtaProdotto + "</html>";
+
+                JLabel lblInfo = new JLabel(testoHtml);
+
+                JPanel panelButtons = new JPanel(new GridLayout(1, 2, 5, 0));
+                JButton btnGestione = new JButton("Gestisci");
+                JButton btnRimuovi = new JButton("Rimuovi");
+                panelButtons.add(btnGestione);
+                panelButtons.add(btnRimuovi);
+
+                btnRimuovi.addActionListener(e -> {
+                    int risposta = JOptionPane.showConfirmDialog(this,
+                            "Sei sicuro di voler eliminare permanentemente " + nomeProdotto + " dal catalogo?",
+                            "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+
+                    if (risposta == JOptionPane.YES_OPTION) {
+                        boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
+                        if (eliminato) {
+                            JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
+                            fillCatalogo();
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Errore nell'eliminazione.", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 });
-            });
 
-            panelProdotto.add(lblInfo, BorderLayout.CENTER);
-            panelProdotto.add(panelButtons, BorderLayout.EAST);
+                btnGestione.addActionListener(e -> {
+                    // Passiamo le stringhe estratte direttamente al costruttore
+                    FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
+                            nomeProdotto, categoriaProdotto, prezzoProdotto, descrizioneProdotto, qtaProdotto, isDisponibile, isScontato
+                    );
+                    frameGestione.setVisible(true);
+                    frameGestione.setLocationRelativeTo(null);
 
-            CatalogoPane.add(panelProdotto);
-            CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+                    frameGestione.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent windowEvent) {
+                            fillCatalogo();
+                        }
+                    });
+                });
+
+                panelProdotto.add(lblInfo, BorderLayout.CENTER);
+                panelProdotto.add(panelButtons, BorderLayout.EAST);
+
+                CatalogoPane.add(panelProdotto);
+                CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
         }
 
         CatalogoPane.revalidate();
