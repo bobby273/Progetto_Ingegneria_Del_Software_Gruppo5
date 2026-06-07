@@ -3,7 +3,6 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.ControllerCliente;
-import entity.Prodotto;
 
 import javax.swing.*;
 import javax.swing.border.Border;
@@ -36,44 +35,14 @@ public class MainframeCliente extends JFrame {
     private void fillCatalogo() {
         CatalogoPane.removeAll();
 
-        //TODO: Sto simulando stub, qua ci andrà la lista vera
-        //TODO: Va aggiunta la gestione di catalogo vuoto!
-        //visualizzazione dei prodotti
-        /*for (int i = 0; i < 20; i++) {
-            JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
-            panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                    BorderFactory.createEmptyBorder(5, 5, 5, 5),
-                    BorderFactory.createEtchedBorder()
-            ));
-
-            panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
-
-            String nomeProdotto = "Prodotto <" + i + ">";
-            String descrizioneProdotto = "Descrizione prodotto <" + i + ">";
-            String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
-                    "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
-
-            JLabel lblInfo = new JLabel(testoHtml);
-            JButton btnInfo = new JButton("Altre info");
-
-            final int idProdotto = i;
-            btnInfo.addActionListener(e -> JOptionPane.showMessageDialog(this, "Apertura dettagli prodotto " + idProdotto));
-
-            panelProdotto.add(lblInfo, BorderLayout.CENTER);
-            panelProdotto.add(btnInfo, BorderLayout.EAST);
-
-            CatalogoPane.add(panelProdotto);
-            CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
-        }*/
-
-        //Chiama database con controller
-        List<Prodotto> prodotti = ControllerCliente.getTuttiIProdotti();
+        //Chiama database con controller (restituisce lista di array di stringhe: [0]=Nome, [1]=Descrizione)
+        List<String[]> prodotti = ControllerCliente.getCatalogoBreve();
 
         if(prodotti==null || prodotti.isEmpty()){
             CatalogoPane.add(new JLabel("Catalogo vuoto -- Riprova più tardi"));
         }
         else{
-            for(Prodotto p : prodotti){
+            for(String[] p : prodotti){
                 JPanel panelProdotto = new JPanel(new BorderLayout(15,10));
                 //Estetica
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
@@ -83,9 +52,9 @@ public class MainframeCliente extends JFrame {
 
                 panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE,80));
 
-                //I dati veri e propri
-                String nomeProdotto = p.getNome();
-                String descrizioneProdotto = p.getDescrizione();
+                //I dati veri e propri spacchettati
+                String nomeProdotto = p[0];
+                String descrizioneProdotto = p[1];
                 String testoHtml = "<html><h3 style='margin:0;'>" + nomeProdotto + "</h3>" +
                         "<p style='margin:0;'>" + descrizioneProdotto + "</p></html>";
 
@@ -95,7 +64,7 @@ public class MainframeCliente extends JFrame {
 
                 // Button
                 btnInfo.addActionListener(e -> {
-                    new FrameDettaglioProdotto(p); //Chiamata a FrameDettaglioPrdotto
+                    ControllerCliente.apriDettaglioProdotto(nomeProdotto); //Chiamata a Controller
                 });
 
                 panelProdotto.add(lblInfo, BorderLayout.CENTER);
