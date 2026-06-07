@@ -6,8 +6,6 @@ import database.GestorePersistenza;
 import java.util.List;
 import java.util.Map;
 
-import java.util.Map;
-
 public class ClientFacade {
 
     //Attributi
@@ -47,13 +45,19 @@ public class ClientFacade {
 
     }
 
-    //metodo per accedere al catalogo (visualizza tutti i prodotti)
+    public Prodotto ricercaProdotto(String nomeProdotto) {
+        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+    }
+
+
     public List<Prodotto> getTuttiIProdotti(){
         return Catalogo.getInstance().getTuttiIProdotti();
     }
 
-    public Prodotto ricercaProdotto(String nomeProdotto) {
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
+
 }
 

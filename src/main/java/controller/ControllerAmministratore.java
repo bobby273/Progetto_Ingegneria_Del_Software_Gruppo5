@@ -55,5 +55,14 @@ public class ControllerAmministratore {
     public static boolean rimuoviProdotto(String nomeProdotto) {
         return AdminFacade.rimuoviProdotto(nomeProdotto);
     }
+
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+            return adminFacade.getTuttiIProdotti();
+        }
+
+        // Deleghiamo il lavoro alla Facade
+        return adminFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
+}
 

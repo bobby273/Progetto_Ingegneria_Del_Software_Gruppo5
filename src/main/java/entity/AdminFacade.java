@@ -1,9 +1,5 @@
 package entity;
 
-import database.GestorePersistenza;
-import database.JpaUtil;
-import jakarta.persistence.EntityManager;
-
 import java.util.List;
 
 public class AdminFacade {
@@ -68,7 +64,16 @@ public class AdminFacade {
 
         return listaDatiGrezzi;
     }
+
+    public List<Prodotto> getTuttiIProdotti(){
+        return Catalogo.getInstance().getTuttiIProdotti();
     }
+
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    }
+
+}
 
 
 

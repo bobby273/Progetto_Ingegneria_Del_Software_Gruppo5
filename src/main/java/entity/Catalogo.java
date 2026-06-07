@@ -155,18 +155,17 @@ public class Catalogo {
     }
 
 
-    public List<Prodotto> ricercaProdotto(String campoDiRicerca, String testoDigitato) {
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
 
         GestorePersistenza gestore = new GestorePersistenza();
         final List<String> CAMPI_RICERCA_AMMESSI = Arrays.asList("nome", "categoria", "descrizione");
 
-        // 1. Controllo di sicurezza per evitare che utenti da terminale possano cercare su campi non ammessi.
-        if (!CAMPI_RICERCA_AMMESSI.contains(campoDiRicerca)) {
+        // Controllo di sicurezza per evitare che utenti da terminale possano cercare su campi non ammessi.
+        if (!CAMPI_RICERCA_AMMESSI.contains(categoriaRicerca)) {
             // Se il campo non è tra quelli ammessi, lanciamo un'eccezione o restituiamo null/lista vuota
-            throw new IllegalArgumentException("Campo di ricerca non valido: " + campoDiRicerca);
+            throw new IllegalArgumentException("Campo di ricerca non valido: " + categoriaRicerca);
         }
 
-        // 2. Se è tutto ok, deleghiamo al gestore del prof
-        return gestore.cercaPerCampo(Prodotto.class, campoDiRicerca, testoDigitato);
+        return gestore.cercaPerCampo(Prodotto.class, categoriaRicerca, elementoDaCercare);
     }
 }

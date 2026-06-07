@@ -73,4 +73,13 @@ public class ControllerCliente {
         // Verifico mediante metodo Facade
         return clientFacade.ricercaProdotto(nomeProdotto) != null;
     }
+
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+            return clientFacade.getTuttiIProdotti();
+        }
+
+        // Deleghiamo il lavoro alla Facade
+        return clientFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    }
 }
