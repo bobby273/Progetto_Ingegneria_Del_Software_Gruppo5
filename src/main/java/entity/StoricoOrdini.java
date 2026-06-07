@@ -46,7 +46,7 @@ public class StoricoOrdini {
             System.out.println("La lista è vuota: il sistema non ha ricevuto alcun ordine");
         } else {
             for (Ordine o: ordini){
-                //System.out.println("ID:"+o.id+"\t Costo totale:"+o.totale+ "\t Cliente:" + o.cliente+"\tOggetti contenuti:"+o.prodottiContenuti+ "\t Stato Ordine" +o.stato+"\t Data Conferma Ordine:" +o.dataConferma+ "\t Indirizzo Spedizione:"+o.indirizzoSpedizione+"\n");
+                System.out.println("ID:"+o.getId()+"\t Costo totale:"+o.getTotale()+ "\t Cliente:" + o.getCliente()+"\tOggetti contenuti:"+o.getProdottiContenuti()+ "\t Stato Ordine" +o.getStato()+"\t Data Conferma Ordine:" +o.getDataConferma()+ "\t Indirizzo Spedizione:"+o.getIndirizzoSpedizione()+"\n");
                 //unico dubbio:quando il cliente userà questo metodo per visualizzare i propri ordini,
                 //cosa mostrerà data conferma ordine? conviene inserire lì il tasto di conferma?
             }
@@ -59,6 +59,16 @@ public class StoricoOrdini {
         return (List<Ordine>) this.ordini;
     }
 
+    Ordine cercaOrdinePerId(String id_ordine){
+        Ordine cercato = null;
+        for(Ordine o: this.ordini){
+            if(o.getId().equals(id_ordine)){
+                cercato = o;
+                break;
+            }
+        }
+        return cercato;
+    }
 
 
     //casi d'uso non trattati in questo progetto:
@@ -68,9 +78,5 @@ public class StoricoOrdini {
 
     public void inviaNotifiche(){
         System.out.println("Notifiche inviate"); //stub generico che funziona da placeholder della vera funzione
-    }
-
-    public Ordine cercaOrdinePerId(String idOrdine) {
-        return null;
     }
 }
