@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class Catalogo {
 
-    public static Catalogo instance; //SINGLETON
+    static Catalogo instance; //SINGLETON
 
     private GestorePersistenza gp;
 
@@ -53,7 +53,7 @@ public class Catalogo {
         return ris.isEmpty() ? null : ris.get(0);
     }
 
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+    List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
 
         GestorePersistenza gestore = new GestorePersistenza();
         final List<String> CAMPI_RICERCA_AMMESSI = Arrays.asList("nome", "categoria", "descrizione");

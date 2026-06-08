@@ -17,15 +17,15 @@ public class Prodotto {
     private String nome;
 
     //Getter e setter
-    public int getQtaDisponibile() {
+    int getQtaDisponibile() {
         return qtaDisponibile;
     }
 
-    public String getNome() {
+    String getNome() {
         return nome;
     }
 
-    public void setQtaDisponibile(int qtaDisponibile) {
+    void setQtaDisponibile(int qtaDisponibile) {
         this.qtaDisponibile = qtaDisponibile;
     }
 
@@ -33,7 +33,7 @@ public class Prodotto {
     public Prodotto() {
     }
 
-    public Prodotto(String nome, int qtaDisponibile, String descrizione, float prezzo, String categoria, boolean isDisponibile, boolean isScontato) {
+    Prodotto(String nome, int qtaDisponibile, String descrizione, float prezzo, String categoria, boolean isDisponibile, boolean isScontato) {
         this.nome = nome;
         this.qtaDisponibile = qtaDisponibile;
         this.descrizione = descrizione;
@@ -44,23 +44,23 @@ public class Prodotto {
     }
 
 
-    public void setCategoria(String categoria) {
+    void setCategoria(String categoria) {
         this.categoria = categoria;
     }
 
-    public void setDescrizione(String descrizione) {
+    void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
 
-    public void setDisponibile(boolean disponibile) {
+    void setDisponibile(boolean disponibile) {
         isDisponibile = disponibile;
     }
 
-    public void setNome(String nome) {
+    void setNome(String nome) {
         this.nome = nome;
     }
 
-    public void setPrezzo(float prezzo) {
+    void setPrezzo(float prezzo) {
         this.prezzo = prezzo;
 
     }

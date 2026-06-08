@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 public class Cliente extends Utente{
+    //Attributi
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -26,13 +27,17 @@ public class Cliente extends Utente{
     //Costruttori
     public Cliente(){}
 
-    public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
+    Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         super(email, nome, cognome, password);
         this.indirizzoSpedizione=indirizzoSpedizione;
         this.ordiniPersonali=new ArrayList<Ordine>();
         this.carrello = new Carrello(email);
     }
 
+    //Getter e setter
+    Long getId(){
+        return id;
+    }
 
     //Metodi
     Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
@@ -85,9 +90,6 @@ public class Cliente extends Utente{
         return cercato;
     }
 
-    Long getId(){
-        return id;
-    }
     List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
@@ -119,7 +121,7 @@ public class Cliente extends Utente{
     }
 
 
-    public void visualizzaInfoOrdine(Ordine ordineSelezionato) {
+    void visualizzaInfoOrdine(Ordine ordineSelezionato) {
         if (ordineSelezionato == null) {
             System.out.println("Errore: Nessun ordine selezionato."); //tale if serve per evitare errori di NullPointerException
             //in caso di avvio del metodo da terminale

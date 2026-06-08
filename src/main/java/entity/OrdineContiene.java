@@ -13,7 +13,7 @@ public class OrdineContiene {
     private Prodotto prodotto;
 
     //Costruttori
-    public OrdineContiene(Prodotto prodotto, int quantita, Ordine o) {
+    OrdineContiene(Prodotto prodotto, int quantita, Ordine o) {
         this.prodotto = prodotto;
         this.quantità = quantita;
         this.ordine_id = o.getId();
@@ -23,15 +23,15 @@ public class OrdineContiene {
     }
 
     //Getter e setter
-    public int getQuantita() {
+    int getQuantita() {
         return quantità;
     }
 
-    public void setQuantita(int quantita) {
+    void setQuantita(int quantita) {
         this.quantità = quantita;
     }
 
-    public Prodotto getProdotto() {
+    Prodotto getProdotto() {
         return prodotto;
     }
 }

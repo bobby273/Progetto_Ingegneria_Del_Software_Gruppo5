@@ -15,7 +15,7 @@ public class CarrelloContiene {
     Prodotto prodotto;
 
     //Costruttori
-    public CarrelloContiene(Prodotto prodotto, int quantita) {
+    CarrelloContiene(Prodotto prodotto, int quantita) {
         this.prodotto = prodotto;
         this.quantita = quantita;
     }
@@ -24,14 +24,14 @@ public class CarrelloContiene {
     }
 
     //Getter e setter
-    public int getQuantita() {
+    int getQuantita() {
         return quantita;
     }
-    public void setQuantita(int quantita) {
+    void setQuantita(int quantita) {
         this.quantita = quantita;
     }
 
-    public Prodotto getProdotto() {
+    Prodotto getProdotto() {
         return prodotto;
     }
 
