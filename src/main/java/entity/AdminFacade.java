@@ -25,12 +25,12 @@ public class AdminFacade {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
             boolean annullato = amministratore.annullaOrdine(id_ordine);
-            Ordine aggiorna = null;
+            boolean aggiorna = false;
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = gp.aggiorna(o);
+                aggiorna = (gp.aggiorna(o)==null || gp.aggiorna(o.getCliente())==null);
             }
-            return (aggiorna != null);
+            return aggiorna;
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
