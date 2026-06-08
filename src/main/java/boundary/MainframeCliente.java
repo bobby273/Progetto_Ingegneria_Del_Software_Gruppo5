@@ -20,7 +20,7 @@ public class MainframeCliente extends JFrame {
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
     private JLabel lblCatalogo;
-    private JButton btnVisualizzaCatalogo;
+    private JButton esciButton;
     private JFrame frameStoricoOrdini;
     private ControllerCliente controllerCliente;
 
@@ -34,7 +34,7 @@ public class MainframeCliente extends JFrame {
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        btnVisualizzaCatalogo.setVisible(false);
+        esciButton.setVisible(false);
 
         if (checkLogin(emailUtente, CLIENTE) != CLIENTE) {
             JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
@@ -74,6 +74,12 @@ public class MainframeCliente extends JFrame {
                 frameStoricoOrdini.requestFocus();
             }
         });
+        esciButton.addActionListener(e -> {
+            fillCatalogo();
+            lblCatalogo.setText("Catalogo");
+            esciButton.setVisible(false);
+        });
+
         setVisible(true);
     }
 
@@ -142,6 +148,7 @@ public class MainframeCliente extends JFrame {
     public void mostraRisultatiRicerca(List<String[]> prodottiFiltrati) {
         CatalogoPane.removeAll();
         lblCatalogo.setText("Risultati della ricerca");
+        esciButton.setVisible(true);
         if (prodottiFiltrati == null || prodottiFiltrati.isEmpty()) {
             JLabel lblVuoto = new JLabel("Nessun prodotto trovato per i criteri inseriti.", SwingConstants.CENTER);
             lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
@@ -232,9 +239,14 @@ public class MainframeCliente extends JFrame {
         if (lblCatalogoFont != null) lblCatalogo.setFont(lblCatalogoFont);
         lblCatalogo.setText("Catalogo");
         contentPanel.add(lblCatalogo, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        btnVisualizzaCatalogo = new JButton();
-        btnVisualizzaCatalogo.setText("Esci");
-        contentPanel.add(btnVisualizzaCatalogo, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        esciButton = new JButton();
+        esciButton.setEnabled(true);
+        Font esciButtonFont = this.$$$getFont$$$("Segoe UI Variable", Font.BOLD, 16, esciButton.getFont());
+        if (esciButtonFont != null) esciButton.setFont(esciButtonFont);
+        esciButton.setForeground(new Color(-13171176));
+        esciButton.setMargin(new Insets(10, 30, 10, 30));
+        esciButton.setText("Esci");
+        contentPanel.add(esciButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
