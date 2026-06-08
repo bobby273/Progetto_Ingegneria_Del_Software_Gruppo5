@@ -38,7 +38,7 @@ public class ClientFacade {
             }
             return (aggiorna != null);
         } else{
-            //il null e' sus
+            //il null è sus
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -57,7 +57,6 @@ public class ClientFacade {
     }
 
 
-    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
     public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
