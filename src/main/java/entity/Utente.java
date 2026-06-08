@@ -10,22 +10,23 @@ public class Utente {
     private String password;
 
     public Utente(){}
-    public Utente(String email, String nome, String cognome, String password){
+    Utente(String email, String nome, String cognome, String password){
         this.email=email;
         this.nome=nome;
         this.cognome=cognome;
         this.password=password;
     }
 
-    public String getNome() {
+    //Getter e setter
+    String getNome() {
         return nome;
     }
-    public String getCognome() {
+    String getCognome() {
         return cognome;
     }
 
     // l'unico get utile è quello dell'email in quanto serve per la visualizzazione degli ordini personali
-    public String getEmail() {
+    String getEmail() {
         return email;
     }
 }

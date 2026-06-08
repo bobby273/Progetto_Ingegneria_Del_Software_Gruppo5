@@ -6,10 +6,13 @@ import controller.ControllerCliente;
 
 import javax.swing.*;
 import javax.swing.border.Border;
+import javax.swing.plaf.FontUIResource;
+import javax.swing.text.StyleContext;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.List;
+import java.util.Locale;
 
 import static controller.ControllerAccesso.checkLogin;
 
@@ -25,17 +28,17 @@ public class MainframeCliente extends JFrame {
     private ControllerCliente controllerCliente;
 
     private String emailUtente = "";
-    public static final int CLIENTE=8;
+    public static final int CLIENTE = 8;
 
     public MainframeCliente(String emailUtente) {
         //design della finestra
-        this.emailUtente=emailUtente;
+        this.emailUtente = emailUtente;
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        if(checkLogin(emailUtente, CLIENTE)!=CLIENTE) {
+        if (checkLogin(emailUtente, CLIENTE) != CLIENTE) {
             JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
         } else {
             //setting per avere finestra a scorrimento (amazon-style)
@@ -46,14 +49,14 @@ public class MainframeCliente extends JFrame {
                 this.controllerCliente = new ControllerCliente(this.emailUtente);
             }
         }
-            fillCatalogo();
+        fillCatalogo();
 
-            //Click del bottone carrello
-            CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        //Click del bottone carrello
+        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-            VediCarrello.addActionListener(e -> {
-                new FrameCarrello(emailUtente);
-            });
+        VediCarrello.addActionListener(e -> {
+            new FrameCarrello(emailUtente);
+        });
 
         RicercaProdotto.addActionListener(e -> {
 
@@ -70,13 +73,13 @@ public class MainframeCliente extends JFrame {
 
                     frameStoricoOrdini.setLocationRelativeTo(null);
 
-                        frameStoricoOrdini.setVisible(true);
+                    frameStoricoOrdini.setVisible(true);
 
 
-                    } else {
+                } else {
 
-                        frameStoricoOrdini.toFront();
-                        frameStoricoOrdini.requestFocus();
+                    frameStoricoOrdini.toFront();
+                    frameStoricoOrdini.requestFocus();
 
                 }
             }
@@ -107,7 +110,7 @@ public class MainframeCliente extends JFrame {
                 panelProdotto.setBackground(Color.WHITE);
                 //Estetica
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(220,220,220), 1, true),
+                        BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
                         BorderFactory.createEmptyBorder(12, 15, 12, 15)
                 ));
 
@@ -126,7 +129,7 @@ public class MainframeCliente extends JFrame {
                 JButton btnInfo = new JButton("Altre info");
                 btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 btnInfo.setBackground(new Color(230, 230, 230)); // Azzurro moderno
-                btnInfo.setForeground(new Color(44,62,80));
+                btnInfo.setForeground(new Color(44, 62, 80));
                 btnInfo.setFocusPainted(false); // Toglie il brutto bordino di selezione
 
                 // Button
@@ -192,7 +195,7 @@ public class MainframeCliente extends JFrame {
         CatalogoPane.repaint();
     }
 
-    public JFrame apriUICliente(){
+    public JFrame apriUICliente() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {
@@ -218,7 +221,7 @@ public class MainframeCliente extends JFrame {
      */
     private void $$$setupUI$$$() {
         contentPanel = new JPanel();
-        contentPanel.setLayout(new GridLayoutManager(5, 1, new Insets(0, 0, 0, 0), -1, -1));
+        contentPanel.setLayout(new GridLayoutManager(6, 1, new Insets(0, 0, 0, 0), -1, -1));
         contentPanel.setBackground(new Color(-657931));
         VediCarrello = new JButton();
         VediCarrello.setText("Visualizzazione carrello");
@@ -230,13 +233,40 @@ public class MainframeCliente extends JFrame {
         VisualizzaDettaglioOrdine.setText("Visualizzazione dettaglio ordine");
         contentPanel.add(VisualizzaDettaglioOrdine, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         CatalogoScrollPane = new JScrollPane();
-        contentPanel.add(CatalogoScrollPane, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        contentPanel.add(CatalogoScrollPane, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         CatalogoPane = new JPanel();
         CatalogoPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         CatalogoScrollPane.setViewportView(CatalogoPane);
         VisualizzaStoricoOrdini = new JButton();
         VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini");
         contentPanel.add(VisualizzaStoricoOrdini, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final JLabel label1 = new JLabel();
+        Font label1Font = this.$$$getFont$$$("Berlin Sans FB Demi", Font.BOLD, 28, label1.getFont());
+        if (label1Font != null) label1.setFont(label1Font);
+        label1.setText("Catalogo");
+        contentPanel.add(label1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+    }
+
+    /**
+     * @noinspection ALL
+     */
+    private Font $$$getFont$$$(String fontName, int style, int size, Font currentFont) {
+        if (currentFont == null) return null;
+        String resultName;
+        if (fontName == null) {
+            resultName = currentFont.getName();
+        } else {
+            Font testFont = new Font(fontName, Font.PLAIN, 10);
+            if (testFont.canDisplay('a') && testFont.canDisplay('1')) {
+                resultName = fontName;
+            } else {
+                resultName = currentFont.getName();
+            }
+        }
+        Font font = new Font(resultName, style >= 0 ? style : currentFont.getStyle(), size >= 0 ? size : currentFont.getSize());
+        boolean isMac = System.getProperty("os.name", "").toLowerCase(Locale.ENGLISH).startsWith("mac");
+        Font fontWithFallback = isMac ? new Font(font.getFamily(), font.getStyle(), font.getSize()) : new StyleContext().getFont(font.getFamily(), font.getStyle(), font.getSize());
+        return fontWithFallback instanceof FontUIResource ? fontWithFallback : new FontUIResource(fontWithFallback);
     }
 
     /**

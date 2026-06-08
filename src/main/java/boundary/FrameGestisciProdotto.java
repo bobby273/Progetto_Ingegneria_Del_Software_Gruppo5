@@ -37,7 +37,7 @@ public class FrameGestisciProdotto extends JFrame {
 
     private String nomeProdottoCorrente;
 
-    public FrameGestisciProdotto(String nome, String categoria, String prezzo, String descrizione, String qta, boolean disponibile,boolean scontato) {
+    public FrameGestisciProdotto(String nome, String categoria, String prezzo, String descrizione, String qta, boolean disponibile, boolean scontato) {
         $$$setupUI$$$();
         setContentPane(contentPane);
         setTitle("Gestione Prodotto: " + nome);
@@ -50,42 +50,42 @@ public class FrameGestisciProdotto extends JFrame {
         // ==========================================
 // 1. POPOLAMENTO INIZIALE DEI CAMPI (Dati dallo Stub)
 // ==========================================
-            // ... qui sotto c'è il codice della tua griglia che inizializza i componenti ...
+        // ... qui sotto c'è il codice della tua griglia che inizializza i componenti ...
 
-            // Assegnazione dei testi ricevuti
-            textNome.setText(nome);
-            textCategoria.setText(categoria);
-            textPrezzo.setText(prezzo);
-            areaDescrizione.setText(descrizione);
-            textQtaDisponibile.setText(qta);
+        // Assegnazione dei testi ricevuti
+        textNome.setText(nome);
+        textCategoria.setText(categoria);
+        textPrezzo.setText(prezzo);
+        areaDescrizione.setText(descrizione);
+        textQtaDisponibile.setText(qta);
 
-            // Configurazione RadioButton
-            ButtonGroup gruppoDisp = new ButtonGroup();
-            gruppoDisp.add(SIRadioButtonDisponibile);
-            gruppoDisp.add(NORadioButtonDisponibile);
-            if (disponibile) SIRadioButtonDisponibile.setSelected(true);
-            else NORadioButtonDisponibile.setSelected(true);
+        // Configurazione RadioButton
+        ButtonGroup gruppoDisp = new ButtonGroup();
+        gruppoDisp.add(SIRadioButtonDisponibile);
+        gruppoDisp.add(NORadioButtonDisponibile);
+        if (disponibile) SIRadioButtonDisponibile.setSelected(true);
+        else NORadioButtonDisponibile.setSelected(true);
 
-            ButtonGroup gruppoScon = new ButtonGroup();
-            gruppoScon.add(SIRadioButtonScontato);
-            gruppoScon.add(NORadioButtonScontato);
-            if (scontato) SIRadioButtonScontato.setSelected(true);
-            else NORadioButtonScontato.setSelected(true);
+        ButtonGroup gruppoScon = new ButtonGroup();
+        gruppoScon.add(SIRadioButtonScontato);
+        gruppoScon.add(NORadioButtonScontato);
+        if (scontato) SIRadioButtonScontato.setSelected(true);
+        else NORadioButtonScontato.setSelected(true);
 
-            // Rendo i campi non editabili direttamente da tastiera per forzare l'uso dei bottoni Modifica
-            textNome.setEditable(false);
-            textCategoria.setEditable(false);
-            textPrezzo.setEditable(false);
-            areaDescrizione.setEditable(false);
-            textQtaDisponibile.setEditable(false);
-            areaDescrizione.setLineWrap(true);
-            areaDescrizione.setWrapStyleWord(true);
+        // Rendo i campi non editabili direttamente da tastiera per forzare l'uso dei bottoni Modifica
+        textNome.setEditable(false);
+        textCategoria.setEditable(false);
+        textPrezzo.setEditable(false);
+        areaDescrizione.setEditable(false);
+        textQtaDisponibile.setEditable(false);
+        areaDescrizione.setLineWrap(true);
+        areaDescrizione.setWrapStyleWord(true);
 
-            // ==========================================
-            // 2. LOGICA DEI BOTTONI "MODIFICA"
-            // ==========================================
+        // ==========================================
+        // 2. LOGICA DEI BOTTONI "MODIFICA"
+        // ==========================================
 
-            // MODIFICA NOME
+        // MODIFICA NOME
         modificaNomeButton.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Nome:", textNome.getText());
             if (input != null) {
@@ -146,7 +146,7 @@ public class FrameGestisciProdotto extends JFrame {
             }
         });
 
-            // MODIFICA PREZZO
+        // MODIFICA PREZZO
         modificaPrezzoButton.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "Inserisci il nuovo Prezzo:", textPrezzo.getText());
             if (input != null) {
@@ -170,7 +170,7 @@ public class FrameGestisciProdotto extends JFrame {
         });
 
 
-            // MODIFICA DESCRIZIONE
+        // MODIFICA DESCRIZIONE
         modificaDescrizioneButton.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Descrizione:", areaDescrizione.getText());
             if (input != null) {
@@ -193,7 +193,7 @@ public class FrameGestisciProdotto extends JFrame {
         });
 
 
-            // MODIFICA QUANTITÀ DISPONIBILE
+        // MODIFICA QUANTITÀ DISPONIBILE
         modificaQtaDisponibileButton.addActionListener(e -> {
             String input = JOptionPane.showInputDialog(this, "Inserisci la nuova Quantità:", textQtaDisponibile.getText());
             if (input != null) {
@@ -216,7 +216,7 @@ public class FrameGestisciProdotto extends JFrame {
         });
 
 
-            // MODIFICA IS DISPONIBILE (Dialogo a scelta multipla)
+        // MODIFICA IS DISPONIBILE (Dialogo a scelta multipla)
         modificaIsDisponibileButton.addActionListener(e -> {
             String[] opzioni = {"SI", "NO"};
             int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è disponibile?", "Modifica Disponibilità",
@@ -239,7 +239,7 @@ public class FrameGestisciProdotto extends JFrame {
         });
 
 
-            // MODIFICA IS SCONTATO
+        // MODIFICA IS SCONTATO
         modificaIsScontatoButton.addActionListener(e -> {
             String[] opzioni = {"SI", "NO"};
             int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è scontato?", "Modifica Sconto",
@@ -260,14 +260,14 @@ public class FrameGestisciProdotto extends JFrame {
             }
         });
 
-            // ==========================================
-            // 3. LOGICA TASTO ESCI
-            // ==========================================
-            ESCIButton.addActionListener(e -> {
-                // Chiude la finestra corrente rilasciando le risorse, lasciando aperto il MainFrame
-                dispose();
-            });
-        }
+        // ==========================================
+        // 3. LOGICA TASTO ESCI
+        // ==========================================
+        ESCIButton.addActionListener(e -> {
+            // Chiude la finestra corrente rilasciando le risorse, lasciando aperto il MainFrame
+            dispose();
+        });
+    }
 
 
     /**

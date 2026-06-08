@@ -3,13 +3,13 @@ package entity;
 //import StubPagamento.InterfacciaPagamento;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
-import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 public class Cliente extends Utente{
+    //Attributi
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -125,7 +125,7 @@ public class Cliente extends Utente{
     }
 
 
-    public void visualizzaInfoOrdine(Ordine ordineSelezionato) {
+    void visualizzaInfoOrdine(Ordine ordineSelezionato) {
         if (ordineSelezionato == null) {
             System.out.println("Errore: Nessun ordine selezionato."); //tale if serve per evitare errori di NullPointerException
             //in caso di avvio del metodo da terminale

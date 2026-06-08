@@ -23,24 +23,23 @@ public class MainframeAmministratore extends JFrame {
     private JPanel CatalogoPane;
     private String emailUtente = "";
     private ControllerAmministratore controllerAmministratore;
-    public static final int AMMINISTRATORE=7;
+    public static final int AMMINISTRATORE = 7;
 
 
     public MainframeAmministratore(String emailUtente) {
-        this.emailUtente=emailUtente;
+        this.emailUtente = emailUtente;
         setTitle("Benvenuto amministratore");
         setContentPane(contentPane);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        if(checkLogin(emailUtente, AMMINISTRATORE)!=AMMINISTRATORE)
-        {
+        if (checkLogin(emailUtente, AMMINISTRATORE) != AMMINISTRATORE) {
             JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
         } else {
             // Setting per avere la finestra a scorrimento (amazon-style)
             CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
-        //instanzia un controller se per qualunque motivo esso non dovesse esistere
+            //instanzia un controller se per qualunque motivo esso non dovesse esistere
             if (this.controllerAmministratore == null) {
                 this.controllerAmministratore = new ControllerAmministratore(this.emailUtente);
             }
@@ -96,7 +95,7 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.removeAll();
 
         // Riceviamo una lista di array di stringhe dal Controller
-        java.util.List<String[]> listaCatalogo = ControllerAmministratore.ottieniListaProdotti();
+        List<String[]> listaCatalogo = ControllerAmministratore.ottieniListaProdotti();
 
         if (listaCatalogo.isEmpty()) {
             // Forziamo il BorderLayout per questo ramo
@@ -106,7 +105,8 @@ public class MainframeAmministratore extends JFrame {
             emptyPanel.setBackground(CatalogoPane.getBackground());
 
             GridBagConstraints gbc = new GridBagConstraints();
-            gbc.gridx = 0; gbc.gridy = 0;
+            gbc.gridx = 0;
+            gbc.gridy = 0;
             gbc.insets = new Insets(6, 0, 6, 0);
             gbc.anchor = GridBagConstraints.CENTER;
 
@@ -127,8 +127,7 @@ public class MainframeAmministratore extends JFrame {
             emptyPanel.add(subtitleLabel, gbc);
 
             CatalogoPane.add(emptyPanel, BorderLayout.CENTER);
-        }
-        else {
+        } else {
             CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
             for (String[] dati : listaCatalogo) {
 

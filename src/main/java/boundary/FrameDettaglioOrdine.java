@@ -58,7 +58,7 @@ public class FrameDettaglioOrdine extends JFrame {
         this.dataConferma = controllerCliente.getDataConferma(id_ordine);
         this.indirizzoSpedizione = controllerCliente.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controllerCliente.getProdottiEQuantita(id_ordine);
-        this.id_cliente= controllerCliente.getIdCliente(id_ordine);
+        this.id_cliente = controllerCliente.getIdCliente(id_ordine);
         apriFrame();
     }
 
@@ -71,7 +71,7 @@ public class FrameDettaglioOrdine extends JFrame {
         this.dataConferma = controller.getDataConferma(id_ordine);
         this.indirizzoSpedizione = controller.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controller.getProdottiEQuantita(id_ordine);
-        this.id_cliente= controller.getIdCliente(id_ordine);
+        this.id_cliente = controller.getIdCliente(id_ordine);
         apriFrame();
     }
 

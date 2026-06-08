@@ -30,6 +30,7 @@ public class Ordine {
     @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Cliente cliente;
 
+    //Costruttori
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
         this.cliente = cliente;
         this.indirizzoSpedizione = indirizzoSpedizione;
@@ -45,6 +46,7 @@ public class Ordine {
 
     }
 
+    //Metodi
     //metodo per aggiungere i prodotti dal carrello al nuovo ordine
     private List<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
         List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
@@ -95,7 +97,8 @@ public class Ordine {
 
      */
 
-    public Cliente getCliente() {
+    //getter e setter
+    Cliente getCliente() {
         return cliente;
     }
 
@@ -103,10 +106,10 @@ public class Ordine {
         return cliente.getId();
     }
 
-    public void setStato(Stato stato) {
+    void setStato(Stato stato) {
         this.stato=stato;
     }
-    public Stato getStato() {
+    Stato getStato() {
         return this.stato;
     }
 
@@ -129,24 +132,24 @@ public class Ordine {
         return null;
     }
 
-    public List<OrdineContiene> getProdottiContenuti() {
+    List<OrdineContiene> getProdottiContenuti() {
         return prodottiContenuti;
     }
 
-    public float getTotale() {
+    float getTotale() {
         return totale;
     }
 
-    public LocalDateTime getDataConferma() {
+    LocalDateTime getDataConferma() {
         return dataConferma;
     }
 
-    public String getIndirizzoSpedizione() {
+    String getIndirizzoSpedizione() {
         return indirizzoSpedizione;
     }
 
     //stub
-    public boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
+    boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
         return InterfacciaPagamento.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, id_ordine, totale);
     }
 }

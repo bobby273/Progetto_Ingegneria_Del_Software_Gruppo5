@@ -68,7 +68,8 @@ public class ControllerCliente {
                     (String) prodotto[2],
                     (int) prodotto[3],
                     (boolean) prodotto[4],
-                    (String) prodotto[5]
+                    (String) prodotto[5],
+                    (boolean) prodotto[6]
             );
         }
     }

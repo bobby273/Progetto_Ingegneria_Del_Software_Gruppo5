@@ -38,7 +38,7 @@ public class ClientFacade {
             }
             return aggiorna;
         } else{
-            //il null e' sus
+            //il null è sus
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -85,7 +85,6 @@ public class ClientFacade {
     }
 
 
-    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
     public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
@@ -162,7 +161,8 @@ public class ClientFacade {
                             p.getDescrizione(),
                             String.valueOf(p.getPrezzo()),
                             p.getCategoria(),
-                            String.valueOf(item.getQuantita())
+                            String.valueOf(item.getQuantita()),
+                            String.valueOf(p.isDisponibile())
                     });
                 }
             }
@@ -184,7 +184,8 @@ public class ClientFacade {
                         p.getCategoria(),
                         p.getQtaDisponibile(),
                         p.IsScontato(),
-                        p.getDescrizione()
+                        p.getDescrizione(),
+                        p.isDisponibile()
                 };
             }
             return null;
@@ -220,10 +221,11 @@ public class ClientFacade {
                 for (Prodotto p : prodottiTrovati) {
                     risultati.add(new String[]{
                             p.getNome(),
-                            p.getDescrizione(),
+                            p.getCategoria(),
                             String.valueOf(p.getPrezzo()),
                             p.getDescrizione(),
                             String.valueOf(p.getQtaDisponibile()),
+                            String.valueOf(p.isDisponibile()),
                             String.valueOf(p.IsScontato())
                     });
                 }
@@ -234,15 +236,6 @@ public class ClientFacade {
             return null;
         }
     }
-
-    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-    }
-
-    /*TRY: probabilmente va eliminato
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-    }*/
 
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){

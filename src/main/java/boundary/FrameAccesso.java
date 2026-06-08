@@ -52,7 +52,7 @@ public class FrameAccesso {
                         if (frameMain != null) {
                             frameMain.dispose();
                         }
-                        java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(accessoPane);
+                        Window finestraAttuale = SwingUtilities.getWindowAncestor(accessoPane);
                         if (finestraAttuale != null) {
                             finestraAttuale.dispose();
                         }
@@ -68,7 +68,7 @@ public class FrameAccesso {
                         if (frameMain != null) {
                             frameMain.dispose();
                         }
-                        java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(accessoPane);
+                        Window finestraAttuale = SwingUtilities.getWindowAncestor(accessoPane);
                         if (finestraAttuale != null) {
                             finestraAttuale.dispose();
                         }

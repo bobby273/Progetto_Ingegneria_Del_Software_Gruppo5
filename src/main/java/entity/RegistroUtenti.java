@@ -10,14 +10,14 @@ public class RegistroUtenti {
         this.gestorePers=new GestorePersistenza();
     }
 
-    public static RegistroUtenti getInstance(){
+    static RegistroUtenti getInstance(){
         if(instance==null){
             instance=new RegistroUtenti();
         }
         return instance;
     }
 
-    public int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){
+    int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){
         //verifico prima che le credenziali non siano gia' in uso
         if(verificaProfiloAmministratore(email, password))
             return 5;
@@ -27,7 +27,7 @@ public class RegistroUtenti {
         return -1;
     }
 
-    public int creaNuovoCliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
+    int creaNuovoCliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         if(verificaProfiloCliente(email, password))
             return 6;
         Cliente clt=new Cliente(email, nome, cognome, password, indirizzoSpedizione);
@@ -36,22 +36,22 @@ public class RegistroUtenti {
         return -1;
     }
 
-    public boolean verificaProfiloAmministratore(String email, String password){
+    boolean verificaProfiloAmministratore(String email, String password){
         Amministratore admin= gestorePers.cercaPrimoPerCampi(Amministratore.class, Map.of("email",email, "password", password));
         return admin !=null;
     }
 
-    public boolean verificaProfiloCliente(String email, String password){
+    boolean verificaProfiloCliente(String email, String password){
         Cliente clt= gestorePers.cercaPrimoPerCampi(Cliente.class, Map.of("email",email, "password", password));
         return clt !=null;
     }
 
-    public boolean verificaEsistenzaCliente(String email){
+    boolean verificaEsistenzaCliente(String email){
         Cliente clt= gestorePers.cercaPrimoPerCampi(Cliente.class, Map.of("email",email));
         return clt !=null;
     }
 
-    public boolean verificaEsistenzaAmministratore(String email){
+    boolean verificaEsistenzaAmministratore(String email){
         Amministratore admin= gestorePers.cercaPrimoPerCampi(Amministratore.class, Map.of("email",email));
         return admin !=null;
     }
