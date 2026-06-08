@@ -160,7 +160,7 @@ public class AdminFacade {
             List<Prodotto> prodottiTrovati;
 
             if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
+                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //LOGICA DI ANNULLAMENTO: se non compilo la ricerca, ottengo indietro il catalogo intero
             } else {
                 prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
             }

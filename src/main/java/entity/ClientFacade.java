@@ -236,6 +236,20 @@ public class ClientFacade {
         }
     }
 
+    public Object[] getInfoOrdine(String id_ordine) {
+        if(checkLogin(mailUtente, CLIENTE) == CLIENTE) {
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+
+            if (cliente != null) {
+                return cliente.visualizzaInfoOrdine(id_ordine);
+            }
+            return null;
+
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato.", "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
     public List<String[]> getStoricoOrdiniPersonale() {
         if(checkLogin(mailUtente, CLIENTE) == CLIENTE) {
 
