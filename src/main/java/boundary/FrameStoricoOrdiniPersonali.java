@@ -108,11 +108,14 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
      */
     private void $$$setupUI$$$() {
         StoricoOrdiniPane = new JPanel();
-        StoricoOrdiniPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        StoricoOrdiniPane.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
         MainPanel = new JScrollPane();
         StoricoOrdiniPane.add(MainPanel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         tabellaOrdini = new JTable();
         MainPanel.setViewportView(tabellaOrdini);
+        final JLabel label1 = new JLabel();
+        label1.setText("Effettuare doppio click per visualizzare dettagli");
+        StoricoOrdiniPane.add(label1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_SOUTHWEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

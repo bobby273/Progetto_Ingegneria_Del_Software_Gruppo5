@@ -34,7 +34,7 @@ public class ClientFacade {
             boolean aggiorna = false;
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = !((gp.aggiorna(o)==null) ||(gp.aggiorna(cliente)==null) || (gp.aggiorna(StoricoOrdini.getInstance())==null));
+                aggiorna = !((gp.aggiorna(o)==null) ||(gp.aggiorna(cliente)==null));
             }
             return aggiorna;
         } else{

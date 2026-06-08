@@ -7,8 +7,6 @@ import javax.swing.*;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.List;
 import java.util.Locale;
 
@@ -19,9 +17,10 @@ public class MainframeCliente extends JFrame {
     private JButton VediCarrello;
     private JButton VisualizzaStoricoOrdini;
     private JButton RicercaProdotto;
-    private JButton VisualizzaDettaglioOrdine;
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
+    private JLabel lblCatalogo;
+    private JButton btnVisualizzaCatalogo;
     private JFrame frameStoricoOrdini;
     private ControllerCliente controllerCliente;
 
@@ -35,6 +34,7 @@ public class MainframeCliente extends JFrame {
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        btnVisualizzaCatalogo.setVisible(false);
 
         if (checkLogin(emailUtente, CLIENTE) != CLIENTE) {
             JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
@@ -141,6 +141,7 @@ public class MainframeCliente extends JFrame {
     //metodo per mostrare i risultati della ricerca
     public void mostraRisultatiRicerca(List<String[]> prodottiFiltrati) {
         CatalogoPane.removeAll();
+        lblCatalogo.setText("Risultati della ricerca");
         if (prodottiFiltrati == null || prodottiFiltrati.isEmpty()) {
             JLabel lblVuoto = new JLabel("Nessun prodotto trovato per i criteri inseriti.", SwingConstants.CENTER);
             lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
@@ -218,22 +219,22 @@ public class MainframeCliente extends JFrame {
         RicercaProdotto = new JButton();
         RicercaProdotto.setText("Ricerca di prodotti");
         contentPanel.add(RicercaProdotto, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        VisualizzaDettaglioOrdine = new JButton();
-        VisualizzaDettaglioOrdine.setText("Visualizzazione dettaglio ordine");
-        contentPanel.add(VisualizzaDettaglioOrdine, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         CatalogoScrollPane = new JScrollPane();
-        contentPanel.add(CatalogoScrollPane, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        contentPanel.add(CatalogoScrollPane, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         CatalogoPane = new JPanel();
         CatalogoPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         CatalogoScrollPane.setViewportView(CatalogoPane);
         VisualizzaStoricoOrdini = new JButton();
         VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini personali");
         contentPanel.add(VisualizzaStoricoOrdini, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
-        final JLabel label1 = new JLabel();
-        Font label1Font = this.$$$getFont$$$("Berlin Sans FB Demi", Font.BOLD, 28, label1.getFont());
-        if (label1Font != null) label1.setFont(label1Font);
-        label1.setText("Catalogo");
-        contentPanel.add(label1, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        lblCatalogo = new JLabel();
+        Font lblCatalogoFont = this.$$$getFont$$$("Berlin Sans FB Demi", Font.BOLD, 28, lblCatalogo.getFont());
+        if (lblCatalogoFont != null) lblCatalogo.setFont(lblCatalogoFont);
+        lblCatalogo.setText("Catalogo");
+        contentPanel.add(lblCatalogo, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        btnVisualizzaCatalogo = new JButton();
+        btnVisualizzaCatalogo.setText("Esci");
+        contentPanel.add(btnVisualizzaCatalogo, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
