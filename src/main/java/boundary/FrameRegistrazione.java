@@ -74,7 +74,7 @@ public class FrameRegistrazione {
                                                         FrameAccesso.toFront();
                                                         FrameAccesso.requestFocus();
                                                     }
-                                                    java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(registrazionePane);
+                                                    Window finestraAttuale = SwingUtilities.getWindowAncestor(registrazionePane);
                                                     if (finestraAttuale != null) {
                                                         finestraAttuale.dispose();
                                                     }
@@ -91,7 +91,7 @@ public class FrameRegistrazione {
                                                         FrameAccesso.toFront();
                                                         FrameAccesso.requestFocus();
                                                     }
-                                                    java.awt.Window finestraAttuale = javax.swing.SwingUtilities.getWindowAncestor(registrazionePane);
+                                                    Window finestraAttuale = SwingUtilities.getWindowAncestor(registrazionePane);
                                                     if (finestraAttuale != null) {
                                                         finestraAttuale.dispose();
                                                     }

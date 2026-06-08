@@ -137,7 +137,8 @@ public class FrameCreaOrdine extends JFrame {
             int ccv = Integer.parseInt(CCVTextField.getText());
             int mese = Integer.parseInt(meseTextField.getText());
             int anno = Integer.parseInt(annoTextField.getText());
-            if(ccv<1 || ccv>999 || mese<1 || mese>12 || anno<1900 || anno>2100) throw new NumberFormatException();
+            if (ccv < 1 || ccv > 999 || mese < 1 || mese > 12 || anno < 1900 || anno > 2100)
+                throw new NumberFormatException();
             boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCartaTextField.getText(), ccv, mese, anno);
 
             if (check) {
@@ -157,7 +158,7 @@ public class FrameCreaOrdine extends JFrame {
                     "Errore di Formato",
                     JOptionPane.ERROR_MESSAGE);
             Esito.setText("Ordine non creato");
-        } catch (Exception e){
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Errore sconosciuto, riprovare più tardi", "Errore Server", JOptionPane.ERROR_MESSAGE);
         }
     }

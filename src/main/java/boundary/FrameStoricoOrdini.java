@@ -24,7 +24,7 @@ public class FrameStoricoOrdini extends JFrame {
     private List<String> lista_id_Ordini;
 
     //costruttore della boundary
-    public FrameStoricoOrdini(ControllerCliente controller){
+    public FrameStoricoOrdini(ControllerCliente controller) {
         this.controller = controller;
 
         setTitle("Storico Ordini");
@@ -38,17 +38,18 @@ public class FrameStoricoOrdini extends JFrame {
     }
 
     private void fillTabella() {
-   //metodo di test
+        //metodo di test
         System.out.println("PROVA");
     }
-    private void addListenerTabella(){
+
+    private void addListenerTabella() {
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked (MouseEvent e){
-                if (e.getClickCount() == 2){
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
                     int rigaSelezionata = tabellaOrdini.getSelectedRow();
 
-                    if (rigaSelezionata != -1){
+                    if (rigaSelezionata != -1) {
                         String id_ordineSelezionato = lista_id_Ordini.get(rigaSelezionata);
                         mostraDettagliOrdine(id_ordineSelezionato);
                     }
@@ -57,7 +58,7 @@ public class FrameStoricoOrdini extends JFrame {
         });
     }
 
-    private void mostraDettagliOrdine(String id_ordineSelezionato){
+    private void mostraDettagliOrdine(String id_ordineSelezionato) {
         FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato);
         //passiamo controller (di tipo cliente) in quanto questo metodo è riservato puramente al frameCliente
         frameDettaglio.setLocationRelativeTo(this);

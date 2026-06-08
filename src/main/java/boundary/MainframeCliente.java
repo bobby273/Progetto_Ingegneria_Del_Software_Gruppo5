@@ -25,17 +25,17 @@ public class MainframeCliente extends JFrame {
     private ControllerCliente controllerCliente;
 
     private String emailUtente = "";
-    public static final int CLIENTE=8;
+    public static final int CLIENTE = 8;
 
     public MainframeCliente(String emailUtente) {
         //design della finestra
-        this.emailUtente=emailUtente;
+        this.emailUtente = emailUtente;
         setTitle("Benvenuto cliente");
         setContentPane(contentPanel);
         setSize(900, 600);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        if(checkLogin(emailUtente, CLIENTE)!=CLIENTE) {
+        if (checkLogin(emailUtente, CLIENTE) != CLIENTE) {
             JOptionPane.showMessageDialog(this, "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
         } else {
             //setting per avere finestra a scorrimento (amazon-style)
@@ -46,14 +46,14 @@ public class MainframeCliente extends JFrame {
                 this.controllerCliente = new ControllerCliente(this.emailUtente);
             }
         }
-            fillCatalogo();
+        fillCatalogo();
 
-            //Click del bottone carrello
-            CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+        //Click del bottone carrello
+        CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-            VediCarrello.addActionListener(e -> {
-                new FrameCarrello(emailUtente);
-            });
+        VediCarrello.addActionListener(e -> {
+            new FrameCarrello(emailUtente);
+        });
 
         RicercaProdotto.addActionListener(e -> {
 
@@ -70,13 +70,13 @@ public class MainframeCliente extends JFrame {
 
                     frameStoricoOrdini.setLocationRelativeTo(null);
 
-                        frameStoricoOrdini.setVisible(true);
+                    frameStoricoOrdini.setVisible(true);
 
 
-                    } else {
+                } else {
 
-                        frameStoricoOrdini.toFront();
-                        frameStoricoOrdini.requestFocus();
+                    frameStoricoOrdini.toFront();
+                    frameStoricoOrdini.requestFocus();
 
                 }
             }
@@ -107,7 +107,7 @@ public class MainframeCliente extends JFrame {
                 panelProdotto.setBackground(Color.WHITE);
                 //Estetica
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(220,220,220), 1, true),
+                        BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
                         BorderFactory.createEmptyBorder(12, 15, 12, 15)
                 ));
 
@@ -126,7 +126,7 @@ public class MainframeCliente extends JFrame {
                 JButton btnInfo = new JButton("Altre info");
                 btnInfo.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 btnInfo.setBackground(new Color(230, 230, 230)); // Azzurro moderno
-                btnInfo.setForeground(new Color(44,62,80));
+                btnInfo.setForeground(new Color(44, 62, 80));
                 btnInfo.setFocusPainted(false); // Toglie il brutto bordino di selezione
 
                 // Button
@@ -192,7 +192,7 @@ public class MainframeCliente extends JFrame {
         CatalogoPane.repaint();
     }
 
-    public JFrame apriUICliente(){
+    public JFrame apriUICliente() {
         try {
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
         } catch (Exception e) {

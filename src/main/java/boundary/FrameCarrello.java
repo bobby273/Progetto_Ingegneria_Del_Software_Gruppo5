@@ -62,7 +62,7 @@ public class FrameCarrello extends JFrame {
                 JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
                 panelProdotto.setBackground(Color.WHITE);
                 panelProdotto.setBorder(BorderFactory.createCompoundBorder(
-                        BorderFactory.createLineBorder(new Color(220,220,220), 1, true),
+                        BorderFactory.createLineBorder(new Color(220, 220, 220), 1, true),
                         BorderFactory.createEmptyBorder(10, 10, 10, 10)
                 ));
                 panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
@@ -73,11 +73,19 @@ public class FrameCarrello extends JFrame {
                 String prezzo = p[2];
                 String categoria = p[3];
                 String quantita = p[4];
+                String disponibile = p[5];
+
+                if(disponibile.equals("true")){
+                    disponibile="Sì";
+                }
+                else{
+                    disponibile="No";
+                }
 
                 String testoHtml = "<html><div style='width: 350px; font-family: Segoe UI;'>" +
                         "<h3 style='margin:0; color:#2c3e50;'>" + nome + " <span style='font-size:10px; color:#bdc3c7'>(" + categoria + ")</span></h3>" +
                         "<p style='margin:4px 0 8px 0; color:#7f8c8d;'>" + descrizione + "</p>" +
-                        "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b></p>" +
+                        "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b> | Disponibile? "+ disponibile + "</p>" +
                         "</div></html>";
 
                 JLabel lblInfo = new JLabel(testoHtml);

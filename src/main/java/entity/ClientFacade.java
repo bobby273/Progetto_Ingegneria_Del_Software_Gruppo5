@@ -134,7 +134,8 @@ public class ClientFacade {
                             p.getDescrizione(),
                             String.valueOf(p.getPrezzo()),
                             p.getCategoria(),
-                            String.valueOf(item.getQuantita())
+                            String.valueOf(item.getQuantita()),
+                            String.valueOf(p.isDisponibile())
                     });
                 }
             }
@@ -156,7 +157,8 @@ public class ClientFacade {
                         p.getCategoria(),
                         p.getQtaDisponibile(),
                         p.IsScontato(),
-                        p.getDescrizione()
+                        p.getDescrizione(),
+                        p.isDisponibile()
                 };
             }
             return null;
