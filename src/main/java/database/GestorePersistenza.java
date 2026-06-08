@@ -99,7 +99,7 @@ public class GestorePersistenza {
     }
 
     //modifica del metodo presente nel file professore e adattato al caso della ricerca di un prodotto
-    //(ovvero una ricerca che potrebbe non necessitare di case sensitive e potrebbe voler cercare per sottostringhe
+    //(ovvero una ricerca che potrebbe non necessitare di case sensitive e potrebbe voler cercare per sottostringhe)
     public <T> List<T> cercaPerCampoLike(Class<T> classe, String nomeCampo, Object valore) {
         return cercaPerCampiLike(
                 classe,
@@ -107,6 +107,7 @@ public class GestorePersistenza {
         );
     }
 
+    //riscrittura di cercaPerCampi
     public <T> List<T> cercaPerCampiLike(Class<T> classe, Map<String, Object> campi) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
@@ -137,7 +138,7 @@ public class GestorePersistenza {
                 String nomeParametro = nomeCampo.replace(".", "_");
                 Object valore = campi.get(nomeCampo);
 
-                if (valore instanceof String) {
+                if (valore instanceof String) { //trasforma la stringa in maiuscolo in modo da comparare
                     String valoreNeutro = ((String) valore).toUpperCase();
                     query.setParameter(nomeParametro, "%" + valoreNeutro+ "%");
                 } else {
