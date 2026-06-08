@@ -66,19 +66,6 @@ public class StoricoOrdini {
         return cercato;
     }
 
-    // Metodo ponte che collega la ricerca allo spacchettamento dei dati
-    public Object[] ottieniDettagliOrdine(String id_ordine) {
-        // 1. Cerca l'ordine all'interno dello storico
-        Ordine ordineCercato = cercaOrdinePerId(id_ordine);
-
-        // 2. Se l'ordine esiste, deleghiamo a lui la creazione dell'array
-        if (ordineCercato != null) {
-            return ordineCercato.getInfoOrdine();
-        }
-
-        System.out.println("Errore: Ordine " + id_ordine + " non trovato nello storico.");
-        return null;
-    }
 
     //casi d'uso non trattati in questo progetto:
     void generaReport(){

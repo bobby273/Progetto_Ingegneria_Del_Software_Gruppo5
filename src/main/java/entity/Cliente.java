@@ -159,14 +159,16 @@ public class Cliente extends Utente{
 
 
     Object[] visualizzaInfoOrdine(String id_ordine) {
-        Ordine mioOrdine = cercaOrdine(id_ordine);
-        if (mioOrdine == null) {
+        // 1. Deleghiamo la ricerca allo StoricoOrdini globale
+        Ordine ordineSelezionato = StoricoOrdini.getInstance().cercaOrdinePerId(id_ordine);
+
+        // 2. Per Questioni di ulteriore sicurezza Verifichiamo che l'ordine esista e che sia mio
+        if (ordineSelezionato == null || !ordineSelezionato.getCliente().getEmail().equals(this.getEmail())) {
             System.out.println("Errore: Ordine non trovato o non appartenente a questo cliente.");
             return null;
         }
-        return StoricoOrdini.getInstance().ottieniDettagliOrdine(id_ordine);
+        return ordineSelezionato.getInfoOrdine(); //per l'UML, posso tranquillamente accedere ad ordini dopo che mi sono assicurato che l'ordine sia personale
     }
-
 
     boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
         boolean esito = false;
