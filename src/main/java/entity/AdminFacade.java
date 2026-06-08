@@ -2,6 +2,11 @@ package entity;
 
 import database.GestorePersistenza;
 
+import javax.swing.*;
+
+import static controller.ControllerAccesso.AMMINISTRATORE;
+import static controller.ControllerAccesso.checkLogin;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,146 +15,242 @@ import java.util.Map;
 public class AdminFacade {
 
     private final GestorePersistenza gp = new GestorePersistenza();
-    private String mailAmministratore;
+    private static String mailAmministratore;
 
     public AdminFacade(String mailUser){
         this.mailAmministratore = mailUser;
     }
 
     public boolean annullaOrdine(String id_ordine){
-        Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
-        boolean annullato = amministratore.annullaOrdine(id_ordine);
-        Ordine aggiorna=null;
-        if(annullato){
-            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            aggiorna = gp.aggiorna(o);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
+            boolean annullato = amministratore.annullaOrdine(id_ordine);
+            Ordine aggiorna = null;
+            if (annullato) {
+                Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+                aggiorna = gp.aggiorna(o);
+            }
+            return (aggiorna != null);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return (aggiorna !=null);
     }
 
     public static boolean creaProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
-        return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaNome(String nomeOriginale, String nuovoNome) {
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
         return Catalogo.getInstance().modificaNome(nomeOriginale, nuovoNome);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaCategoria(String nome, String nuovaCategoria) {
-        return Catalogo.getInstance().modificaCategoria(nome, nuovaCategoria);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaCategoria(nome, nuovaCategoria);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaPrezzo(String nome, float nuovoPrezzo) {
-        return Catalogo.getInstance().modificaPrezzo(nome, nuovoPrezzo);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaPrezzo(nome, nuovoPrezzo);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaDescrizione(String nome, String nuovaDescrizione) {
-        return Catalogo.getInstance().modificaDescrizione(nome, nuovaDescrizione);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaDescrizione(nome, nuovaDescrizione);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaQuantita(String nome, int nuovaQta) {
-        return Catalogo.getInstance().modificaQuantita(nome, nuovaQta);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaQuantita(nome, nuovaQta);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaDisponibilita(String nome, boolean nuovaDisp) {
-        return Catalogo.getInstance().modificaDisponibilita(nome, nuovaDisp);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaDisponibilita(nome, nuovaDisp);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean modificaSconto(String nome, boolean nuovoSconto) {
-        return Catalogo.getInstance().modificaSconto(nome, nuovoSconto);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().modificaSconto(nome, nuovoSconto);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static boolean rimuoviProdotto(String nomeProdotto) {
-        return Catalogo.getInstance().rimuoviProdotto(nomeProdotto);
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().rimuoviProdotto(nomeProdotto);
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
     public static java.util.List<String[]> getListaProdottiPerScorrimento() {
-        // 1. Il catalogo estrae le entità (siamo nello stesso package, quindi funziona!)
-        java.util.List<Prodotto> veriProdotti = Catalogo.getInstance().getTuttiIProdotti();
-        java.util.List<String[]> listaDatiGrezzi = new java.util.ArrayList<>();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            // 1. Il catalogo estrae le entità (siamo nello stesso package, quindi funziona!)
+            java.util.List<Prodotto> veriProdotti = Catalogo.getInstance().getTuttiIProdotti();
+            java.util.List<String[]> listaDatiGrezzi = new java.util.ArrayList<>();
 
-        // 2. Trasformiamo ogni entità in un array di Stringhe leggibile dall'esterno
-        for (Prodotto p : veriProdotti) {
-            String[] datiProdotto = new String[] {
-                    p.getNome(),            // index 0
-                    p.getCategoria(),       // index 1
-                    String.format("%.2f", p.getPrezzo()), // index 2
-                    p.getDescrizione(),     // index 3
-                    String.valueOf(p.getQtaDisponibile()), // index 4
-                    String.valueOf(p.isDisponibile()),            // Index 5 <-- AGGIUNTO REALE DAL DB
-                    String.valueOf(p.isScontato())
-            };
-            listaDatiGrezzi.add(datiProdotto);
+            // 2. Trasformiamo ogni entità in un array di Stringhe leggibile dall'esterno
+            for (Prodotto p : veriProdotti) {
+                String[] datiProdotto = new String[]{
+                        p.getNome(),            // index 0
+                        p.getCategoria(),       // index 1
+                        String.format("%.2f", p.getPrezzo()), // index 2
+                        p.getDescrizione(),     // index 3
+                        String.valueOf(p.getQtaDisponibile()), // index 4
+                        String.valueOf(p.isDisponibile()),            // Index 5 <-- AGGIUNTO REALE DAL DB
+                        String.valueOf(p.isScontato())
+                };
+                listaDatiGrezzi.add(datiProdotto);
+            }
+
+            return listaDatiGrezzi;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-
-        return listaDatiGrezzi;
     }
 
     public List<Prodotto> getTuttiIProdotti(){
-        return Catalogo.getInstance().getTuttiIProdotti();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            return Catalogo.getInstance().getTuttiIProdotti();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     //proviamo a filtrare direttamente nella AdminFacade.
     public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
-        List<Prodotto> prodottiTrovati;
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            List<Prodotto> prodottiTrovati;
 
-        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
-        } else {
-            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-        }
-
-        List<String[]> risultati = new ArrayList<>();
-        if (prodottiTrovati != null) {
-            for (Prodotto p : prodottiTrovati) {
-                risultati.add(new String[]{
-                        p.getNome(),
-                        p.getCategoria(),
-                        String.valueOf(p.getPrezzo()),
-                        p.getDescrizione(),
-                        String.valueOf(p.getQtaDisponibile()),
-                        String.valueOf(p.isDisponibile()),
-                        String.valueOf(p.IsScontato())
-                });
+            if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
+            } else {
+                prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
             }
-        } return risultati;
+
+            List<String[]> risultati = new ArrayList<>();
+            if (prodottiTrovati != null) {
+                for (Prodotto p : prodottiTrovati) {
+                    risultati.add(new String[]{
+                            p.getNome(),
+                            p.getCategoria(),
+                            String.valueOf(p.getPrezzo()),
+                            p.getDescrizione(),
+                            String.valueOf(p.getQtaDisponibile()),
+                            String.valueOf(p.isDisponibile()),
+                            String.valueOf(p.IsScontato())
+                    });
+                }
+            }
+            return risultati;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public Long getIdClienteDaIdOrdine(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getIdCliente();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getIdCliente();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public String getStato(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getStato().toString();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getStato().toString();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public float getTotale(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getTotale();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getTotale();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return 0;
+        }
     }
 
     public LocalDateTime getDataConferma(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getDataConferma();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getDataConferma();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public String getIndirizzoSpedizione(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getIndirizzoSpedizione();
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getIndirizzoSpedizione();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        ArrayList<OrdineContiene> pc=o.getProdottiContenuti();
-        ArrayList<String> prodotti = new  ArrayList<>();
-        for(OrdineContiene c:pc){
-            prodotti.add(c.getProdotto().getNome());
-            prodotti.add(String.valueOf(c.getQuantita()));
-        }
+        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
+            ArrayList<String> prodotti = new ArrayList<>();
+            for (OrdineContiene c : pc) {
+                prodotti.add(c.getProdotto().getNome());
+                prodotti.add(String.valueOf(c.getQuantita()));
+            }
 
-        return prodotti;
+            return prodotti;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
 }

@@ -2,7 +2,6 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
-import controller.ControllerCliente;
 
 import javax.swing.*;
 import java.awt.*;
