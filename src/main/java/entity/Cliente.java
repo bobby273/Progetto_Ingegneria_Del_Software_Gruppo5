@@ -159,14 +159,14 @@ public class Cliente extends Utente{
 
 
     Object[] visualizzaInfoOrdine(String id_ordine) {
-        Ordine ordineSelezionato = cercaOrdine(id_ordine);
-        if (ordineSelezionato == null) {
+        Ordine mioOrdine = cercaOrdine(id_ordine);
+        if (mioOrdine == null) {
             System.out.println("Errore: Ordine non trovato o non appartenente a questo cliente.");
             return null;
         }
-        // Recuperiamo e restituiamo i dati impacchettati dall'Information Expert
-        return ordineSelezionato.getInfoOrdine();
+        return StoricoOrdini.getInstance().ottieniDettagliOrdine(id_ordine);
     }
+
 
     boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
         boolean esito = false;
