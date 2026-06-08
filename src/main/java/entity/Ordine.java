@@ -2,7 +2,9 @@ package entity;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
@@ -22,16 +24,18 @@ public class Ordine {
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private ArrayList<OrdineContiene> prodottiContenuti;
+    private List<OrdineContiene> prodottiContenuti;
 
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Cliente cliente;
 
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
         this.cliente = cliente;
         this.indirizzoSpedizione = indirizzoSpedizione;
         this.id_ordine = generaID();
+        this.stato = Stato.INSERITO;
+        this.dataConferma = LocalDateTime.now();
         this.totale = 0;
         this.prodottiContenuti = new ArrayList<>();
         this.prodottiContenuti = aggiungiDaCarrello(carrello);
@@ -41,37 +45,55 @@ public class Ordine {
 
     }
 
-    private ArrayList<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
+    //metodo per aggiungere i prodotti dal carrello al nuovo ordine
+    private List<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
         List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
         if(prodottiInCarrello.isEmpty()) return null;
-        ArrayList<OrdineContiene> prodottiInOrdine = new ArrayList<>();
+        List<OrdineContiene> prodottiInOrdine = new ArrayList<>();
+        List<CarrelloContiene> daRimuovereDalCarrello = new ArrayList<>();
         for (CarrelloContiene carrelloContiene : prodottiInCarrello) {
             if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(),carrelloContiene.getQuantita(), this));
-                carrello.rimuoviProdotto(carrelloContiene.getProdotto());
+                daRimuovereDalCarrello.add(carrelloContiene);
             } else {
                 System.out.println("quantità desiderata del prodotto "+carrelloContiene.getProdotto().getNome()+" non disponibile");
             }
+        }
+        //rimuovo i prodotti dal carrello
+        for (CarrelloContiene prodotto : daRimuovereDalCarrello) {
+            carrello.rimuoviProdotto(prodotto.getProdotto());
         }
         return prodottiInOrdine;
     }
 
 
+    //metodo per generare un id univoco per Ordine
     private String generaID(){
         boolean esiste=true;
-        char[] id= new char[10];
+        int[] id= new int[10];
         java.util.Random random = new java.util.Random();
+        String idOrdine="0000000001";
         while(esiste){
-            random.setSeed(System.currentTimeMillis());
             for(int i=0; i<10; i++) {
-                id[i] = (char) random.nextInt(10);
+                id[i] = random.nextInt(10);
+                //System.out.print(id[i]);
             }
-            if(StoricoOrdini.getInstance().cercaOrdinePerId(String.valueOf(id))==null){
+            idOrdine = Arrays.stream(id).mapToObj(String::valueOf).collect(Collectors.joining());
+            if(StoricoOrdini.getInstance().cercaOrdinePerId(idOrdine)==null){
                 esiste=false;
             }
         }
-        return String.valueOf(id);
+        return idOrdine;
     }
+
+    /*
+    public static void main(String[] args){
+        Cliente io = new Cliente("aaaaaaaaaa@gmail.com","Robertina","Giovengo","aaaaaaa12345670","Via Antonio Segni");
+        Ordine ordine = new Ordine(io,"Via Antonio Segni",new Carrello("aaaaaaaaaa@gmail.com"));
+        System.out.println(ordine.getId());
+    }
+
+     */
 
     public Cliente getCliente() {
         return cliente;
@@ -107,7 +129,7 @@ public class Ordine {
         return null;
     }
 
-    public ArrayList<OrdineContiene> getProdottiContenuti() {
+    public List<OrdineContiene> getProdottiContenuti() {
         return prodottiContenuti;
     }
 

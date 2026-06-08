@@ -3,6 +3,7 @@ package entity;
 //import StubPagamento.InterfacciaPagamento;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
+import jakarta.transaction.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +17,7 @@ public class Cliente extends Utente{
     private String indirizzoSpedizione;
     private byte immagineProfilo;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<Ordine> ordiniPersonali;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -33,6 +34,13 @@ public class Cliente extends Utente{
         this.carrello = new Carrello(email);
     }
 
+    //getter e setter
+    Long getId(){
+        return id;
+    }
+    Carrello getCarrello(){
+        return carrello;
+    }
 
     //Metodi
     Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
@@ -85,9 +93,7 @@ public class Cliente extends Utente{
         return cercato;
     }
 
-    Long getId(){
-        return id;
-    }
+
     List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
