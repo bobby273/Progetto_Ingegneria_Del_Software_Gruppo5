@@ -55,7 +55,7 @@ public class MainframeCliente extends JFrame {
                 new FrameCarrello(emailUtente);
             });
 
-        RicercaProdotto.addActionListener(e -> {
+/*        RicercaProdotto.addActionListener(e -> {
 
             FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
 
@@ -80,7 +80,7 @@ public class MainframeCliente extends JFrame {
 
                 }
             }
-        });
+        });*/
 
         setVisible(true);
     }

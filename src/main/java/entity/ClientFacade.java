@@ -131,12 +131,10 @@ public class ClientFacade {
                     Prodotto p = item.getProdotto();
                     carrelloBreve.add(new String[]{
                             p.getNome(),
-                            p.getCategoria(),
-                            String.valueOf(p.getPrezzo()),
                             p.getDescrizione(),
-                            String.valueOf(p.getQtaDisponibile()),
-                            String.valueOf(p.isDisponibile()), //non serve perchè il cliente scopre se un prodotto non è disponibile solo all'acquisto, ma lo inserisco per completezza
-                            String.valueOf(p.IsScontato())
+                            String.valueOf(p.getPrezzo()),
+                            p.getCategoria(),
+                            String.valueOf(item.getQuantita())
                     });
                 }
             }

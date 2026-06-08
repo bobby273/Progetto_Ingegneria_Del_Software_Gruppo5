@@ -83,7 +83,7 @@ public class FrameCarrello extends JFrame {
                 JLabel lblInfo = new JLabel(testoHtml);
                 JButton btnRimuovi = new JButton("Rimuovi dal carrello");
                 btnRimuovi.setCursor(new Cursor(Cursor.HAND_CURSOR));
-                btnRimuovi.setBackground(new Color(230, 230, 230)); // Rosso
+                btnRimuovi.setBackground(new Color(230, 230, 230));
                 btnRimuovi.setForeground(new Color(192, 57, 43));
                 btnRimuovi.setFocusPainted(false);
 
@@ -112,7 +112,7 @@ public class FrameCarrello extends JFrame {
             btnProcediOrdine.setAlignmentX(Component.CENTER_ALIGNMENT);
             btnProcediOrdine.setFont(new Font("Segoe UI", Font.BOLD, 14));
             btnProcediOrdine.setBackground(new Color(41, 128, 185)); // Blu
-            btnProcediOrdine.setForeground(Color.WHITE);
+            btnProcediOrdine.setForeground(new Color(32, 29, 29));
             btnProcediOrdine.setFocusPainted(false);
             btnProcediOrdine.setCursor(new Cursor(Cursor.HAND_CURSOR));
             btnProcediOrdine.setMaximumSize(new Dimension(250, 40));
