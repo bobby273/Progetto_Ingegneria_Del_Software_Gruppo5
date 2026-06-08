@@ -2,7 +2,9 @@ package entity;
 
 import java.util.ArrayList;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
@@ -24,13 +26,17 @@ public class Ordine {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
     private List<OrdineContiene> prodottiContenuti;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+
+    @ManyToOne(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     private Cliente cliente;
 
+    //Costruttori
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
         this.cliente = cliente;
         this.indirizzoSpedizione = indirizzoSpedizione;
         this.id_ordine = generaID();
+        this.stato = Stato.INSERITO;
+        this.dataConferma = LocalDateTime.now();
         this.totale = 0;
         this.prodottiContenuti = new ArrayList<>();
         this.prodottiContenuti = aggiungiDaCarrello(carrello);
@@ -40,9 +46,11 @@ public class Ordine {
 
     }
 
-    private ArrayList<OrdineContiene> aggiungiDaCarrello(Carrello carrello){
+    //Metodi
+    //metodo per aggiungere i prodotti dal carrello al nuovo ordine
+    private List<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
         List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
-        ArrayList<OrdineContiene> prodottiInOrdine = new ArrayList<>();
+        List<OrdineContiene> prodottiInOrdine = new ArrayList<>();
 
         // 1. CORREZIONE BUG NULL: Se è vuoto, restituiamo una lista vuota (non null!)
         // Così evitiamo la NullPointerException in Cliente.java
@@ -73,23 +81,36 @@ public class Ordine {
     }
 
 
+    //metodo per generare un id univoco per Ordine
     private String generaID(){
         boolean esiste=true;
-        char[] id= new char[10];
+        int[] id= new int[10];
         java.util.Random random = new java.util.Random();
+        String idOrdine="0000000001";
         while(esiste){
-            random.setSeed(System.currentTimeMillis());
             for(int i=0; i<10; i++) {
-                id[i] = (char) random.nextInt(10);
+                id[i] = random.nextInt(10);
+                //System.out.print(id[i]);
             }
-            if(StoricoOrdini.getInstance().cercaOrdinePerId(String.valueOf(id))==null){
+            idOrdine = Arrays.stream(id).mapToObj(String::valueOf).collect(Collectors.joining());
+            if(StoricoOrdini.getInstance().cercaOrdinePerId(idOrdine)==null){
                 esiste=false;
             }
         }
-        return String.valueOf(id);
+        return idOrdine;
     }
 
-    public Cliente getCliente() {
+    /*
+    public static void main(String[] args){
+        Cliente io = new Cliente("aaaaaaaaaa@gmail.com","Robertina","Giovengo","aaaaaaa12345670","Via Antonio Segni");
+        Ordine ordine = new Ordine(io,"Via Antonio Segni",new Carrello("aaaaaaaaaa@gmail.com"));
+        System.out.println(ordine.getId());
+    }
+
+     */
+
+    //getter e setter
+    Cliente getCliente() {
         return cliente;
     }
 
@@ -97,10 +118,10 @@ public class Ordine {
         return cliente.getId();
     }
 
-    public void setStato(Stato stato) {
+    void setStato(Stato stato) {
         this.stato=stato;
     }
-    public Stato getStato() {
+    Stato getStato() {
         return this.stato;
     }
 
@@ -127,20 +148,20 @@ public class Ordine {
         return prodottiContenuti;
     }
 
-    public float getTotale() {
+    float getTotale() {
         return totale;
     }
 
-    public LocalDateTime getDataConferma() {
+    LocalDateTime getDataConferma() {
         return dataConferma;
     }
 
-    public String getIndirizzoSpedizione() {
+    String getIndirizzoSpedizione() {
         return indirizzoSpedizione;
     }
 
     //stub
-    public boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
+    boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
         return InterfacciaPagamento.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, id_ordine, totale);
     }
 }

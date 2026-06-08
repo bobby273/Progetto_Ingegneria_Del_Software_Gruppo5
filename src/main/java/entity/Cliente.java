@@ -9,6 +9,7 @@ import java.util.List;
 
 @Entity
 public class Cliente extends Utente{
+    //Attributi
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -33,6 +34,13 @@ public class Cliente extends Utente{
         this.carrello = new Carrello(email);
     }
 
+    //getter e setter
+    Long getId(){
+        return id;
+    }
+    Carrello getCarrello(){
+        return carrello;
+    }
 
     Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza) {
         System.out.println("🔍 [CLIENTE] Entrato nel metodo creaOrdine interno!");
@@ -137,9 +145,7 @@ public class Cliente extends Utente{
         return cercato;
     }
 
-    Long getId(){
-        return id;
-    }
+
     List<Ordine> visualizzaElencoOrdini() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
@@ -171,7 +177,7 @@ public class Cliente extends Utente{
     }
 
 
-    public void visualizzaInfoOrdine(Ordine ordineSelezionato) {
+    void visualizzaInfoOrdine(Ordine ordineSelezionato) {
         if (ordineSelezionato == null) {
             System.out.println("Errore: Nessun ordine selezionato."); //tale if serve per evitare errori di NullPointerException
             //in caso di avvio del metodo da terminale

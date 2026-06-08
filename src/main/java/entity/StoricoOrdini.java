@@ -13,7 +13,7 @@ public class StoricoOrdini {
         this.ordini = new ArrayList<>();
     }
 
-    public static StoricoOrdini getInstance() {
+    static StoricoOrdini getInstance() {
         if (instance == null) {
             instance = new StoricoOrdini();
         }
@@ -24,7 +24,7 @@ public class StoricoOrdini {
     // scriviamo ora i modi per aggiungere e rimuovere ordini nella nostra lista
     //aggiungiOrdini servirà per ogni instanza di Ordine, mentre rimuovere verrà chiamata da annullaOrdine()
 
-    public void aggiungiOrdine(Ordine ordineDaAggiungere){
+    void aggiungiOrdine(Ordine ordineDaAggiungere){
         if (ordineDaAggiungere != null && this.ordini.contains(ordineDaAggiungere)) {
             this.ordini.add(ordineDaAggiungere);
         } else {
@@ -32,7 +32,7 @@ public class StoricoOrdini {
         }
     }
 
-    public void rimuoviOrdine(Ordine ordineDaRimuovere){
+    void rimuoviOrdine(Ordine ordineDaRimuovere){
         if (ordineDaRimuovere != null && this.ordini.contains(ordineDaRimuovere)) {
             this.ordini.remove(ordineDaRimuovere);
         } else {
@@ -40,7 +40,7 @@ public class StoricoOrdini {
         }
     }
 
-    public void stampaOrdiniRicevuti(){
+    void stampaOrdiniRicevuti(){
         if (this.ordini.isEmpty()) {
             System.out.println("------ ELENCO ORDINI RICEVUTI ------\n");
             System.out.println("La lista è vuota: il sistema non ha ricevuto alcun ordine");
@@ -55,7 +55,7 @@ public class StoricoOrdini {
     }
 
     //metodo ausiliario per ottenere l'elenco ordini, è necessario per visualizza elenco ordini
-    public List<Ordine> getOrdini(){
+    List<Ordine> getOrdini(){
         return (List<Ordine>) this.ordini;
     }
 
@@ -72,11 +72,11 @@ public class StoricoOrdini {
 
 
     //casi d'uso non trattati in questo progetto:
-    public void generaReport(){
+    void generaReport(){
         System.out.println("Report generato"); //stub generico che funziona da placeholder della vera funzione
     }
 
-    public void inviaNotifiche(){
+    void inviaNotifiche(){
         System.out.println("Notifiche inviate"); //stub generico che funziona da placeholder della vera funzione
     }
 }

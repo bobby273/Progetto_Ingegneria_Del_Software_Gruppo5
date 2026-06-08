@@ -30,23 +30,23 @@ public class OrdineContiene {
     }
 
     // Getter e setter
-    public Long getId() {
+    Long getId() {
         return id;
     }
 
-    public int getQuantita() {
+    int getQuantita() {
         return quantità;
     }
 
-    public void setQuantita(int quantita) {
+    void setQuantita(int quantita) {
         this.quantità = quantita;
     }
 
-    public Prodotto getProdotto() {
+    Prodotto getProdotto() {
         return prodotto;
     }
 
-    public String getOrdine_id() {
+    String getOrdine_id() {
         return ordine_id;
     }
 }

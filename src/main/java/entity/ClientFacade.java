@@ -31,14 +31,14 @@ public class ClientFacade {
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE){
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
             boolean annullato = cliente.annullaOrdine(id_ordine);
-            Ordine aggiorna = null;
+            boolean aggiorna = false;
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = gp.aggiorna(o);
+                aggiorna = !((gp.aggiorna(o)==null) ||(gp.aggiorna(cliente)==null) || (gp.aggiorna(StoricoOrdini.getInstance())==null));
             }
-            return (aggiorna != null);
+            return aggiorna;
         } else{
-            //il null e' sus
+            //il null è sus
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
         }
@@ -67,6 +67,9 @@ public class ClientFacade {
                 // questo comando farà una INSERT perfetta dell'Ordine senza far esplodere il Cliente!
                 // ====================================================================
                 gp.salva(o);
+                cliente.getCarrello().getProdottiContenuti().clear();
+                gp.aggiorna(cliente);
+
 
                 System.out.println("✅ [FACADE] Ordine salvato nel Database con successo! Missione compiuta.");
                 return true; // 🟢 Segnale di SUCCESSO per far comparire il popup sulla GUI
@@ -75,6 +78,36 @@ public class ClientFacade {
             System.out.println("❌ [FACADE] La creazione dell'ordine è fallita (es. pagamento rifiutato o carrello vuoto).");
             return false;
 
+            if (cliente == null) {
+                System.out.println("Errore: Cliente non trovato nel database.");
+            }
+            Ordine nuovoOrdine = cliente.creaOrdine(indirizzo, num_carta, CCV, meseScadenza, annoScadenza);
+            if (nuovoOrdine != null) {
+
+                // AGGIORNAMENTO TABELLA 'ORDINE' e 'ORDINE_CONTIENE'
+                // Salviamo il nuovo ordine appena generato nel database
+                gp.salva(nuovoOrdine);
+
+                // AGGIORNAMENTO TABELLA 'CARRELLO' / 'CARRELLO_CONTIENE'
+                // Svuotiamo i prodotti dal carrello del cliente visto che l'acquisto è concluso
+                cliente.getCarrello().getProdottiContenuti().clear();
+
+                // AGGIORNAMENTO TABELLA 'CLIENTE' (e la relazione degli ordini)
+                // Aggiorniamo il cliente: avendo aggiunto il nuovo ordine a 'ordiniPersonali'
+                // e avendo svuotato il carrello, questo salverà lo stato di entrambe le tabelle nel DB
+                gp.aggiorna(cliente);
+
+                // AGGIORNAMENTO TABELLA 'STORICO_ORDINI'
+                // Se lo StoricoOrdini è un'entità persistente nel database, aggiorna anche lui
+                gp.aggiorna(StoricoOrdini.getInstance());
+
+                creato= true;
+            } else {
+                // Se il metodo ha restituito null, il pagamento è fallito o il carrello era vuoto.
+                // Le rimesse a posto nel carrello locale sono già state gestite dentro creaOrdine(),
+                // dobbiamo solo assicurarci di salvare lo stato aggiornato del cliente nel DB.
+                gp.aggiorna(cliente);
+            }
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -82,7 +115,6 @@ public class ClientFacade {
     }
 
 
-    //questo metodo non deve essere implementato qui ma in carrello [vedi GitHub]
     public boolean aggiungiOAggiornaProdottoACarrello(String mailUtente, String nomeProdotto, int qtaDesiderata){
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
@@ -235,15 +267,6 @@ public class ClientFacade {
         }
     }
 
-    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-    }
-
-    /*TRY: probabilmente va eliminato
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-    }*/
-
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
@@ -322,7 +345,7 @@ public class ClientFacade {
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            List<OrdineContiene> pc = o.getProdottiContenuti();
+            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
             ArrayList<String> prodotti = new ArrayList<>();
             for (OrdineContiene c : pc) {
                 prodotti.add(c.getProdotto().getNome());

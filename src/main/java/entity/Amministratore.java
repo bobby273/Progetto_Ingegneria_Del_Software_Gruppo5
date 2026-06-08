@@ -17,12 +17,12 @@ public class Amministratore extends Utente{
 
     public Amministratore(){}
 
-    public Amministratore(String email, String nome, String cognome, String password, String badge){
+    Amministratore(String email, String nome, String cognome, String password, String badge){
         super(email, nome, cognome, password);
         this.badge=badge;
     }
 
-   public boolean annullaOrdine(String id_ordine) {
+   boolean annullaOrdine(String id_ordine) {
         StoricoOrdini storicoOrdini = StoricoOrdini.getInstance();
         Ordine ordine = storicoOrdini.cercaOrdinePerId(id_ordine);
         if(ordine == null) return false;
