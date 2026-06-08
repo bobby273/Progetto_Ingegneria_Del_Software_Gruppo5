@@ -63,12 +63,15 @@ public class MainframeCliente extends JFrame {
         VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
                 if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
-
-                    FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
-
+                    // ATTENZIONE QUI: ho tolto "FrameStoricoOrdini" all'inizio della riga.
+                    // Ora usiamo la variabile globale della classe!
+                    frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
                     frameStoricoOrdini.setLocationRelativeTo(null);
+                    frameStoricoOrdini.setVisible(true);
+                } else {
+                    frameStoricoOrdini.toFront();
+                    frameStoricoOrdini.requestFocus();
 
                     frameStoricoOrdini.setVisible(true);
 
@@ -81,7 +84,6 @@ public class MainframeCliente extends JFrame {
                 }
             }
         });
-
         setVisible(true);
     }
 

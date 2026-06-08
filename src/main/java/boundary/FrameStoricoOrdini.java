@@ -33,16 +33,10 @@ public class FrameStoricoOrdini extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        fillTabella();
         addListenerTabella(); //il listener per poter interagire con la tabella
     }
 
-    private void fillTabella() {
-        //metodo di test
-        System.out.println("PROVA");
-    }
-
-    private void addListenerTabella() {
+    private void addListenerTabella(){
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
