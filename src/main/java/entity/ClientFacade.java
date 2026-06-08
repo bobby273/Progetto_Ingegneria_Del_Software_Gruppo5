@@ -209,15 +209,6 @@ public class ClientFacade {
         }
     }
 
-    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-    }
-
-    /*TRY: probabilmente va eliminato
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-    }*/
-
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {

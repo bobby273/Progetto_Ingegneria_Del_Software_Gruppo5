@@ -25,7 +25,7 @@ public class Catalogo {
         }
         return instance;
 
-    } //TODO: l'ho creato perchè mi serviva per accedere ai prodotti, va completato!
+    }
 
     //Metodi
 
@@ -48,21 +48,21 @@ public class Catalogo {
 
     // RETRIEVAL: Il catalogo sa come cercare un prodotto
     Prodotto cercaProdotto(String nome) {
-        GestorePersistenza gp = new GestorePersistenza();
+        gp = new GestorePersistenza();
         List<Prodotto> ris = gp.cercaPerCampo(Prodotto.class, "nome", nome);
         return ris.isEmpty() ? null : ris.get(0);
     }
 
     List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
 
-        GestorePersistenza gestore = new GestorePersistenza();
+
         final List<String> CAMPI_RICERCA_AMMESSI = Arrays.asList("nome", "categoria", "descrizione");
         // Controllo di sicurezza per evitare che utenti da terminale possano cercare su campi non ammessi.
         if (!CAMPI_RICERCA_AMMESSI.contains(categoriaRicerca)) {
             // Se il campo non è tra quelli ammessi, lanciamo un'eccezione o restituiamo null/lista vuota
             throw new IllegalArgumentException("Campo di ricerca non valido: " + categoriaRicerca);
         }
-        return gestore.cercaPerCampoLike(Prodotto.class, categoriaRicerca, elementoDaCercare);
+        return gp.cercaPerCampoLike(Prodotto.class, categoriaRicerca, elementoDaCercare);
     }
 
     // CREAZIONE: Il catalogo decide se un prodotto può essere aggiunto
@@ -72,7 +72,7 @@ public class Catalogo {
             System.out.println("CATALOGO: Impossibile aggiungere, prodotto già esistente.");
             return false;
         }
-        GestorePersistenza gp = new GestorePersistenza();
+        gp = new GestorePersistenza();
         return gp.salva(nuovo);
     }
 
