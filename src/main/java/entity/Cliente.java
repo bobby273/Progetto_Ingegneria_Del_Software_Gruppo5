@@ -151,18 +151,10 @@ public class Cliente extends Utente{
         //successivamente, li passo ad ordiniPersonali, ovvero la lista visualizzabile dalla singola istanza di Cliente
 
         //parte di transferimento
-        List<Ordine> ordiniFiltrati = new ArrayList<>();
-        StoricoOrdini storico = StoricoOrdini.getInstance();
-        List<Ordine> tuttiGliOrdini= storico.getOrdini();
-
-        if(tuttiGliOrdini != null){
-            for(Ordine ordine : tuttiGliOrdini){
-                if (ordine.getCliente() != null && ordine.getCliente().getEmail().equals(this.getEmail())){
-                    ordiniFiltrati.add(ordine);
-                }
-            }
+        if (this.ordiniPersonali == null) {
+            return new ArrayList<>();
         }
-        return ordiniFiltrati;
+        return this.ordiniPersonali;
     }
 
 
