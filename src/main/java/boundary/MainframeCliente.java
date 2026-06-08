@@ -1,11 +1,9 @@
 package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import controller.ControllerCliente;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -60,28 +58,17 @@ public class MainframeCliente extends JFrame {
             FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
 
         });
-        VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
-                    // ATTENZIONE QUI: ho tolto "FrameStoricoOrdini" all'inizio della riga.
-                    // Ora usiamo la variabile globale della classe!
-                    frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
-                    frameStoricoOrdini.setLocationRelativeTo(null);
-                    frameStoricoOrdini.setVisible(true);
-                } else {
-                    frameStoricoOrdini.toFront();
-                    frameStoricoOrdini.requestFocus();
-
-                    frameStoricoOrdini.setVisible(true);
-
-
-                } else {
-
-                    frameStoricoOrdini.toFront();
-                    frameStoricoOrdini.requestFocus();
-
-                }
+        VisualizzaStoricoOrdini.addActionListener(e -> {
+            // Se il frame non esiste o è stato chiuso, lo ricreo
+            if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
+                frameStoricoOrdini = new FrameStoricoOrdiniPersonali(controllerCliente);
+                frameStoricoOrdini.setLocationRelativeTo(this);
+                frameStoricoOrdini.setVisible(true);
+            } else {
+                // Se è già aperto e minimizzato o dietro altre finestre, portalo in primo piano
+                frameStoricoOrdini.setVisible(true);
+                frameStoricoOrdini.toFront();
+                frameStoricoOrdini.requestFocus();
             }
         });
         setVisible(true);
