@@ -194,10 +194,11 @@ public class ClientFacade {
                 for (Prodotto p : prodottiTrovati) {
                     risultati.add(new String[]{
                             p.getNome(),
-                            p.getDescrizione(),
+                            p.getCategoria(),
                             String.valueOf(p.getPrezzo()),
                             p.getDescrizione(),
                             String.valueOf(p.getQtaDisponibile()),
+                            String.valueOf(p.isDisponibile()),
                             String.valueOf(p.IsScontato())
                     });
                 }

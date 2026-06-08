@@ -62,7 +62,7 @@ public class Catalogo {
             // Se il campo non è tra quelli ammessi, lanciamo un'eccezione o restituiamo null/lista vuota
             throw new IllegalArgumentException("Campo di ricerca non valido: " + categoriaRicerca);
         }
-        return gestore.cercaPerCampo(Prodotto.class, categoriaRicerca, elementoDaCercare);
+        return gestore.cercaPerCampoLike(Prodotto.class, categoriaRicerca, elementoDaCercare);
     }
 
     // CREAZIONE: Il catalogo decide se un prodotto può essere aggiunto
