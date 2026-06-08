@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="db_pinguini@localhost" uuid="3cf80245-65b4-403d-a4ee-a8baeceda9bd">
+    <data-source source="LOCAL" name="db_pinguini@localhost" uuid="8cafc338-65d5-481b-b25e-a6e2e10630a6">
       <driver-ref>mysql.8</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>

@@ -75,17 +75,16 @@ public class FrameCarrello extends JFrame {
                 String quantita = p[4];
                 String disponibile = p[5];
 
-                if(disponibile.equals("true")){
-                    disponibile="Sì";
-                }
-                else{
-                    disponibile="No";
+                if (disponibile.equals("true")) {
+                    disponibile = "Sì";
+                } else {
+                    disponibile = "No";
                 }
 
                 String testoHtml = "<html><div style='width: 350px; font-family: Segoe UI;'>" +
                         "<h3 style='margin:0; color:#2c3e50;'>" + nome + " <span style='font-size:10px; color:#bdc3c7'>(" + categoria + ")</span></h3>" +
                         "<p style='margin:4px 0 8px 0; color:#7f8c8d;'>" + descrizione + "</p>" +
-                        "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b> | Disponibile? "+ disponibile + "</p>" +
+                        "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b> | Disponibile? " + disponibile + "</p>" +
                         "</div></html>";
 
                 JLabel lblInfo = new JLabel(testoHtml);
