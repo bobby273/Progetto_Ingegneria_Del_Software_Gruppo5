@@ -1,13 +1,20 @@
 package entity;
 
 import database.GestorePersistenza;
-import java.util.List;
 import java.util.Map;
 
 public class RegistroUtenti {
+    private static RegistroUtenti instance;
     private GestorePersistenza gestorePers;
-    public RegistroUtenti(){
-        gestorePers=new GestorePersistenza();
+    private RegistroUtenti(){
+        this.gestorePers=new GestorePersistenza();
+    }
+
+    public static RegistroUtenti getInstance(){
+        if(instance==null){
+            instance=new RegistroUtenti();
+        }
+        return instance;
     }
 
     public int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){

@@ -10,12 +10,13 @@ import java.util.List;
 public class ControllerCliente {
 
     //TODO: simulo la mail di cliente attuale
-    private static final String MAIL_CLIENTE = "fornataro.ma@gmail.com";
+    private static String MAIL_CLIENTE="";
 
     //Attributi
     private static ClientFacade clientFacade;
 
     public ControllerCliente(String mailUtente){
+        this.MAIL_CLIENTE=mailUtente;
         this.clientFacade = new ClientFacade(mailUtente);
     }
 

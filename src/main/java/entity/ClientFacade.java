@@ -3,6 +3,10 @@ package entity;
 //import StubPagamento.InterfacciaPagamento;
 import database.GestorePersistenza;
 
+import javax.swing.*;
+
+import static controller.ControllerAccesso.CLIENTE;
+import static controller.ControllerAccesso.checkLogin;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,21 +28,32 @@ public class ClientFacade {
 
     //Metodi
     public boolean annullaOrdine(String id_ordine) {
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        boolean annullato = cliente.annullaOrdine(id_ordine);
-        Ordine aggiorna=null;
-        if(annullato){
-            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            aggiorna = gp.aggiorna(o);
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE){
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            boolean annullato = cliente.annullaOrdine(id_ordine);
+            Ordine aggiorna = null;
+            if (annullato) {
+                Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+                aggiorna = gp.aggiorna(o);
+            }
+            return (aggiorna != null);
+        } else{
+            //il null e' sus
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return (aggiorna!=null);
     }
 
     public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        Ordine o = cliente.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
-        gp.salva(o);
-        return o==null;
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            Ordine o = cliente.creaOrdine(indirizzo, num_carta, CCV, meseScadenza, annoScadenza);
+            gp.salva(o);
+            return o == null;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
 
@@ -47,72 +62,93 @@ public class ClientFacade {
         //true -> aggiunto al carrello, false -> prodotto (o carrello) non trovato
 
         //Delego ricerca del prodotto all'informatione expert [catalogo]
-        Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
 
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
 
-        if(prodotto != null && cliente != null){
+            if (prodotto != null && cliente != null) {
 
-            boolean esitoAggiunta = cliente.aggiungiProdottoACarrello(prodotto, qtaDesiderata);
+                boolean esitoAggiunta = cliente.aggiungiProdottoACarrello(prodotto, qtaDesiderata);
 
-            if(esitoAggiunta){
-                gp.aggiorna(cliente);
-                return true;
+                if (esitoAggiunta) {
+                    gp.aggiorna(cliente);
+                    return true;
+                }
             }
+            return false;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
     }
     //Manuel: per rimuovere prodotti dal carrello
     public boolean rimuoviProdottoDalCarrello(String mailUtente, String nomeProdotto){
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        if(cliente != null){
-            Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            if (cliente != null) {
+                Prodotto prodotto = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
 
-            boolean esitoRimozione = cliente.rimuoviProdottoDalCarrello(prodotto);
+                boolean esitoRimozione = cliente.rimuoviProdottoDalCarrello(prodotto);
 
-            if(esitoRimozione){
-                gp.aggiorna(cliente);
-                return true;
+                if (esitoRimozione) {
+                    gp.aggiorna(cliente);
+                    return true;
+                }
             }
+            return false;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
         }
-        return false;
     }
 
     //Metodi di spacchettamento per garantire isolamento di prodotto
     public List<String[]> getCatalogoBreve() {
-        List<Prodotto> prodotti = Catalogo.getInstance().getTuttiIProdotti();
-        List<String[]> catalogoBreve = new ArrayList<>();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            List<Prodotto> prodotti = Catalogo.getInstance().getTuttiIProdotti();
+            List<String[]> catalogoBreve = new ArrayList<>();
 
-        if (prodotti != null) {
-            for (Prodotto p : prodotti) {
-                catalogoBreve.add(new String[]{p.getNome(), p.getDescrizione()});
+            if (prodotti != null) {
+                for (Prodotto p : prodotti) {
+                    catalogoBreve.add(new String[]{p.getNome(), p.getDescrizione()});
+                }
             }
+            return catalogoBreve;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return catalogoBreve;
     }
 
     public List<String[]> getCarrelloBreve(String mailUtente) {
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        List<String[]> carrelloBreve = new ArrayList<>();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            List<String[]> carrelloBreve = new ArrayList<>();
 
-        if (cliente != null && cliente.getProdottiCarrello() != null) {
-            for (CarrelloContiene item : cliente.getProdottiCarrello()) {
-                Prodotto p = item.getProdotto();
-                carrelloBreve.add(new String[]{
-                        p.getNome(),
-                        p.getCategoria(),
-                        String.valueOf(p.getPrezzo()),
-                        p.getDescrizione(),
-                        String.valueOf(p.getQtaDisponibile()),
-                        String.valueOf(p.isDisponibile()), //non serve perchè il cliente scopre se un prodotto non è disponibile solo all'acquisto, ma lo inserisco per completezza
-                        String.valueOf(p.IsScontato())
-                });
+            if (cliente != null && cliente.getProdottiCarrello() != null) {
+                for (CarrelloContiene item : cliente.getProdottiCarrello()) {
+                    Prodotto p = item.getProdotto();
+                    carrelloBreve.add(new String[]{
+                            p.getNome(),
+                            p.getCategoria(),
+                            String.valueOf(p.getPrezzo()),
+                            p.getDescrizione(),
+                            String.valueOf(p.getQtaDisponibile()),
+                            String.valueOf(p.isDisponibile()), //non serve perchè il cliente scopre se un prodotto non è disponibile solo all'acquisto, ma lo inserisco per completezza
+                            String.valueOf(p.IsScontato())
+                    });
+                }
             }
+            return carrelloBreve;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return carrelloBreve;
     }
 
-        public Object[] getDettagliProdotto (String nomeProdotto){
+    public Object[] getDettagliProdotto (String nomeProdotto){
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Prodotto p = Catalogo.getInstance().ricercaProdotto(nomeProdotto);
 
             if (p != null) {
@@ -126,36 +162,51 @@ public class ClientFacade {
                 };
             }
             return null;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
+    }
 
     public boolean esisteProdotto(String nomeProdotto) {
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto) != null;
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            return Catalogo.getInstance().ricercaProdotto(nomeProdotto) != null;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return false;
+        }
     }
 
 
     //proviamo a filtrare direttamente nella clientFacade.
     public List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
-        List<Prodotto> prodottiTrovati;
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            List<Prodotto> prodottiTrovati;
 
-        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
-        } else {
-            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-        }
-
-        List<String[]> risultati = new ArrayList<>();
-        if (prodottiTrovati != null) {
-            for (Prodotto p : prodottiTrovati) {
-                risultati.add(new String[]{
-                        p.getNome(),
-                        p.getDescrizione(),
-                        String.valueOf(p.getPrezzo()),
-                        p.getDescrizione(),
-                        String.valueOf(p.getQtaDisponibile()),
-                        String.valueOf(p.IsScontato())
-                });
+            if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti(); //se non compilo la ricerca, ottengo indietro il catalogo intero
+            } else {
+                prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
             }
-        } return risultati;
+
+            List<String[]> risultati = new ArrayList<>();
+            if (prodottiTrovati != null) {
+                for (Prodotto p : prodottiTrovati) {
+                    risultati.add(new String[]{
+                            p.getNome(),
+                            p.getDescrizione(),
+                            String.valueOf(p.getPrezzo()),
+                            p.getDescrizione(),
+                            String.valueOf(p.getQtaDisponibile()),
+                            String.valueOf(p.IsScontato())
+                    });
+                }
+            }
+            return risultati;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
@@ -169,76 +220,121 @@ public class ClientFacade {
 
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){
-        return Catalogo.getInstance().getTuttiIProdotti();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            return Catalogo.getInstance().getTuttiIProdotti();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     //Manuel: per ottenere prodotti da visualizzare nel carrello
     public List<CarrelloContiene> getProdottiNelCarrello(String mailUtente){
-        Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-        if(cliente != null){
-            return cliente.getProdottiCarrello();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            if (cliente != null) {
+                return cliente.getProdottiCarrello();
+            }
+            return new ArrayList<>();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return new ArrayList<>();
     }
 
 
     public Long getIdClienteDaIdOrdine(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getIdCliente();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getIdCliente();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public String getStato(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getStato().toString();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getStato().toString();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public float getTotale(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getTotale();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getTotale();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return 0;
+        }
     }
 
     public LocalDateTime getDataConferma(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getDataConferma();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getDataConferma();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public String getIndirizzoSpedizione(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        return o.getIndirizzoSpedizione();
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            return o.getIndirizzoSpedizione();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
-        Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-        ArrayList<OrdineContiene> pc=o.getProdottiContenuti();
-        ArrayList<String> prodotti = new  ArrayList<>();
-        for(OrdineContiene c:pc){
-            prodotti.add(c.getProdotto().getNome());
-            prodotti.add(String.valueOf(c.getQuantita()));
-        }
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
+            ArrayList<String> prodotti = new ArrayList<>();
+            for (OrdineContiene c : pc) {
+                prodotti.add(c.getProdotto().getNome());
+                prodotti.add(String.valueOf(c.getQuantita()));
+            }
 
-        return prodotti;
+            return prodotti;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
     }
 
     // Nella ClientFacade: Metodo per la ricerca che restituisce i dati pronti per la GUI
     public List<String[]> ricercaProdottoInCatalogoBreve(String categoriaRicerca, String elementoDaCercare) {
-        List<Prodotto> prodottiTrovati;
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            List<Prodotto> prodottiTrovati;
 
-        // Se la ricerca è vuota, restituiamo tutto il catalogo
-        if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-            prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti();
-        } else {
-            // Altrimenti deleghiamo al catalogo la ricerca specifica
-            prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-        }
-
-        // Spacchettiamo i risultati per la Boundary
-        List<String[]> risultatiBrevi = new ArrayList<>();
-        if (prodottiTrovati != null) {
-            for (Prodotto p : prodottiTrovati) {
-                risultatiBrevi.add(new String[]{p.getNome(), p.getDescrizione()});
+            // Se la ricerca è vuota, restituiamo tutto il catalogo
+            if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
+                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti();
+            } else {
+                // Altrimenti deleghiamo al catalogo la ricerca specifica
+                prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
             }
+
+            // Spacchettiamo i risultati per la Boundary
+            List<String[]> risultatiBrevi = new ArrayList<>();
+            if (prodottiTrovati != null) {
+                for (Prodotto p : prodottiTrovati) {
+                    risultatiBrevi.add(new String[]{p.getNome(), p.getDescrizione()});
+                }
+            }
+            return risultatiBrevi;
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
         }
-        return risultatiBrevi;
     }
 
 }
