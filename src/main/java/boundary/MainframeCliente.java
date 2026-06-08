@@ -1,11 +1,9 @@
 package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
-import com.intellij.uiDesigner.core.Spacer;
 import controller.ControllerCliente;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.plaf.FontUIResource;
 import javax.swing.text.StyleContext;
 import java.awt.*;
@@ -63,28 +61,19 @@ public class MainframeCliente extends JFrame {
             FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
 
         });
-        VisualizzaStoricoOrdini.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
-
-                    FrameStoricoOrdini frameStoricoOrdini = new FrameStoricoOrdini(controllerCliente);
-
-                    frameStoricoOrdini.setLocationRelativeTo(null);
-
-                    frameStoricoOrdini.setVisible(true);
-
-
-                } else {
-
-                    frameStoricoOrdini.toFront();
-                    frameStoricoOrdini.requestFocus();
-
-                }
+        VisualizzaStoricoOrdini.addActionListener(e -> {
+            // Se il frame non esiste o è stato chiuso, lo ricreo
+            if (frameStoricoOrdini == null || !frameStoricoOrdini.isDisplayable()) {
+                frameStoricoOrdini = new FrameStoricoOrdiniPersonali(controllerCliente);
+                frameStoricoOrdini.setLocationRelativeTo(this);
+                frameStoricoOrdini.setVisible(true);
+            } else {
+                // Se è già aperto e minimizzato o dietro altre finestre, portalo in primo piano
+                frameStoricoOrdini.setVisible(true);
+                frameStoricoOrdini.toFront();
+                frameStoricoOrdini.requestFocus();
             }
         });
-
         setVisible(true);
     }
 
@@ -238,7 +227,7 @@ public class MainframeCliente extends JFrame {
         CatalogoPane.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
         CatalogoScrollPane.setViewportView(CatalogoPane);
         VisualizzaStoricoOrdini = new JButton();
-        VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini");
+        VisualizzaStoricoOrdini.setText("Visualizzazione storico ordini personali");
         contentPanel.add(VisualizzaStoricoOrdini, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         final JLabel label1 = new JLabel();
         Font label1Font = this.$$$getFont$$$("Berlin Sans FB Demi", Font.BOLD, 28, label1.getFont());

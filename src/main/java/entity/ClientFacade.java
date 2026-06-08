@@ -267,6 +267,42 @@ public class ClientFacade {
         }
     }
 
+    public List<String[]> getStoricoOrdiniPersonale() {
+        if(checkLogin(mailUtente, CLIENTE) == CLIENTE) {
+
+            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+            List<String[]> storicoBreve = new ArrayList<>();
+
+            if (cliente != null) {
+                // ECCO LA MAGIA: Deleghiamo al Cliente il compito di trovarsi i suoi ordini!
+                List<Ordine> ordiniPersonali = cliente.visualizzaOrdiniPersonali();
+
+                for (Ordine o : ordiniPersonali) {
+                    storicoBreve.add(new String[]{
+                            o.getId(), // (o getId_ordine())
+                            o.getDataConferma() != null ? o.getDataConferma().toString() : "In elaborazione",
+                            o.getStato() != null ? o.getStato().toString() : "Sconosciuto",
+                            String.format("%.2f", o.getTotale())
+                    });
+                }
+            }
+            return storicoBreve;
+
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide.", "Errore", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+    }
+
+    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
+        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
+    }
+
+    /*TRY: probabilmente va eliminato
+    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
+        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
+    }*/
+
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {

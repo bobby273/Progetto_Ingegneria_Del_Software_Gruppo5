@@ -85,7 +85,10 @@ public class ControllerCliente {
     public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
         return clientFacade.ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
     }
-
+    //metodo per ricevere i dati dalla clientFacade e passarli alla GUI frameStoricoOrdiniPersonale
+    public List<String[]> getStoricoOrdiniPersonale() {
+        return clientFacade.getStoricoOrdiniPersonale();
+    }
     public String getStato(String id_ordine){
         return clientFacade.getStato(id_ordine);
     }

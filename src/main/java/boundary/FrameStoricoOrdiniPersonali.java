@@ -3,17 +3,17 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerCliente;
-import entity.Ordine;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 //TODO: verificarne la funzionalità
-public class FrameStoricoOrdini extends JFrame {
+public class FrameStoricoOrdiniPersonali extends JFrame {
     //variabili per il GUI Designer
     private JPanel StoricoOrdiniPane;
     private JScrollPane MainPanel;
@@ -24,7 +24,7 @@ public class FrameStoricoOrdini extends JFrame {
     private List<String> lista_id_Ordini;
 
     //costruttore della boundary
-    public FrameStoricoOrdini(ControllerCliente controller) {
+    public FrameStoricoOrdiniPersonali(ControllerCliente controller) {
         this.controller = controller;
 
         setTitle("Storico Ordini");
@@ -33,16 +33,43 @@ public class FrameStoricoOrdini extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        fillTabella();
+        caricaDatiStorico();//metodo per popolare la tabella
         addListenerTabella(); //il listener per poter interagire con la tabella
     }
 
-    private void fillTabella() {
-        //metodo di test
-        System.out.println("PROVA");
+    private void caricaDatiStorico() {
+        // 1. Definiamo le colonne della UI
+        String[] colonne = {"ID Ordine", "Data Conferma", "Stato", "Totale (€)"};
+
+        // 2. Creiamo il modello (bloccando la modifica delle celle da parte dell'utente)
+        DefaultTableModel model = new DefaultTableModel(colonne, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+
+        // 3. INIZIALIZZIAMO LA LISTA (fondamentale per evitare NullPointerException)
+        lista_id_Ordini = new ArrayList<>();
+
+        // 4. INTERROGHIAMO IL CONTROLLER
+        List<String[]> storico = controller.getStoricoOrdiniPersonale();
+
+        // 5. Riempiamo la tabella e la lista in parallelo
+        if (storico != null && !storico.isEmpty()) {
+            for (String[] datiOrdine : storico) {
+                model.addRow(datiOrdine); // Aggiunge la riga visiva alla JTable
+                lista_id_Ordini.add(datiOrdine[0]); // Salva l'ID in background per il doppio click
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Nessun ordine trovato nel tuo storico.", "Info", JOptionPane.INFORMATION_MESSAGE);
+        }
+
+        // 6. Applichiamo il modello finale alla tabella
+        tabellaOrdini.setModel(model);
     }
 
-    private void addListenerTabella() {
+    private void addListenerTabella(){
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,10 +87,8 @@ public class FrameStoricoOrdini extends JFrame {
 
     private void mostraDettagliOrdine(String id_ordineSelezionato) {
         FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato);
-        //passiamo controller (di tipo cliente) in quanto questo metodo è riservato puramente al frameCliente
         frameDettaglio.setLocationRelativeTo(this);
         frameDettaglio.setVisible(true);
-
     }
 
 

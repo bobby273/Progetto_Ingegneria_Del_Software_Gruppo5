@@ -27,14 +27,14 @@ public class Cliente extends Utente{
     //Costruttori
     public Cliente(){}
 
-    public Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
+    Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         super(email, nome, cognome, password);
         this.indirizzoSpedizione=indirizzoSpedizione;
         this.ordiniPersonali=new ArrayList<Ordine>();
         this.carrello = new Carrello(email);
     }
 
-    //getter e setter
+    //Getter e setter
     Long getId(){
         return id;
     }
@@ -145,35 +145,24 @@ public class Cliente extends Utente{
         return cercato;
     }
 
-
-    List<Ordine> visualizzaElencoOrdini() {
+    List<Ordine> visualizzaOrdiniPersonali() {
 
         //idea di base: invoco l'information expert StoricoOrdini e cerco gli ordini del cliente
         //successivamente, li passo ad ordiniPersonali, ovvero la lista visualizzabile dalla singola istanza di Cliente
 
         //parte di transferimento
+        List<Ordine> ordiniFiltrati = new ArrayList<>();
         StoricoOrdini storico = StoricoOrdini.getInstance();
         List<Ordine> tuttiGliOrdini= storico.getOrdini();
-        for (Ordine ordine : tuttiGliOrdini) {
-            if(ordine.getCliente().getEmail().equals(this.getEmail())){
-                ordiniPersonali.add(ordine);
-            };
-        }
-        //parte di stampa degli ordini
-        System.out.println("Elenco ordini del cliente: "+this.getNome()+"\t"+this.getCognome()+"\n");
-        System.out.println("----------------------------------------\n");
-        if (ordiniPersonali.isEmpty()) {
-            System.out.println("Non hai ancora effettuato alcun ordine");
-        } else {
-            for (Ordine o: ordiniPersonali){
-                System.out.println("ID:"+o.getId()+"\t Costo totale:"+o.getTotale()+ "\t Stato Ordine" +o.getStato()+"\n");
-                //questa è la visualizzazione "ridotta" degli ordini: la visualizzazione di tutti gli attributi
-                //dell'ordine avviene quando l'utente clicca sullo specifico ordine e avvia quindi
-                // il metodo visualizzaInfoOrdine()
+
+        if(tuttiGliOrdini != null){
+            for(Ordine ordine : tuttiGliOrdini){
+                if (ordine.getCliente() != null && ordine.getCliente().getEmail().equals(this.getEmail())){
+                    ordiniFiltrati.add(ordine);
+                }
             }
         }
-        System.out.println("----------------------------------------\n");
-    return ordiniPersonali;
+        return ordiniFiltrati;
     }
 
 

@@ -42,7 +42,7 @@ public class Catalogo {
         catch(Exception e){
             e.printStackTrace();
             System.out.println("[CATALOGO] Errore nella ricerca del prodotto");
-            return null; //Prodtto non trovato
+            return null; //Prodotto non trovato
         }
     }
 
@@ -67,17 +67,18 @@ public class Catalogo {
     }
 
     // CREAZIONE: Il catalogo decide se un prodotto può essere aggiunto
+    /*TODO: Va rimosso?
     boolean aggiungiProdotto(Prodotto nuovo) {
-        // Controllo di esistenza delegato all'Expert stesso
+        // Controllo di esistenza delegato allExpert stesso
         if (ricercaProdotto(nuovo.getNome()) != null) {
             System.out.println("CATALOGO: Impossibile aggiungere, prodotto già esistente.");
             return false;
         }
         gp = new GestorePersistenza();
         return gp.salva(nuovo);
-    }
+    }*/
 
-    // --- INFORMATION EXPERT: RIMOZIONE (Spostata qui dal gestore/facade) ---
+    // --- INFORMATION EXPERT: RIMOZIONE (spostata qui dal gestore/facade) ---
     boolean rimuoviProdotto(String nomeProdotto) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {

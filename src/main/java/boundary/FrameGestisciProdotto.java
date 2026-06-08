@@ -80,6 +80,10 @@ public class FrameGestisciProdotto extends JFrame {
         textQtaDisponibile.setEditable(false);
         areaDescrizione.setLineWrap(true);
         areaDescrizione.setWrapStyleWord(true);
+        NORadioButtonDisponibile.setEnabled(false);
+        SIRadioButtonDisponibile.setEnabled(false);
+        NORadioButtonScontato.setEnabled(false);
+        SIRadioButtonScontato.setEnabled(false);
 
         // ==========================================
         // 2. LOGICA DEI BOTTONI "MODIFICA"
