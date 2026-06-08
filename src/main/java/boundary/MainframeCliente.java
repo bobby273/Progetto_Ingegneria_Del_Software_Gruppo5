@@ -41,15 +41,16 @@ public class MainframeCliente extends JFrame {
             //setting per avere finestra a scorrimento (amazon-style)
             CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
 
+            //instanzia un controller in modo che l'applicazione non abbia problemi sul primo accesso
+            if (this.controllerCliente == null) {
+                this.controllerCliente = new ControllerCliente(this.emailUtente);
+            }
+        }
             fillCatalogo();
 
             //Click del bottone carrello
             CatalogoScrollPane.getVerticalScrollBar().setUnitIncrement(16);
 
-            if (this.controllerCliente == null) {
-                this.controllerCliente = new ControllerCliente(this.emailUtente);
-            }
-        }
             VediCarrello.addActionListener(e -> {
                 new FrameCarrello(emailUtente);
             });

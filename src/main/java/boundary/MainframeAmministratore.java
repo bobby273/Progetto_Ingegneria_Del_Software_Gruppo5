@@ -2,11 +2,14 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
+import controller.ControllerCliente;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.List;
+
 import static controller.ControllerAccesso.checkLogin;
 
 
@@ -15,11 +18,12 @@ public class MainframeAmministratore extends JFrame {
     private JButton visualizzaDettaglioOrdineButton;
     private JButton consultaAndamentoButton;
     private JButton visualizzaOrdiniRicevutiButton;
-    private JButton cercaProdottoButton;
+    private JButton RicercaProdottoButton;
     private JButton creaProdottoButton;
     private JScrollPane CatalogoScrollPane;
     private JPanel CatalogoPane;
     private String emailUtente = "";
+    private ControllerAmministratore controllerAmministratore;
     public static final int AMMINISTRATORE=7;
 
 
@@ -36,6 +40,11 @@ public class MainframeAmministratore extends JFrame {
         } else {
             // Setting per avere la finestra a scorrimento (amazon-style)
             CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+
+        //instanzia un controller se per qualunque motivo esso non dovesse esistere
+            if (this.controllerAmministratore == null) {
+                this.controllerAmministratore = new ControllerAmministratore(this.emailUtente);
+            }
 
             String messaggioDlc = "Buy the DLC, you broke ass!";
 
@@ -60,9 +69,9 @@ public class MainframeAmministratore extends JFrame {
                     JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
             );
 
-            cercaProdottoButton.addActionListener(e ->
-                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
-            );
+            RicercaProdottoButton.addActionListener(e -> {
+                FrameRicercaProdotti.apri_form_ricerca_admin(controllerAmministratore, risultati -> mostraRisultatiRicerca(risultati));
+            });
 
             creaProdottoButton.addActionListener(e -> {
                 FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
@@ -197,6 +206,93 @@ public class MainframeAmministratore extends JFrame {
         CatalogoPane.repaint();
     }
 
+    //metodo per mostrare i risultati della ricerca versione Amministratore
+    public void mostraRisultatiRicerca(List<String[]> prodottiFiltrati) {
+        CatalogoPane.removeAll();
+
+        if (prodottiFiltrati == null || prodottiFiltrati.isEmpty()) {
+            JLabel lblVuoto = new JLabel("Nessun prodotto trovato per i criteri inseriti.", SwingConstants.CENTER);
+            lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
+            lblVuoto.setForeground(Color.GRAY);
+            lblVuoto.setAlignmentX(Component.CENTER_ALIGNMENT);
+            CatalogoPane.add(Box.createVerticalGlue());
+            CatalogoPane.add(lblVuoto);
+            CatalogoPane.add(Box.createVerticalGlue());
+        } else {
+            CatalogoPane.setLayout(new BoxLayout(CatalogoPane, BoxLayout.Y_AXIS));
+            for (String[] dati : prodottiFiltrati) {
+                JPanel panelProdotto = new JPanel(new BorderLayout(15, 10));
+                panelProdotto.setBorder(BorderFactory.createCompoundBorder(
+                        BorderFactory.createEmptyBorder(5, 5, 5, 5),
+                        BorderFactory.createEtchedBorder()
+                ));
+                panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 80));
+
+                // Estraiamo TUTTI i dati necessari dall'array
+                String nomeProdotto = dati[0];
+                String categoriaProdotto = dati[1];
+                String prezzoProdotto = dati[2];
+                String descrizioneProdotto = dati[3];
+                String qtaProdotto = dati[4];
+                boolean isDisponibile = Boolean.parseBoolean(dati[5]);
+                boolean isScontato = Boolean.parseBoolean(dati[6]);
+
+                String testoHtml = "<html><h3 style='margin:0; color:#2c3e50;'>" + nomeProdotto + "</h3>" +
+                        "<p style='margin:0; font-size:11px; color:#7f8c8d;'>" + descrizioneProdotto + "</p>" +
+                        "<b style='color:#27ae60;'>" + prezzoProdotto + " €</b> - Qta: " + qtaProdotto + "</html>";
+
+                JLabel lblInfo = new JLabel(testoHtml);
+
+                // Creiamo i bottoni specifici per l'Amministratore
+                JPanel panelButtons = new JPanel(new GridLayout(1, 2, 5, 0));
+                JButton btnGestione = new JButton("Gestisci");
+                JButton btnRimuovi = new JButton("Rimuovi");
+                panelButtons.add(btnGestione);
+                panelButtons.add(btnRimuovi);
+
+                // Listener per la rimozione
+                btnRimuovi.addActionListener(e -> {
+                    int risposta = JOptionPane.showConfirmDialog(this,
+                            "Sei sicuro di voler eliminare permanentemente " + nomeProdotto + " dal catalogo?",
+                            "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+
+                    if (risposta == JOptionPane.YES_OPTION) {
+                        boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
+                        if (eliminato) {
+                            JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
+                            fillCatalogo(); // Ricarichiamo tutto il catalogo per aggiornare la vista
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Errore nell'eliminazione.", "Errore", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
+                });
+
+                // Listener per la gestione
+                btnGestione.addActionListener(e -> {
+                    FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
+                            nomeProdotto, categoriaProdotto, prezzoProdotto, descrizioneProdotto, qtaProdotto, isDisponibile, isScontato
+                    );
+                    frameGestione.setVisible(true);
+                    frameGestione.setLocationRelativeTo(null);
+
+                    frameGestione.addWindowListener(new WindowAdapter() {
+                        @Override
+                        public void windowClosed(WindowEvent windowEvent) {
+                            fillCatalogo(); // Ricarichiamo tutto il catalogo al termine della modifica
+                        }
+                    });
+                });
+
+                panelProdotto.add(lblInfo, BorderLayout.CENTER);
+                panelProdotto.add(panelButtons, BorderLayout.EAST);
+
+                CatalogoPane.add(panelProdotto);
+                CatalogoPane.add(Box.createRigidArea(new Dimension(0, 5)));
+            }
+        }
+        CatalogoPane.revalidate();
+        CatalogoPane.repaint();
+    }
 
     public JFrame apriUIAmm() {
         try {
@@ -237,9 +333,9 @@ public class MainframeAmministratore extends JFrame {
         final JPanel panel1 = new JPanel();
         panel1.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
         contentPane.add(panel1, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
-        cercaProdottoButton = new JButton();
-        cercaProdottoButton.setText("Cerca Prodotto");
-        panel1.add(cercaProdottoButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        RicercaProdottoButton = new JButton();
+        RicercaProdottoButton.setText("Cerca Prodotto");
+        panel1.add(RicercaProdottoButton, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         creaProdottoButton = new JButton();
         creaProdottoButton.setText("Crea Prodotto");
         panel1.add(creaProdottoButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
