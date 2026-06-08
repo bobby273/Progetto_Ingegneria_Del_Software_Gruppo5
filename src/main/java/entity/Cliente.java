@@ -16,7 +16,7 @@ public class Cliente extends Utente{
     private String indirizzoSpedizione;
     private byte immagineProfilo;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Ordine> ordiniPersonali;
 
     @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
@@ -34,31 +34,83 @@ public class Cliente extends Utente{
     }
 
 
-    //Metodi
-    Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
-        Ordine ordine = new Ordine(this, indirizzo,this.carrello);
-        if(ordine.getProdottiContenuti().isEmpty()){
+    Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza) {
+        System.out.println("🔍 [CLIENTE] Entrato nel metodo creaOrdine interno!");
+        System.out.println("🔍 [CLIENTE] Stato carrello attuale: " + (this.carrello == null ? "ASSENTE (NULL) ❌" : "PRESENTE ✅"));
+
+        Ordine ordine = null;
+        try {
+            // 1. IL PUNTO CRITICO: Proviamo a costruire l'ordine
+            System.out.println("🔍 [CLIENTE] Tento di lanciare new Ordine()...");
+            ordine = new Ordine(this, indirizzo, this.carrello);
+            System.out.println("✅ [CLIENTE] Costruttore Ordine superato con successo!");
+
+        } catch (Exception e) {
+            System.out.println("❌ CRASH FATALE DENTRO IL COSTRUTTORE DI ORDINE! ❌");
+            System.out.println("Motivo dell'errore: " + e.getMessage());
+            e.printStackTrace();
+            return null;
+        }
+
+        // 2. Controllo sicurezza carrello vuoto
+        if (ordine.getProdottiContenuti() == null || ordine.getProdottiContenuti().isEmpty()) {
+            System.out.println("❌ ERRORE: Impossibile creare l'ordine, il carrello è vuoto!");
             Ordine.elimina(ordine);
             return null;
         }
-        float totale = ordine.calcolaTotale();
-        boolean pagamentoEffettuato = ordine.PagaOrdine(num_carta,CCV,meseScadenza,annoScadenza, ordine.getId(), totale);
-        if(pagamentoEffettuato) {
-            ordiniPersonali.add(ordine);
-            StoricoOrdini.getInstance().aggiungiOrdine(ordine);
-            //in questo modo, l'ordine appena instanziato verrà aggiunto automaticamente allo Storico
 
-            for(OrdineContiene c : ordine.getProdottiContenuti()){
-                Catalogo.getInstance().modificaQuantita(c.getProdotto().getNome(),(c.getProdotto().getQtaDisponibile() - c.getQuantita()));
+        float totale = ordine.calcolaTotale();
+        String idTemporaneoPerStub = "TEMP_ID_" + System.currentTimeMillis();
+
+        // 3. Tentativo di Pagamento
+        boolean pagamentoEffettuato = ordine.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, idTemporaneoPerStub, totale);
+
+        // ==========================================
+        // GESTIONE ESITO PAGAMENTO E TRAPPOLA CRASH
+        // ==========================================
+        if (pagamentoEffettuato) {
+            System.out.println("✅ Pagamento Approvato!");
+
+            try {
+                System.out.println("⏳ DEBUG: Tento di aggiungere agli ordini personali...");
+                // FIX PREVENTIVO: Se Hibernate non ha inizializzato la lista perché vuota, la creiamo noi!
+                if (ordiniPersonali == null) {
+                    ordiniPersonali = new ArrayList<>();
+                }
+                ordiniPersonali.add(ordine);
+
+                System.out.println("⏳ DEBUG: Tento di aggiungere allo StoricoOrdini...");
+                StoricoOrdini.getInstance().aggiungiOrdine(ordine);
+
+                System.out.println("⏳ DEBUG: Tento di scalare le quantità dal catalogo...");
+                for(OrdineContiene c : ordine.getProdottiContenuti()) {
+                    Catalogo.getInstance().modificaQuantita(c.getProdotto().getNome(), (c.getProdotto().getQtaDisponibile() - c.getQuantita()));
+                }
+
+                System.out.println("✅ DEBUG: Operazioni in Cliente completate! Restituisco l'ordine alla Facade.");
+                return ordine;
+
+            } catch (Exception e) {
+                System.out.println("❌ CRASH FATALE DURANTE LE OPERAZIONI POST-PAGAMENTO!");
+                System.out.println("Motivo: " + e.toString());
+                e.printStackTrace();
+
+                // Facciamo rollback fittizio per sicurezza
+                Ordine.elimina(ordine);
+                return null;
             }
-        }else{
-            System.out.println("Pagamento non approvato");
-            for(OrdineContiene c : ordine.getProdottiContenuti()){
-                carrello.aggiungiOAggiornaProdotto(c.getProdotto(),c.getQuantita());
+
+        } else {
+            System.out.println("❌ ERRORE: Pagamento non approvato.");
+
+            // Rollback: Rimettiamo i prodotti nel carrello dell'utente
+            for(OrdineContiene c : ordine.getProdottiContenuti()) {
+                carrello.aggiungiOAggiornaProdotto(c.getProdotto(), c.getQuantita());
             }
+
             Ordine.elimina(ordine);
+            return null;
         }
-        return ordine;
     }
 
 

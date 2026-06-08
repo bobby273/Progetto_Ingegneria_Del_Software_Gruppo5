@@ -22,10 +22,9 @@ public class Ordine {
 
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER)
-    private ArrayList<OrdineContiene> prodottiContenuti;
+    private List<OrdineContiene> prodottiContenuti;
 
-
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)
     private Cliente cliente;
 
     Ordine(Cliente cliente, String indirizzoSpedizione, Carrello carrello){
@@ -41,18 +40,35 @@ public class Ordine {
 
     }
 
-    private ArrayList<OrdineContiene>  aggiungiDaCarrello(Carrello carrello){
+    private ArrayList<OrdineContiene> aggiungiDaCarrello(Carrello carrello){
         List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
-        if(prodottiInCarrello.isEmpty()) return null;
         ArrayList<OrdineContiene> prodottiInOrdine = new ArrayList<>();
-        for (CarrelloContiene carrelloContiene : prodottiInCarrello) {
+
+        // 1. CORREZIONE BUG NULL: Se è vuoto, restituiamo una lista vuota (non null!)
+        // Così evitiamo la NullPointerException in Cliente.java
+        if(prodottiInCarrello == null || prodottiInCarrello.isEmpty()) {
+            return prodottiInOrdine;
+        }
+
+        // 2. LA SOLUZIONE ANTI-CRASH: Creiamo una copia "fotografia" della lista
+        List<CarrelloContiene> copiaCarrello = new ArrayList<>(prodottiInCarrello);
+
+        // 3. Iteriamo sulla copia, così Java non va in confusione
+        for (CarrelloContiene carrelloContiene : copiaCarrello) {
             if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
-                prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(),carrelloContiene.getQuantita(), this));
+
+                // Aggiungiamo all'ordine
+                prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(), carrelloContiene.getQuantita(), this));
+
+                // Ora la rimozione è SICURA perché stiamo eliminando dall'originale
+                // ma stiamo leggendo dalla copia!
                 carrello.rimuoviProdotto(carrelloContiene.getProdotto());
+
             } else {
-                System.out.println("quantità desiderata del prodotto "+carrelloContiene.getProdotto().getNome()+" non disponibile");
+                System.out.println("Quantità desiderata del prodotto " + carrelloContiene.getProdotto().getNome() + " non disponibile");
             }
         }
+
         return prodottiInOrdine;
     }
 
@@ -107,7 +123,7 @@ public class Ordine {
         return null;
     }
 
-    public ArrayList<OrdineContiene> getProdottiContenuti() {
+    public List<OrdineContiene> getProdottiContenuti() { // <-- LIST al posto di ArrayList
         return prodottiContenuti;
     }
 

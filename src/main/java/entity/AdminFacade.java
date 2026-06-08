@@ -239,7 +239,7 @@ public class AdminFacade {
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
+            List<OrdineContiene> pc = o.getProdottiContenuti();
             ArrayList<String> prodotti = new ArrayList<>();
             for (OrdineContiene c : pc) {
                 prodotti.add(c.getProdotto().getNome());

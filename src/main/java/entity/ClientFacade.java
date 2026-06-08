@@ -45,11 +45,36 @@ public class ClientFacade {
     }
 
     public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+        System.out.println("🔍 [FACADE] Inizio procedura creaOrdine per l'utente: " + mailUtente);
+
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+
+            if (cliente == null) {
+                System.out.println("❌ ERRORE: Cliente non trovato nel Database!");
+                return false;
+            }
+
+            // 1. Creiamo l'oggetto ordine (il metodo interno ha già fatto tutti i controlli)
             Ordine o = cliente.creaOrdine(indirizzo, num_carta, CCV, meseScadenza, annoScadenza);
-            gp.salva(o);
-            return o == null;
+
+            // 2. Controlliamo se è andato tutto a buon fine
+            if (o != null) {
+                System.out.println("✅ [FACADE] Ordine creato internamente. Procedo al salvataggio diretto (gp.salva)...");
+
+                // ====================================================================
+                // IL SALVATAGGIO DEFINITIVO: Ora che abbiamo il mappedBy e niente Cascade strani,
+                // questo comando farà una INSERT perfetta dell'Ordine senza far esplodere il Cliente!
+                // ====================================================================
+                gp.salva(o);
+
+                System.out.println("✅ [FACADE] Ordine salvato nel Database con successo! Missione compiuta.");
+                return true; // 🟢 Segnale di SUCCESSO per far comparire il popup sulla GUI
+            }
+
+            System.out.println("❌ [FACADE] La creazione dell'ordine è fallita (es. pagamento rifiutato o carrello vuoto).");
+            return false;
+
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -297,7 +322,7 @@ public class ClientFacade {
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
+            List<OrdineContiene> pc = o.getProdottiContenuti();
             ArrayList<String> prodotti = new ArrayList<>();
             for (OrdineContiene c : pc) {
                 prodotti.add(c.getProdotto().getNome());
