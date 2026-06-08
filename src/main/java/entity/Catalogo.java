@@ -47,11 +47,12 @@ public class Catalogo {
     }
 
     // RETRIEVAL: Il catalogo sa come cercare un prodotto
-    Prodotto cercaProdotto(String nome) {
+    /* TODO: Da eliminare
+    Prodotto ricercaProdotto(String nome) {
         gp = new GestorePersistenza();
         List<Prodotto> ris = gp.cercaPerCampo(Prodotto.class, "nome", nome);
         return ris.isEmpty() ? null : ris.get(0);
-    }
+    }*/
 
     List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
 
@@ -68,7 +69,7 @@ public class Catalogo {
     // CREAZIONE: Il catalogo decide se un prodotto può essere aggiunto
     boolean aggiungiProdotto(Prodotto nuovo) {
         // Controllo di esistenza delegato all'Expert stesso
-        if (cercaProdotto(nuovo.getNome()) != null) {
+        if (ricercaProdotto(nuovo.getNome()) != null) {
             System.out.println("CATALOGO: Impossibile aggiungere, prodotto già esistente.");
             return false;
         }
@@ -98,15 +99,15 @@ public class Catalogo {
     }
 
     boolean modificaNome(String nomeOriginale, String nuovoNome) {
-        Prodotto p = cercaProdotto(nomeOriginale);
-        if (p == null || cercaProdotto(nuovoNome) != null) return false;
+        Prodotto p = ricercaProdotto(nomeOriginale);
+        if (p == null || ricercaProdotto(nuovoNome) != null) return false;
 
         rimuoviProdotto(nomeOriginale);
         return creaEAggiungiProdotto(nuovoNome, p.getCategoria(), p.getPrezzo(), p.getDescrizione(), p.getQtaDisponibile(), p.isDisponibile(), p.isScontato());
     }
 
     boolean modificaCategoria(String nome, String nuovaCat) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setCategoria(nuovaCat);
         new GestorePersistenza().aggiorna(p);
@@ -114,7 +115,7 @@ public class Catalogo {
     }
 
     boolean modificaPrezzo(String nome, float nuovoPrezzo) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setPrezzo(nuovoPrezzo);
         new GestorePersistenza().aggiorna(p);
@@ -122,7 +123,7 @@ public class Catalogo {
     }
 
     boolean modificaQuantita(String nome, int nuovaQta) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setQtaDisponibile(nuovaQta);
         new GestorePersistenza().aggiorna(p);
@@ -130,7 +131,7 @@ public class Catalogo {
     }
 
     boolean modificaDisponibilita(String nome, boolean nuovaDisp) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setDisponibile(nuovaDisp);
         new GestorePersistenza().aggiorna(p);
@@ -138,7 +139,7 @@ public class Catalogo {
     }
 
     boolean modificaSconto(String nome, boolean nuovoSconto) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setScontato(nuovoSconto);
         new GestorePersistenza().aggiorna(p);
@@ -146,7 +147,7 @@ public class Catalogo {
     }
 
     boolean modificaDescrizione(String nome, String nuovaDesc) {
-        Prodotto p = cercaProdotto(nome);
+        Prodotto p = ricercaProdotto(nome);
         if (p == null) return false;
         p.setDescrizione(nuovaDesc);
         new GestorePersistenza().aggiorna(p);
@@ -154,7 +155,7 @@ public class Catalogo {
     }
 
     boolean creaEAggiungiProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
-        if (cercaProdotto(nome) != null) {
+        if (ricercaProdotto(nome) != null) {
             System.out.println("CATALOGO: Prodotto già esistente, creazione annullata.");
             return false;
         }
