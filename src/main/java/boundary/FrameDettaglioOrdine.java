@@ -36,7 +36,9 @@ public class FrameDettaglioOrdine extends JFrame {
 
     //Variabili per la logica BCED
     private ControllerCliente controllerCliente;
-    private ControllerAmministratore controllerAmministratore;
+    private ControllerAmministratore controllerAmministratore; //attualmente questo frame non è eseguibile da amministratore in quanto
+    //manca un appropriato metodo che mostra lo storico globale con solo gli ordini effettuati, ma lo implementiamo comunque
+    //in modo che in futuro esso sia facilmente instanziabile
 
     private boolean isAmministratore; //sarà il nostro modo per riconoscere
     // se questa frame è stata aperta da FrameCliente o da FrameAmministratore
@@ -59,6 +61,9 @@ public class FrameDettaglioOrdine extends JFrame {
         this.indirizzoSpedizione = controllerCliente.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controllerCliente.getProdottiEQuantita(id_ordine);
         this.id_cliente = controllerCliente.getIdCliente(id_ordine);
+
+        Object[] infoOrdine = controller.getInfoOrdine(id_ordine);
+        popolaDatiDaArray(infoOrdine);
         apriFrame();
     }
 
@@ -72,6 +77,10 @@ public class FrameDettaglioOrdine extends JFrame {
         this.indirizzoSpedizione = controller.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controller.getProdottiEQuantita(id_ordine);
         this.id_cliente = controller.getIdCliente(id_ordine);
+
+        //per il futuro, avremo una implementazione analoga a quella che avviene nel costruttore cliente
+        //Object[] infoOrdine = controller.getInfoOrdine(id_ordine);
+        //popolaDatiDaArray(infoOrdine);
         apriFrame();
     }
 
@@ -82,13 +91,39 @@ public class FrameDettaglioOrdine extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        fillTabella();
+        lblId.setText(id_ordineSelezionato != null ? id_ordineSelezionato : "N/D");
+        lblStato.setText(stato != null ? stato : "Sconosciuto");
+        lblTotale.setText(String.format("%.2f €", totale));
+        lblDataConferma.setText(dataConferma != null ? dataConferma.toString() : "N/D");
+        lblIndirizzoSpedizione.setText(indirizzoSpedizione != null ? indirizzoSpedizione : "N/D");
+
+        if (ProdottiEQuantita != null && !ProdottiEQuantita.isEmpty()) {
+            String listaHTML = "<html>• " + String.join("<br>• ", ProdottiEQuantita) + "</html>";
+            lblOggettiAcquistati.setText(listaHTML);
+        } else {
+            lblOggettiAcquistati.setText("Nessun dettaglio prodotti");
+        }
+
+        // Blocca il tasto se l'ordine non è più annullabile
+        if (stato != null && (stato.equals("ANNULLATO") || stato.equals("CONSEGNATO") || stato.equals("SPEDITO"))) {
+            btnAnnullaOrdine.setEnabled(false);
+        }
+
+        // --- ATTIVAZIONE DEI BOTTONI ---
         addListenerBottoni();
+
     }
 
-    private void fillTabella() {
-        //metodo di Test
-        System.out.println("PROVA");
+    private void popolaDatiDaArray(Object[] info) {
+        if (info != null) {
+            // L'indice 0 è l'ID, ma lo abbiamo già assegnato sopra
+            this.totale = (float) info[1];
+            this.stato = (String) info[2];
+            this.dataConferma = (LocalDateTime) info[3];
+            this.indirizzoSpedizione = (String) info[4];
+            this.ProdottiEQuantita = (ArrayList<String>) info[5];
+            this.id_cliente = (Long) info[6];
+        }
     }
 
     private void addListenerBottoni() {
@@ -118,7 +153,7 @@ public class FrameDettaglioOrdine extends JFrame {
                         btnAnnullaOrdine.setEnabled(false);
                         JOptionPane.showMessageDialog(PanelOrdine, "Ordine annullato. Avvenuto rimborso:");
                     } else {
-                        JOptionPane.showMessageDialog(PanelOrdine, "Errore durante l'annullamento.", "Errore", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(PanelOrdine, "Errore: hai già annullato questo ordine!", "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
@@ -193,7 +228,4 @@ public class FrameDettaglioOrdine extends JFrame {
         return PanelOrdine;
     }
 
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
-    }
 }

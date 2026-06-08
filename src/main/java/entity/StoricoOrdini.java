@@ -54,10 +54,6 @@ public class StoricoOrdini {
 
     }
 
-    //metodo ausiliario per ottenere l'elenco ordini, è necessario per visualizza elenco ordini
-    List<Ordine> getOrdini(){
-        return (List<Ordine>) this.ordini;
-    }
 
     Ordine cercaOrdinePerId(String id_ordine){
         Ordine cercato = null;

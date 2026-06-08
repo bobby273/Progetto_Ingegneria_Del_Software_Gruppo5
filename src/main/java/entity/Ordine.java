@@ -100,6 +100,28 @@ public class Ordine {
         return idOrdine;
     }
 
+    // Metodo Information Expert: impacchetta tutte le info dell'ordine
+    public Object[] getInfoOrdine() {
+        // 1. Prepariamo la lista dei prodotti già formattata per la grafica
+        ArrayList<String> prodottiStr = new ArrayList<>();
+        if (this.prodottiContenuti != null) {
+            for (OrdineContiene c : this.prodottiContenuti) {
+                prodottiStr.add(c.getProdotto().getNome() + " (Q.tà: " + c.getQuantita() + ")"); //in questo modo, combiniamo i prodotti e la quantità in un'unica stringa
+            }
+        }
+
+        // 2. Restituiamo l'array con tutti i dati nell'ordine esatto
+        return new Object[]{
+                this.id_ordine,
+                this.totale,
+                this.stato != null ? this.stato.toString() : "N/D",
+                this.dataConferma,
+                this.indirizzoSpedizione,
+                prodottiStr,
+                this.cliente != null ? this.cliente.getId() : null
+        };
+    }
+
     /*
     public static void main(String[] args){
         Cliente io = new Cliente("aaaaaaaaaa@gmail.com","Robertina","Giovengo","aaaaaaa12345670","Via Antonio Segni");

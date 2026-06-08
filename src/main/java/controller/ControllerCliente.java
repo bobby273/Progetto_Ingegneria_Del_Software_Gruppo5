@@ -92,6 +92,10 @@ public class ControllerCliente {
     public String getStato(String id_ordine){
         return clientFacade.getStato(id_ordine);
     }
+    //analogamente, metodo per ricevere i dati dalla clientFacade e passarli alla GUI frameDettaglioOrdine
+    public Object[] getInfoOrdine(String id_ordine) {
+        return clientFacade.getInfoOrdine(id_ordine);
+    }
 
     public float getTotale(String id_ordine){
         return clientFacade.getTotale(id_ordine);

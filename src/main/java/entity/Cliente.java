@@ -158,25 +158,14 @@ public class Cliente extends Utente{
     }
 
 
-    void visualizzaInfoOrdine(Ordine ordineSelezionato) {
+    Object[] visualizzaInfoOrdine(String id_ordine) {
+        Ordine ordineSelezionato = cercaOrdine(id_ordine);
         if (ordineSelezionato == null) {
-            System.out.println("Errore: Nessun ordine selezionato."); //tale if serve per evitare errori di NullPointerException
-            //in caso di avvio del metodo da terminale
-            return;
+            System.out.println("Errore: Ordine non trovato o non appartenente a questo cliente.");
+            return null;
         }
-
-        // Stampiamo la "tabella" completa con tutti gli attributi dell'ordine'
-        System.out.println("==================================================");
-        System.out.println("             DETTAGLIO COMPLETO ORDINE            ");
-        System.out.println("==================================================");
-        System.out.println("ID ORDINE:            " + ordineSelezionato.getId());
-        System.out.println("TOTALE PAGATO:        €" + ordineSelezionato.getTotale());
-        System.out.println("OGGETTI ACQUISTATI" + ordineSelezionato.getProdottiContenuti());
-        System.out.println("STATO ATTUALE:        " + ordineSelezionato.getStato());
-        System.out.println("DATA CONFERMA:        " + ordineSelezionato.getDataConferma());
-        System.out.println("INDIRIZZO SPEDIZIONE: " + ordineSelezionato.getIndirizzoSpedizione());
-        System.out.println("==================================================");
-
+        // Recuperiamo e restituiamo i dati impacchettati dall'Information Expert
+        return ordineSelezionato.getInfoOrdine();
     }
 
     boolean aggiungiProdottoACarrello(Prodotto prodotto, int qtaDesiderata){
