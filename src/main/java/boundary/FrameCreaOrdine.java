@@ -25,6 +25,7 @@ public class FrameCreaOrdine extends JFrame {
     private JLabel LabelAnno;
     private JTextField annoTextField;
     private JButton bottoneConferma;
+    private JLabel Esito;
 
     private String emailUtente;
 
@@ -44,7 +45,7 @@ public class FrameCreaOrdine extends JFrame {
      */
     private void $$$setupUI$$$() {
         pannelloPrincipale = new JPanel();
-        pannelloPrincipale.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        pannelloPrincipale.setLayout(new GridLayoutManager(3, 1, new Insets(0, 0, 0, 0), -1, -1));
         pannelloForm = new JPanel();
         pannelloForm.setLayout(new GridLayoutManager(10, 1, new Insets(0, 0, 0, 0), -1, -1));
         pannelloPrincipale.add(pannelloForm, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
@@ -64,12 +65,12 @@ public class FrameCreaOrdine extends JFrame {
         CCVTextField = new JTextField();
         pannelloForm.add(CCVTextField, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         LabelMese = new JLabel();
-        LabelMese.setText("Mese di scadenza:");
+        LabelMese.setText("Mese di scadenza della carta:");
         pannelloForm.add(LabelMese, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         meseTextField = new JTextField();
         pannelloForm.add(meseTextField, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         LabelAnno = new JLabel();
-        LabelAnno.setText("Anno di scadenza:");
+        LabelAnno.setText("Anno di scadenza della carta:");
         pannelloForm.add(LabelAnno, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         annoTextField = new JTextField();
         pannelloForm.add(annoTextField, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -82,6 +83,9 @@ public class FrameCreaOrdine extends JFrame {
         xButton = new JButton();
         xButton.setText("Esci");
         pannelloBottoni.add(xButton, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        Esito = new JLabel();
+        Esito.setText("");
+        pannelloPrincipale.add(Esito, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**
@@ -113,7 +117,6 @@ public class FrameCreaOrdine extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 // Chiude la finestra e termina l'applicazione in modo sicuro
                 dispose();
-                System.exit(0);
             }
         });
 
@@ -121,6 +124,7 @@ public class FrameCreaOrdine extends JFrame {
         bottoneConferma.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                Esito.setText("in attesa di una risposta dal server...");
                 elaboraDati();
             }
         });
@@ -133,21 +137,28 @@ public class FrameCreaOrdine extends JFrame {
             int ccv = Integer.parseInt(CCVTextField.getText());
             int mese = Integer.parseInt(meseTextField.getText());
             int anno = Integer.parseInt(annoTextField.getText());
+            if(ccv<1 || ccv>999 || mese<1 || mese>12 || anno<1900 || anno>2100) throw new NumberFormatException();
             boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCartaTextField.getText(), ccv, mese, anno);
 
             if (check) {
                 JOptionPane.showMessageDialog(null, "Ordine creato con successo!");
+                Esito.setText("Ordine creato");
                 dispose();
+                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(null, "Errore durante la creazione dell'ordine.", "Ordine vuoto o pagamento non andato a buon fine",
                         JOptionPane.ERROR_MESSAGE);
+                Esito.setText("Ordine non creato");
             }
         } catch (NumberFormatException ex) {
             // Se l'utente inserisce lettere nei campi degli interi, catturiamo l'errore
             JOptionPane.showMessageDialog(this,
-                    "Assicurati di inserire solo numeri validi nei campi 'Intero'.",
+                    "Assicurati di aver inserito correttamente i dati",
                     "Errore di Formato",
                     JOptionPane.ERROR_MESSAGE);
+            Esito.setText("Ordine non creato");
+        } catch (Exception e){
+            JOptionPane.showMessageDialog(this, "Errore sconosciuto, riprovare più tardi", "Errore Server", JOptionPane.ERROR_MESSAGE);
         }
     }
 
