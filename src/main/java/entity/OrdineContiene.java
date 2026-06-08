@@ -5,6 +5,10 @@ import jakarta.persistence.*;
 @Entity
 public class OrdineContiene {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+
     private String ordine_id;
 
     private int quantità;

@@ -3,17 +3,15 @@ package boundary;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerCliente;
-import entity.Ordine;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
 //TODO: verificarne la funzionalità
-public class FrameStoricoOrdini extends JFrame {
+public class FrameStoricoOrdiniPersonali extends JFrame {
     //variabili per il GUI Designer
     private JPanel StoricoOrdiniPane;
     private JScrollPane MainPanel;
@@ -24,7 +22,7 @@ public class FrameStoricoOrdini extends JFrame {
     private List<String> lista_id_Ordini;
 
     //costruttore della boundary
-    public FrameStoricoOrdini(ControllerCliente controller) {
+    public FrameStoricoOrdiniPersonali(ControllerCliente controller) {
         this.controller = controller;
 
         setTitle("Storico Ordini");
@@ -33,16 +31,12 @@ public class FrameStoricoOrdini extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        fillTabella();
+        //metodo per popolare la tabella
         addListenerTabella(); //il listener per poter interagire con la tabella
     }
 
-    private void fillTabella() {
-        //metodo di test
-        System.out.println("PROVA");
-    }
 
-    private void addListenerTabella() {
+    private void addListenerTabella(){
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -60,10 +54,8 @@ public class FrameStoricoOrdini extends JFrame {
 
     private void mostraDettagliOrdine(String id_ordineSelezionato) {
         FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato);
-        //passiamo controller (di tipo cliente) in quanto questo metodo è riservato puramente al frameCliente
         frameDettaglio.setLocationRelativeTo(this);
         frameDettaglio.setVisible(true);
-
     }
 
 
