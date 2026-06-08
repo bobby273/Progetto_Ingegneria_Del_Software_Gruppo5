@@ -69,7 +69,7 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
         tabellaOrdini.setModel(model);
     }
 
-    private void addListenerTabella(){
+    private void addListenerTabella() {
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {

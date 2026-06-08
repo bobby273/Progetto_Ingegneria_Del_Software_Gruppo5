@@ -77,37 +77,6 @@ public class ClientFacade {
 
             System.out.println("❌ [FACADE] La creazione dell'ordine è fallita (es. pagamento rifiutato o carrello vuoto).");
             return false;
-
-            if (cliente == null) {
-                System.out.println("Errore: Cliente non trovato nel database.");
-            }
-            Ordine nuovoOrdine = cliente.creaOrdine(indirizzo, num_carta, CCV, meseScadenza, annoScadenza);
-            if (nuovoOrdine != null) {
-
-                // AGGIORNAMENTO TABELLA 'ORDINE' e 'ORDINE_CONTIENE'
-                // Salviamo il nuovo ordine appena generato nel database
-                gp.salva(nuovoOrdine);
-
-                // AGGIORNAMENTO TABELLA 'CARRELLO' / 'CARRELLO_CONTIENE'
-                // Svuotiamo i prodotti dal carrello del cliente visto che l'acquisto è concluso
-                cliente.getCarrello().getProdottiContenuti().clear();
-
-                // AGGIORNAMENTO TABELLA 'CLIENTE' (e la relazione degli ordini)
-                // Aggiorniamo il cliente: avendo aggiunto il nuovo ordine a 'ordiniPersonali'
-                // e avendo svuotato il carrello, questo salverà lo stato di entrambe le tabelle nel DB
-                gp.aggiorna(cliente);
-
-                // AGGIORNAMENTO TABELLA 'STORICO_ORDINI'
-                // Se lo StoricoOrdini è un'entità persistente nel database, aggiorna anche lui
-                gp.aggiorna(StoricoOrdini.getInstance());
-
-                creato= true;
-            } else {
-                // Se il metodo ha restituito null, il pagamento è fallito o il carrello era vuoto.
-                // Le rimesse a posto nel carrello locale sono già state gestite dentro creaOrdine(),
-                // dobbiamo solo assicurarci di salvare lo stato aggiornato del cliente nel DB.
-                gp.aggiorna(cliente);
-            }
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -381,7 +350,7 @@ public class ClientFacade {
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-            ArrayList<OrdineContiene> pc = o.getProdottiContenuti();
+            List<OrdineContiene> pc = o.getProdottiContenuti();
             ArrayList<String> prodotti = new ArrayList<>();
             for (OrdineContiene c : pc) {
                 prodotti.add(c.getProdotto().getNome());
