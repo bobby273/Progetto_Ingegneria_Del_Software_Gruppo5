@@ -244,9 +244,9 @@ public class MainframeCliente extends JFrame {
         Font esciButtonFont = this.$$$getFont$$$("Segoe UI Variable", Font.BOLD, 16, esciButton.getFont());
         if (esciButtonFont != null) esciButton.setFont(esciButtonFont);
         esciButton.setForeground(new Color(-13171176));
-        esciButton.setMargin(new Insets(10, 30, 10, 30));
+        esciButton.setMargin(new Insets(10, 20, 10, 20));
         esciButton.setText("Esci");
-        contentPanel.add(esciButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        contentPanel.add(esciButton, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_SOUTH, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
     }
 
     /**

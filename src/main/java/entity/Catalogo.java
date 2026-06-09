@@ -30,11 +30,13 @@ public class Catalogo {
     //Metodi
 
     List<Prodotto> getTuttiIProdotti() {
-        gp = new database.GestorePersistenza();
-        // Passando una mappa vuota, il tuo GestorePersistenza estrae l'intera tabella da MySQL
-        return gp.cercaPerCampi(Prodotto.class, java.util.Map.of());
-    }
+        if (gp == null) {
+            gp = new database.GestorePersistenza();
+        }
 
+        // IL FILTRO MAGICO: Diciamo a Hibernate di prendere SOLO quelli con isEliminato a false!
+        return gp.cercaPerCampi(Prodotto.class, java.util.Map.of("isEliminato", false));
+    }
     Prodotto ricercaProdotto(String nomeProdotto) {
         try{
             return gp.cercaPrimoPerCampi(Prodotto.class, Map.of("nome", nomeProdotto));
@@ -83,22 +85,31 @@ public class Catalogo {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
+            // 1. Troviamo il prodotto nel database
             Prodotto p = em.find(Prodotto.class, nomeProdotto);
+
             if (p != null) {
-                em.remove(p);
+                // 2. IL SOFT DELETE: Sostituiamo la cancellazione fisica con la nostra etichetta!
+                // Al posto di em.remove(p), cambiamo solo lo stato.
+                p.setEliminato(true);
+
+                // 3. Salviamo. JPA capisce da solo che 'p' è cambiato e lancerà una query UPDATE
                 em.getTransaction().commit();
+                System.out.println("✅ [CATALOGO] Prodotto '" + nomeProdotto + "' nascosto con successo (Soft Delete).");
                 return true;
             }
             em.getTransaction().commit();
             return false;
         } catch (RuntimeException e) {
-            if (em.getTransaction().isActive()) em.getTransaction().rollback();
+            System.out.println("❌ [CATALOGO] Errore durante il Soft Delete: " + e.getMessage());
+            if (em.getTransaction().isActive()) {
+                em.getTransaction().rollback();
+            }
             return false;
         } finally {
             em.close();
         }
     }
-
     boolean modificaNome(String nomeOriginale, String nuovoNome) {
         Prodotto p = ricercaProdotto(nomeOriginale);
         if (p == null || ricercaProdotto(nuovoNome) != null) return false;
