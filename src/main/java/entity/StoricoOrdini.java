@@ -1,12 +1,14 @@
 package entity;
 
+import database.GestorePersistenza;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class StoricoOrdini {
     private static StoricoOrdini instance; //StoricoOrdini si comporta come singleton per tutto il BCED,
     //ma verrà usato in maniera diversa da utente e cliente
-
+    private GestorePersistenza gp = new GestorePersistenza();
     private List<Ordine> ordini;
 
     private StoricoOrdini(){
