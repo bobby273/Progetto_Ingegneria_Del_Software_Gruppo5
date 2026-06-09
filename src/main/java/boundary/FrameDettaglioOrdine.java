@@ -163,7 +163,8 @@ public class FrameDettaglioOrdine extends JFrame {
                         lblStato.setText(Stato.ANNULLATO.toString());
                         btnAnnullaOrdine.setEnabled(false);
                         JOptionPane.showMessageDialog(PanelOrdine, "Ordine annullato. Avvenuto rimborso:");
-                    } else {
+                    } else { //scriviamo questa casistica per puri motivi di sicurezza
+                        //in teoria non è mai accessibile dalla GUI per codice in riga 118-120.
                         JOptionPane.showMessageDialog(PanelOrdine, "Errore: hai già annullato questo ordine!", "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }
