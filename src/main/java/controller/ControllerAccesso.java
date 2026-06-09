@@ -8,8 +8,7 @@ public class ControllerAccesso {
     public static final int UTENTE_NON_TROVATO=2;
     public static final int UTENTE_AMM=3;
     public static final int UTENTE_CLIE=4;
-    public static final int AMM_EXS=5;
-    public static final int CLIE_EXS=6;
+    public static final int UTENTE_EXS=5;
     public static final int AMMINISTRATORE=7;
     public static final int CLIENTE=8;
 
