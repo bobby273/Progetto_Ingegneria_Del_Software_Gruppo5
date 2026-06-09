@@ -12,6 +12,7 @@ public class Prodotto {
     private String categoria;
     private boolean isDisponibile=true;
     private boolean isScontato=false;
+    private boolean isEliminato = false;
 
     @Id
     private String nome;
@@ -41,6 +42,7 @@ public class Prodotto {
         this.categoria = categoria;
         this.isDisponibile = isDisponibile;
         this.isScontato = isScontato;
+        this.isEliminato = false;
     }
 
 
@@ -68,6 +70,14 @@ public class Prodotto {
     void setScontato(boolean scontato) {
         isScontato = scontato;
     }
+    boolean isEliminato() {
+        return isEliminato;
+    }
+
+    void setEliminato(boolean eliminato) {
+        this.isEliminato = eliminato;
+    }
+
 
     boolean isDisponibile() {
         return isDisponibile;

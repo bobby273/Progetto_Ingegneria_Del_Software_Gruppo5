@@ -109,14 +109,14 @@ public class AdminFacade {
         }
     }
 
-    public static boolean rimuoviProdotto(String nomeProdotto) {
-        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
-            return Catalogo.getInstance().rimuoviProdotto(nomeProdotto);
-        } else {
-            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
-            return false;
-        }
-    }
+public static boolean rimuoviProdotto(String nomeProdotto) {
+       if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+          return Catalogo.getInstance().rimuoviProdotto(nomeProdotto);
+       } else {
+          JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+          return false;
+       }
+   }
 
     public static java.util.List<String[]> getListaProdottiPerScorrimento() {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
