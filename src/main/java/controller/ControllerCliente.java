@@ -9,7 +9,6 @@ import java.util.List;
 
 public class ControllerCliente {
 
-    //TODO: simulo la mail di cliente attuale
     private static String MAIL_CLIENTE="";
 
     //Attributi

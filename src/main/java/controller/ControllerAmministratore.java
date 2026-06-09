@@ -8,10 +8,6 @@ import java.util.List;
 
 public class ControllerAmministratore {
 
-    //TODO: SIMULO BADGE
-    // non serve?!
-    private static final String badge = "123456";
-    private GestorePersistenza gp;
     //Attributi
     private static AdminFacade adminFacade;
 
