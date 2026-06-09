@@ -32,6 +32,13 @@ public class Amministratore extends Utente{
         if(!InterfacciaPagamento.RimborsaOrdine(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
         StoricoOrdini.getInstance().inviaNotifiche();
+       //Rimettiamo i prodotti nel catalogo
+       Catalogo catalogo = Catalogo.getInstance();
+       for(OrdineContiene c : ordine.getProdottiContenuti()) {
+           Prodotto prodotto = c.getProdotto();
+           int quantita = c.getQuantita();
+           catalogo.modificaQuantita(prodotto.getNome(), prodotto.getQtaDisponibile() + quantita);
+       }
         return true;
     }
 }

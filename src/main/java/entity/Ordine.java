@@ -52,16 +52,12 @@ public class Ordine {
         List<CarrelloContiene> prodottiInCarrello = carrello.getProdottiContenuti();
         List<OrdineContiene> prodottiInOrdine = new ArrayList<>();
 
-        // 1. CORREZIONE BUG NULL: Se è vuoto, restituiamo una lista vuota (non null!)
-        // Così evitiamo la NullPointerException in Cliente.java
         if(prodottiInCarrello == null || prodottiInCarrello.isEmpty()) {
             return prodottiInOrdine;
         }
 
-        // 2. LA SOLUZIONE ANTI-CRASH: Creiamo una copia "fotografia" della lista
         List<CarrelloContiene> copiaCarrello = new ArrayList<>(prodottiInCarrello);
 
-        // 3. Iteriamo sulla copia, così Java non va in confusione
         for (CarrelloContiene carrelloContiene : copiaCarrello) {
             if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())
                     && carrelloContiene.getProdotto().isDisponibile()
@@ -70,8 +66,7 @@ public class Ordine {
                 // Aggiungiamo all'ordine
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(), carrelloContiene.getQuantita(), this));
 
-                // Ora la rimozione è SICURA perché stiamo eliminando dall'originale
-                // ma stiamo leggendo dalla copia!
+                //rimuovo dal carrello
                 carrello.rimuoviProdotto(carrelloContiene.getProdotto());
 
             } else {
