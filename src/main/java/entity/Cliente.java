@@ -48,22 +48,18 @@ public class Cliente extends Utente{
         // costruisco l'ordine
         ordine = new Ordine(this, indirizzo, this.carrello);
 
-        if(ordine ==null){
+        if(ordine == null){
             System.out.println("Crash nel costruttore Ordine");
             return null;
         }
 
         System.out.println("Costruttore Ordine superato con successo!");
 
-
-        /* in teori già fatto in costruttore ordine
         if (ordine.getProdottiContenuti() == null || ordine.getProdottiContenuti().isEmpty()) {
-            System.out.println("Impossibile creare l'ordine, il carrello è vuoto!");
+            System.out.println("Impossibile creare l'ordine!");
             Ordine.elimina(ordine);
             return null;
         }
-
-         */
 
         float totale = ordine.calcolaTotale();
 

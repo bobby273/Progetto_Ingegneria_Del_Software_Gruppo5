@@ -62,7 +62,8 @@ public class ClientFacade {
             if (o != null) {
                 System.out.println("Ordine creato internamente. Procedo al salvataggio diretto...");
                 gp.salva(o);
-                cliente.getCarrello().getProdottiContenuti().clear(); //aggiorna carrello del cliente
+                //cliente.getCarrello().getProdottiContenuti().clear();
+                // aggiorna carrello del cliente
                 gp.aggiorna(cliente);
                 System.out.println("Ordine salvato nel Database con successo");
                 return true;

@@ -86,9 +86,14 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
     }
 
     private void mostraDettagliOrdine(String id_ordineSelezionato) {
-        FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato);
+        FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(controller, id_ordineSelezionato, this);
         frameDettaglio.setLocationRelativeTo(this);
         frameDettaglio.setVisible(true);
+    }
+
+    //per ricaricare la tabella
+    void aggiornaTabella(){
+        caricaDatiStorico();
     }
 
 

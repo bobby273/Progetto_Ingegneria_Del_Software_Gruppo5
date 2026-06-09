@@ -49,9 +49,10 @@ public class FrameDettaglioOrdine extends JFrame {
     private String indirizzoSpedizione;
     private ArrayList<String> ProdottiEQuantita;
     private Long id_cliente;
+    private FrameStoricoOrdiniPersonali frameStoricoOrdiniPersonali;
 
     //costruttore della boundary
-    public FrameDettaglioOrdine(ControllerCliente controller, String id_ordine) {
+    public FrameDettaglioOrdine(ControllerCliente controller, String id_ordine, FrameStoricoOrdiniPersonali frameStoricoOrdiniPersonali) {
         this.controllerCliente = controller;
         this.isAmministratore = false;
         this.id_ordineSelezionato = id_ordine;
@@ -61,6 +62,7 @@ public class FrameDettaglioOrdine extends JFrame {
         this.indirizzoSpedizione = controllerCliente.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controllerCliente.getProdottiEQuantita(id_ordine);
         this.id_cliente = controllerCliente.getIdCliente(id_ordine);
+        this.frameStoricoOrdiniPersonali = frameStoricoOrdiniPersonali;
 
         Object[] infoOrdine = controller.getInfoOrdine(id_ordine);
         popolaDatiDaArray(infoOrdine);
@@ -163,6 +165,8 @@ public class FrameDettaglioOrdine extends JFrame {
                         lblStato.setText(Stato.ANNULLATO.toString());
                         btnAnnullaOrdine.setEnabled(false);
                         JOptionPane.showMessageDialog(PanelOrdine, "Ordine annullato. Avvenuto rimborso:");
+                        dispose();
+                        frameStoricoOrdiniPersonali.aggiornaTabella();
                     } else { //scriviamo questa casistica per puri motivi di sicurezza
                         //in teoria non è mai accessibile dalla GUI per codice in riga 118-120.
                         JOptionPane.showMessageDialog(PanelOrdine, "Errore: hai già annullato questo ordine!", "Errore", JOptionPane.ERROR_MESSAGE);
