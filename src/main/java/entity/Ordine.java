@@ -180,7 +180,7 @@ public class Ordine {
     }
 
     //stub
-    boolean PagaOrdine(String num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
+    boolean PagaOrdine(long num_carta, int CCV, int meseScadenza, int annoScadenza, String id_ordine, float totale){
         return InterfacciaPagamento.PagaOrdine(num_carta, CCV, meseScadenza, annoScadenza, id_ordine, totale);
     }
 }

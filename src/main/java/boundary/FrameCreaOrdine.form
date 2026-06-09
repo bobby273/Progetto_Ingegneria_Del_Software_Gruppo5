@@ -21,7 +21,7 @@
               <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="IndirizzoSpedizione: "/>
+              <text value="Indirizzo di Spedizione: "/>
             </properties>
           </component>
           <component id="32d74" class="javax.swing.JTextField" binding="indirizzoSpedizione">
@@ -30,14 +30,16 @@
                 <preferred-size width="150" height="-1"/>
               </grid>
             </constraints>
-            <properties/>
+            <properties>
+              <text value=""/>
+            </properties>
           </component>
           <component id="37a6f" class="javax.swing.JLabel" binding="LabelNumeroCarta">
             <constraints>
               <grid row="2" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Numero Carta:"/>
+              <text value="Numero Carta di credito o di debito [American Express non supportata]:"/>
             </properties>
           </component>
           <component id="60714" class="javax.swing.JTextField" binding="numCartaTextField">
@@ -69,7 +71,7 @@
               <grid row="6" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Mese di scadenza della carta:"/>
+              <text value="Mese di scadenza della carta [MM]:"/>
             </properties>
           </component>
           <component id="905f2" class="javax.swing.JTextField" binding="meseTextField">
@@ -85,7 +87,7 @@
               <grid row="8" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
             </constraints>
             <properties>
-              <text value="Anno di scadenza della carta:"/>
+              <text value="Anno di scadenza della carta [YYYY]:"/>
             </properties>
           </component>
           <component id="c94bc" class="javax.swing.JTextField" binding="annoTextField">

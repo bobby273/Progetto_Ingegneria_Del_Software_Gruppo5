@@ -37,7 +37,7 @@ public class ControllerCliente {
         return clientFacade.annullaOrdine(id_ordine);
     }
 
-    public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+    public boolean creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza){
         return clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza); //TODO: Andrebbe aggiunto MAIL_CLIENTE come primo parametro
     }
 
@@ -106,6 +106,10 @@ public class ControllerCliente {
 
     public String getIndirizzoSpedizione(String id_ordine){
         return clientFacade.getIndirizzoSpedizione(id_ordine);
+    }
+
+    public String getIndirizzoDefaultCliente(String emailUtente){
+        return clientFacade.getIndirizzoDefaultCliente(emailUtente);
     }
 
     public ArrayList<String> getProdottiEQuantita(String id_ordine){

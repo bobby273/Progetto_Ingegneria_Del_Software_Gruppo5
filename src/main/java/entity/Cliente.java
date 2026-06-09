@@ -41,8 +41,11 @@ public class Cliente extends Utente{
     Carrello getCarrello(){
         return carrello;
     }
+    String getIndirizzoSpedizione(){
+        return indirizzoSpedizione;
+    }
 
-    Ordine creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza) {
+    Ordine creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza) {
 
         Ordine ordine = null;
         // costruisco l'ordine

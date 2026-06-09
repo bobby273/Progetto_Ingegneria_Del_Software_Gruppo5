@@ -44,7 +44,7 @@ public class ClientFacade {
         }
     }
 
-    public boolean creaOrdine(String indirizzo, String num_carta, int CCV, int meseScadenza, int annoScadenza){
+    public boolean creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza){
         System.out.println("🔍 [FACADE] Inizio procedura creaOrdine per l'utente: " + mailUtente);
 
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
@@ -397,6 +397,17 @@ public class ClientFacade {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return null;
         }
+    }
+
+    public String getIndirizzoDefaultCliente(String emailCliente){
+        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
+            Cliente c = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", emailCliente));
+            return c.getIndirizzoSpedizione();
+        } else {
+            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
+            return null;
+        }
+
     }
 
 }

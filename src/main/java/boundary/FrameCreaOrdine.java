@@ -8,6 +8,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 
 public class FrameCreaOrdine extends JFrame {
     private JPanel pannelloPrincipale;
@@ -51,12 +52,13 @@ public class FrameCreaOrdine extends JFrame {
         pannelloForm.setLayout(new GridLayoutManager(10, 1, new Insets(0, 0, 0, 0), -1, -1));
         pannelloPrincipale.add(pannelloForm, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         LabelIndirizzo = new JLabel();
-        LabelIndirizzo.setText("IndirizzoSpedizione: ");
+        LabelIndirizzo.setText("Indirizzo di Spedizione: ");
         pannelloForm.add(LabelIndirizzo, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         indirizzoSpedizione = new JTextField();
+        indirizzoSpedizione.setText("");
         pannelloForm.add(indirizzoSpedizione, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         LabelNumeroCarta = new JLabel();
-        LabelNumeroCarta.setText("Numero Carta:");
+        LabelNumeroCarta.setText("Numero Carta di credito o di debito [American Express non supportata]:");
         pannelloForm.add(LabelNumeroCarta, new GridConstraints(2, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         numCartaTextField = new JTextField();
         pannelloForm.add(numCartaTextField, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -66,12 +68,12 @@ public class FrameCreaOrdine extends JFrame {
         CCVTextField = new JTextField();
         pannelloForm.add(CCVTextField, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         LabelMese = new JLabel();
-        LabelMese.setText("Mese di scadenza della carta:");
+        LabelMese.setText("Mese di scadenza della carta [MM]:");
         pannelloForm.add(LabelMese, new GridConstraints(6, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         meseTextField = new JTextField();
         pannelloForm.add(meseTextField, new GridConstraints(7, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
         LabelAnno = new JLabel();
-        LabelAnno.setText("Anno di scadenza della carta:");
+        LabelAnno.setText("Anno di scadenza della carta [YYYY]:");
         pannelloForm.add(LabelAnno, new GridConstraints(8, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
         annoTextField = new JTextField();
         pannelloForm.add(annoTextField, new GridConstraints(9, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, GridConstraints.SIZEPOLICY_FIXED, null, new Dimension(150, -1), null, 0, false));
@@ -104,7 +106,6 @@ public class FrameCreaOrdine extends JFrame {
         setSize(400, 300);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Consigliato DISPOSE per chiudere solo questa finestra
         setLocationRelativeTo(null);
-
         setContentPane(pannelloPrincipale);
 
         impostaEventi();
@@ -128,21 +129,56 @@ public class FrameCreaOrdine extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Esito.setText("in attesa di una risposta dal server...");
                 elaboraDati();
-                dispose();
                 frameCarrello.aggiornaCarrello();
             }
         });
+
+        indirizzoSpedizione.setText(new ControllerCliente(emailUtente).getIndirizzoDefaultCliente(emailUtente));
     }
 
     private void elaboraDati() {
         ControllerCliente controllerCliente = new ControllerCliente(emailUtente);
 
         try {
-            int ccv = Integer.parseInt(CCVTextField.getText());
+            String ccv_text = CCVTextField.getText();
+            String indirizzo = indirizzoSpedizione.getText();
+            if (ccv_text.length() != 3) {
+                JOptionPane.showMessageDialog(this,
+                        "Il CCV deve essere di 3 cifre.",
+                        "Errore di formato dei dati",
+                        JOptionPane.ERROR_MESSAGE);
+                throw new IllegalArgumentException();
+            }
+            if (numCartaTextField.getText().length() != 16) {
+                JOptionPane.showMessageDialog(this,
+                        "Il numero della carta deve essere di 16 cifre.",
+                        "Errore di formato dei dati",
+                        JOptionPane.ERROR_MESSAGE);
+                throw new IllegalArgumentException();
+            }
+            if (indirizzo.length() < 5 || indirizzo.length() > 100 || !indirizzo.matches("^[\\p{L}\\p{N} ]+$")) {
+                JOptionPane.showMessageDialog(this,
+                        "L'indirizzo deve essere composto da lettere e numeri, e deve essere compreso tra 5 e 100 caratteri.",
+                        "Errore di formato dei dati",
+                        JOptionPane.ERROR_MESSAGE);
+                throw new IllegalArgumentException();
+            }
+
+
+            int ccv = Integer.parseInt(ccv_text);
             int mese = Integer.parseInt(meseTextField.getText());
             int anno = Integer.parseInt(annoTextField.getText());
-            if(ccv<1 || ccv>999 || mese<1 || mese>12 || anno<java.time.LocalDate.now().getYear() || anno>2100) throw new NumberFormatException();
-            boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCartaTextField.getText(), ccv, mese, anno);
+            long numCarta = Long.parseLong(numCartaTextField.getText());
+            if (mese < 1 || mese > 12 || anno < LocalDate.now().getYear() || anno > 2100) {
+                JOptionPane.showMessageDialog(this,
+                        "Mese o anno non validi. Assicurati di aver inserito i dati correttamente.",
+                        "Errore di formato dei dati",
+                        JOptionPane.ERROR_MESSAGE);
+                throw new IllegalArgumentException();
+            }
+
+
+            boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCarta, ccv, mese, anno);
 
             if (check) {
                 JOptionPane.showMessageDialog(null, "Ordine creato con successo!");
@@ -157,11 +193,14 @@ public class FrameCreaOrdine extends JFrame {
         } catch (NumberFormatException ex) {
             // Se l'utente inserisce lettere nei campi degli interi, catturiamo l'errore
             JOptionPane.showMessageDialog(this,
-                    "Assicurati di aver inserito correttamente i dati",
-                    "Errore di Formato",
+                    "Assicurati di aver inserito correttamente i dati.",
+                    "Errore di formato dei dati",
                     JOptionPane.ERROR_MESSAGE);
             Esito.setText("Ordine non creato");
-        } /*catch (Exception e){
+
+        } catch (IllegalArgumentException e) {
+            Esito.setText("Ordine non creato");
+        }/*catch (Exception e){
             JOptionPane.showMessageDialog(this, "Errore sconosciuto, riprovare più tardi", "Errore Server", JOptionPane.ERROR_MESSAGE);
         }*/
     }
