@@ -63,7 +63,9 @@ public class Ordine {
 
         // 3. Iteriamo sulla copia, così Java non va in confusione
         for (CarrelloContiene carrelloContiene : copiaCarrello) {
-            if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())) {
+            if (!(carrelloContiene.getQuantita() > carrelloContiene.getProdotto().getQtaDisponibile())
+                    && carrelloContiene.getProdotto().isDisponibile()
+                    && !carrelloContiene.getProdotto().isEliminato()) {
 
                 // Aggiungiamo all'ordine
                 prodottiInOrdine.add(new OrdineContiene(carrelloContiene.getProdotto(), carrelloContiene.getQuantita(), this));

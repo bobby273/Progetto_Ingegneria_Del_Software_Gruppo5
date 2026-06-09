@@ -66,8 +66,8 @@
         <properties>
           <enabled value="true"/>
           <font name="Segoe UI Variable" size="16" style="1"/>
-          <foreground color="-13171176"/>
-          <margin top="10" left="20" bottom="10" right="20"/>
+          <foreground color="-65536"/>
+          <margin top="5" left="20" bottom="5" right="20"/>
           <text value="Esci"/>
         </properties>
       </component>

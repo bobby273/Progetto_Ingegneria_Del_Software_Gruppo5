@@ -70,6 +70,7 @@ public class Prodotto {
     void setScontato(boolean scontato) {
         isScontato = scontato;
     }
+
     boolean isEliminato() {
         return isEliminato;
     }

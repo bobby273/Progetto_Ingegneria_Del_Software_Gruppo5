@@ -51,31 +51,24 @@ public class ClientFacade {
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
 
             if (cliente == null) {
-                System.out.println("❌ ERRORE: Cliente non trovato nel Database!");
+                System.out.println("Cliente non trovato nel Database");
                 return false;
             }
 
-            // 1. Creiamo l'oggetto ordine (il metodo interno ha già fatto tutti i controlli)
+            //instanzio il nuovo Ordine con i dati forniti dal cliente
             Ordine o = cliente.creaOrdine(indirizzo, num_carta, CCV, meseScadenza, annoScadenza);
 
-            // 2. Controlliamo se è andato tutto a buon fine
+            //check se è andato tutto bene
             if (o != null) {
-                System.out.println("✅ [FACADE] Ordine creato internamente. Procedo al salvataggio diretto (gp.salva)...");
-
-                // ====================================================================
-                // IL SALVATAGGIO DEFINITIVO: Ora che abbiamo il mappedBy e niente Cascade strani,
-                // questo comando farà una INSERT perfetta dell'Ordine senza far esplodere il Cliente!
-                // ====================================================================
+                System.out.println("Ordine creato internamente. Procedo al salvataggio diretto...");
                 gp.salva(o);
-                cliente.getCarrello().getProdottiContenuti().clear();
+                cliente.getCarrello().getProdottiContenuti().clear(); //aggiorna carrello del cliente
                 gp.aggiorna(cliente);
-
-
-                System.out.println("✅ [FACADE] Ordine salvato nel Database con successo! Missione compiuta.");
-                return true; // 🟢 Segnale di SUCCESSO per far comparire il popup sulla GUI
+                System.out.println("Ordine salvato nel Database con successo");
+                return true;
             }
 
-            System.out.println("❌ [FACADE] La creazione dell'ordine è fallita (es. pagamento rifiutato o carrello vuoto).");
+            System.out.println("La creazione dell'ordine è fallita");
             return false;
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
