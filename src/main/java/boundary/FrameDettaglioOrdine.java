@@ -98,11 +98,22 @@ public class FrameDettaglioOrdine extends JFrame {
         lblIndirizzoSpedizione.setText(indirizzoSpedizione != null ? indirizzoSpedizione : "N/D");
 
         if (ProdottiEQuantita != null && !ProdottiEQuantita.isEmpty()) {
-            String listaHTML = "<html>• " + String.join("<br>• ", ProdottiEQuantita) + "</html>";
-            lblOggettiAcquistati.setText(listaHTML);
+            StringBuilder sb = new StringBuilder("<html>");
+
+            // Scorriamo l'array a passi di 2 per accoppiare Nome e Quantità
+            for (int i = 0; i < ProdottiEQuantita.size(); i += 2) {
+                String nomeProdotto = ProdottiEQuantita.get(i);
+                // Prende la quantità (che sta nella posizione successiva)
+                String quantita = (i + 1 < ProdottiEQuantita.size()) ? ProdottiEQuantita.get(i + 1) : "?";
+                // Crea la stringa formattata: "<li>NomeProdotto (Quantità: X)</li>"
+                sb.append("• ").append(nomeProdotto).append(" (Quantità: ").append(quantita).append(")<br>");            }
+            sb.append("</html>");
+            lblOggettiAcquistati.setText(sb.toString());
         } else {
             lblOggettiAcquistati.setText("Nessun dettaglio prodotti");
         }
+
+
 
         // Blocca il tasto se l'ordine non è più annullabile
         if (stato != null && (stato.equals("ANNULLATO") || stato.equals("CONSEGNATO") || stato.equals("SPEDITO"))) {
