@@ -20,7 +20,10 @@ public class RegistroUtenti {
     int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge){
         //verifico prima che le credenziali non siano gia' in uso
         if(verificaProfiloAmministratore(email, password) || verificaProfiloCliente(email,password))
-                return 5;
+            return 5;
+        //verifico che l'email non sia gia' in uso
+        if(verificaEsistenzaAmministratore(email))
+            return 5;
         Amministratore admin=new Amministratore(email, nome, cognome, password, badge);
         if(gestorePers.salva(admin))
             return 0;
@@ -29,6 +32,8 @@ public class RegistroUtenti {
 
     int creaNuovoCliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         if(verificaProfiloAmministratore(email, password) || verificaProfiloCliente(email, password))
+            return 5;
+        if(verificaEsistenzaCliente(email))
             return 5;
         Cliente clt=new Cliente(email, nome, cognome, password, indirizzoSpedizione);
         if(gestorePers.salva(clt))
