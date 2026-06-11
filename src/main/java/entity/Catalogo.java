@@ -33,10 +33,9 @@ public class Catalogo {
         if (gp == null) {
             gp = new database.GestorePersistenza();
         }
-
-        // IL FILTRO MAGICO: Diciamo a Hibernate di prendere SOLO quelli con isEliminato a false!
         return gp.cercaPerCampi(Prodotto.class, java.util.Map.of("isEliminato", false));
     }
+
     Prodotto ricercaProdotto(String nomeProdotto) {
         try{
             return gp.cercaPrimoPerCampi(Prodotto.class, Map.of("nome", nomeProdotto));

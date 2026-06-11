@@ -129,7 +129,21 @@ public class MainframeCliente extends JFrame {
 
                 // Button
                 btnInfo.addActionListener(e -> {
-                    ControllerCliente.apriDettaglioProdotto(nomeProdotto); //Chiamata a Controller
+                    Object[] prodotto = ControllerCliente.apriDettaglioProdotto(nomeProdotto); //Chiamata a Controller
+
+                    if (prodotto != null) {
+                        //Ricezione dalla Facade
+                        new boundary.FrameDettaglioProdotto(
+                                (String) prodotto[0],
+                                (float) prodotto[1],
+                                (String) prodotto[2],
+                                (int) prodotto[3],
+                                (boolean) prodotto[4],
+                                (String) prodotto[5],
+                                (boolean) prodotto[6]
+                        );
+                    }
+
                 });
 
                 panelProdotto.add(lblInfo, BorderLayout.CENTER);
@@ -180,7 +194,20 @@ public class MainframeCliente extends JFrame {
                 btnInfo.setForeground(new Color(44, 62, 80));
                 btnInfo.setFocusPainted(false);
                 btnInfo.addActionListener(e -> {
-                    ControllerCliente.apriDettaglioProdotto(nomeProdotto);
+                    Object[] prodotto = ControllerCliente.apriDettaglioProdotto(nomeProdotto); //Chiamata a Controller
+
+                    if (prodotto != null) {
+                        //Ricezione dalla Facade
+                        new boundary.FrameDettaglioProdotto(
+                                (String) prodotto[0],
+                                (float) prodotto[1],
+                                (String) prodotto[2],
+                                (int) prodotto[3],
+                                (boolean) prodotto[4],
+                                (String) prodotto[5],
+                                (boolean) prodotto[6]
+                        );
+                    }
                 });
                 panelProdotto.add(lblInfo, BorderLayout.CENTER);
                 panelProdotto.add(btnInfo, BorderLayout.EAST);

@@ -56,9 +56,11 @@ public class ControllerCliente {
         return clientFacade.getCarrelloBreve(MAIL_CLIENTE);
     }
 
-    public static void apriDettaglioProdotto(String nomeProdotto) {
+    public static Object[] apriDettaglioProdotto(String nomeProdotto) {
         Object[] prodotto = clientFacade.getDettagliProdotto(nomeProdotto);
+        return prodotto; //TODO: modificato
 
+        /*
         if (prodotto != null) {
             //Ricezione dalla Facade
             new boundary.FrameDettaglioProdotto(
@@ -70,7 +72,7 @@ public class ControllerCliente {
                     (String) prodotto[5],
                     (boolean) prodotto[6]
             );
-        }
+        } */
     }
 
     // Metodo per far verificare alla Boundary se un prodotto esiste (permettere stampa di mess errore apposito [testing])
