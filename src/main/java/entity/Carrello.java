@@ -66,7 +66,4 @@ public class Carrello {
      List<CarrelloContiene> getProdottiContenuti() {
         return prodottiContenuti;
      }
-     void setProdottiContenuti(ArrayList<CarrelloContiene> prodottiContenuti) {
-        this.prodottiContenuti = prodottiContenuti;
-    }
 }

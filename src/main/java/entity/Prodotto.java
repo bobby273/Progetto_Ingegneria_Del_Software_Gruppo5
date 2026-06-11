@@ -84,9 +84,6 @@ public class Prodotto {
         return isDisponibile;
     }
 
-    boolean isScontato() {
-        return isScontato;
-    }
     String getCategoria() {
         return categoria;
     }
@@ -98,7 +95,7 @@ public class Prodotto {
         return prezzo;
     }
 
-    boolean IsScontato() {
+    boolean isScontato() {
         return isScontato;
     }
 }

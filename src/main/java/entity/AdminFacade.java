@@ -175,7 +175,7 @@ public static boolean rimuoviProdotto(String nomeProdotto) {
                             p.getDescrizione(),
                             String.valueOf(p.getQtaDisponibile()),
                             String.valueOf(p.isDisponibile()),
-                            String.valueOf(p.IsScontato())
+                            String.valueOf(p.isScontato())
                     });
                 }
             }
