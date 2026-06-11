@@ -248,14 +248,14 @@ public class ClientFacade {
         if(checkLogin(mailUtente, CLIENTE) == CLIENTE) {
 
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-            List<String[]> storicoBreve = new ArrayList<>();
+            List<String[]> storicoPers = new ArrayList<>();
 
             if (cliente != null) {
                 // ECCO LA MAGIA: Deleghiamo al Cliente il compito di trovarsi i suoi ordini!
                 List<Ordine> ordiniPersonali = cliente.visualizzaOrdiniPersonali();
 
                 for (Ordine o : ordiniPersonali) {
-                    storicoBreve.add(new String[]{
+                    storicoPers.add(new String[]{
                             o.getId(), // (o getId_ordine())
                             o.getDataConferma() != null ? o.getDataConferma().toString() : "In elaborazione",
                             o.getStato() != null ? o.getStato().toString() : "Sconosciuto",
@@ -263,7 +263,7 @@ public class ClientFacade {
                     });
                 }
             }
-            return storicoBreve;
+            return storicoPers;
 
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide.", "Errore", JOptionPane.ERROR_MESSAGE);
