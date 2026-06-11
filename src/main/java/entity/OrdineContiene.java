@@ -20,7 +20,7 @@ public class OrdineContiene {
     private Prodotto prodotto;
 
     // Costruttori (Rimangono IDENTICI ai tuoi, così non devi modificare nulla altrove!)
-    public OrdineContiene(Prodotto prodotto, int quantita, Ordine o) {
+    OrdineContiene(Prodotto prodotto, int quantita, Ordine o) {
         this.prodotto = prodotto;
         this.quantità = quantita;
         this.ordine_id = o.getId();
