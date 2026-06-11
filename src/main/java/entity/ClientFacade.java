@@ -251,7 +251,6 @@ public class ClientFacade {
             List<String[]> storicoPers = new ArrayList<>();
 
             if (cliente != null) {
-                // ECCO LA MAGIA: Deleghiamo al Cliente il compito di trovarsi i suoi ordini!
                 List<Ordine> ordiniPersonali = cliente.visualizzaOrdiniPersonali();
 
                 for (Ordine o : ordiniPersonali) {
