@@ -39,7 +39,7 @@ public class AdminFacade {
 
     public static boolean creaProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
-            return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);
+            return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);  //l'infromation expert di prodotto è catalogo, per la gestione dei prodotti mi devo quindi rifare a lui
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;

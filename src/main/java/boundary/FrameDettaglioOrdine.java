@@ -20,7 +20,7 @@ import java.awt.event.ActionListener;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-//TODO: testare la funzionalità
+    //frame che si apre lato cliente quando si preme su altre info
 
 public class FrameDettaglioOrdine extends JFrame {
     //Variabili per il GUI Designer

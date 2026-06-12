@@ -104,7 +104,7 @@ public class FrameCreaOrdine extends JFrame {
 
         setTitle("Creazione ordine");
         setSize(400, 300);
-        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // Consigliato DISPOSE per chiudere solo questa finestra
+        setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); // uso DISPOSE per chiudere solo questa finestra e non tutto il software
         setLocationRelativeTo(null);
         setContentPane(pannelloPrincipale);
 
@@ -129,16 +129,17 @@ public class FrameCreaOrdine extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Esito.setText("in attesa di una risposta dal server...");
                 elaboraDati();
-                frameCarrello.aggiornaCarrello();
+                frameCarrello.aggiornaCarrello(); //ricarico il carrello aggiornato senza i prodotti ordinati
             }
         });
 
-        indirizzoSpedizione.setText(new ControllerCliente(emailUtente).getIndirizzoDefaultCliente(emailUtente));
+        indirizzoSpedizione.setText(new ControllerCliente(emailUtente).getIndirizzoDefaultCliente(emailUtente)); //setto automaticamente l'indirizzo di spedizione a quello primario dell'utente. può cambiarlo
     }
 
     private void elaboraDati() {
         ControllerCliente controllerCliente = new ControllerCliente(emailUtente);
 
+        //faccio dei controlli sui campi riempiti da gui
         try {
             String ccv_text = CCVTextField.getText();
             String indirizzo = indirizzoSpedizione.getText();
@@ -163,12 +164,11 @@ public class FrameCreaOrdine extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 throw new IllegalArgumentException();
             }
-
-
             int ccv = Integer.parseInt(ccv_text);
             int mese = Integer.parseInt(meseTextField.getText());
             int anno = Integer.parseInt(annoTextField.getText());
             long numCarta = Long.parseLong(numCartaTextField.getText());
+
             if (mese < 1 || mese > 12 || anno < LocalDate.now().getYear() || anno > 2100) {
                 JOptionPane.showMessageDialog(this,
                         "Mese o anno non validi. Assicurati di aver inserito i dati correttamente.",
@@ -178,7 +178,7 @@ public class FrameCreaOrdine extends JFrame {
             }
 
 
-            boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCarta, ccv, mese, anno);
+            boolean check = controllerCliente.creaOrdine(indirizzoSpedizione.getText(), numCarta, ccv, mese, anno); //delego la gestione della logica di business al controller
 
             if (check) {
                 JOptionPane.showMessageDialog(null, "Ordine creato con successo!");
@@ -200,15 +200,6 @@ public class FrameCreaOrdine extends JFrame {
 
         } catch (IllegalArgumentException e) {
             Esito.setText("Ordine non creato");
-        }/*catch (Exception e){
-            JOptionPane.showMessageDialog(this, "Errore sconosciuto, riprovare più tardi", "Errore Server", JOptionPane.ERROR_MESSAGE);
-        }*/
+        }
     }
-
-/* check funzionamento
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new FrameCreaOrdine("r.giove@gmail.com"));
-    }
-
- */
 }

@@ -38,19 +38,13 @@ public class FrameCarrello extends JFrame {
 
     }
 
-    /*
-    //Per testare se la schermata va
-    public static void main(String[] args) {
-        new FrameCarrello("r.giove@gmail.com");
-    }
-*/
 
     private void fillCarrello(String emailUtente) {
         panelCarrello.removeAll();
 
-        List<String[]> prodotti = ControllerCliente.getCarrelloBreve();
+        List<String[]> prodotti = ControllerCliente.getCarrelloBreve();  //funzione per visulizzare il carrello
 
-        if (prodotti == null || prodotti.isEmpty()) {
+        if (prodotti == null || prodotti.isEmpty())  {  //ramo carrello vuoto
             JLabel lblVuoto = new JLabel("Nessun prodotto nel catalogo al momento", SwingConstants.CENTER);
             lblVuoto.setFont(new Font("Segoe UI", Font.ITALIC, 16));
             lblVuoto.setForeground(Color.GRAY);
@@ -69,7 +63,7 @@ public class FrameCarrello extends JFrame {
                 ));
                 panelProdotto.setMaximumSize(new Dimension(Integer.MAX_VALUE, 100));
 
-                //Spacchetto la stringa
+                //Spacchetto la stringa per mostrare a schermo i prodotti nel frame della visualizzazione carrello
                 String nome = p[0];
                 String descrizione = p[1];
                 String prezzo = p[2];
@@ -83,13 +77,13 @@ public class FrameCarrello extends JFrame {
                     disponibile = "No";
                 }
 
-                String testoHtml = "<html><div style='width: 350px; font-family: Segoe UI;'>" +
+                String dati_prodotto = "<html><div style='width: 350px; font-family: Segoe UI;'>" +
                         "<h3 style='margin:0; color:#2c3e50;'>" + nome + " <span style='font-size:10px; color:#bdc3c7'>(" + categoria + ")</span></h3>" +
                         "<p style='margin:4px 0 8px 0; color:#7f8c8d;'>" + descrizione + "</p>" +
                         "<p style='margin:0; font-size:11px;'>Prezzo: <b style='color:#27ae60;'>" + prezzo + " €</b> | Quantità: <b>" + quantita + "</b> | Disponibile? " + disponibile + "</p>" +
                         "</div></html>";
 
-                JLabel lblInfo = new JLabel(testoHtml);
+                JLabel lblInfo = new JLabel(dati_prodotto);
                 JButton btnRimuovi = new JButton("Rimuovi dal carrello");
                 btnRimuovi.setCursor(new Cursor(Cursor.HAND_CURSOR));
                 btnRimuovi.setBackground(new Color(230, 230, 230));
@@ -128,7 +122,7 @@ public class FrameCarrello extends JFrame {
 
             btnProcediOrdine.addActionListener(e -> {
                 // Apre il frame per completare l'ordine
-                new FrameCreaOrdine(emailUtente,this);
+                new FrameCreaOrdine(emailUtente,this);  //se viene premuto il tasto per procedere all'ordine istanzio una frame per la creazione dell'ordine
             });
 
             panelCarrello.add(Box.createRigidArea(new Dimension(0, 20))); // Spazio sopra

@@ -38,10 +38,10 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
     }
 
     private void caricaDatiStorico() {
-        // 1. Definiamo le colonne della UI
+        // Definiamo le colonne della UI
         String[] colonne = {"ID Ordine", "Data Conferma", "Stato", "Totale (€)"};
 
-        // 2. Creiamo il modello (bloccando la modifica delle celle da parte dell'utente)
+        // Creiamo il modello (bloccando la modifica delle celle da parte dell'utente)
         DefaultTableModel model = new DefaultTableModel(colonne, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
@@ -49,13 +49,13 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
             }
         };
 
-        // 3. INIZIALIZZIAMO LA LISTA (fondamentale per evitare NullPointerException)
+        // INIZIALIZZIAMO LA LISTA (fondamentale per evitare NullPointerException)
         lista_id_Ordini = new ArrayList<>();
 
-        // 4. INTERROGHIAMO IL CONTROLLER
+        // INTERROGHIAMO IL CONTROLLER
         List<String[]> storico = controller.getStoricoOrdiniPersonale();
 
-        // 5. Riempiamo la tabella e la lista in parallelo
+        // Riempiamo la tabella e la lista in parallelo
         if (storico != null && !storico.isEmpty()) {
             for (String[] datiOrdine : storico) {
                 model.addRow(datiOrdine); // Aggiunge la riga visiva alla JTable
@@ -69,6 +69,7 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
         tabellaOrdini.setModel(model);
     }
 
+    //grazie a questo blocco possiamo accedere ai dettagli di un ordine semplicemente facendo doppio click su di esso
     private void addListenerTabella() {
         tabellaOrdini.addMouseListener(new MouseAdapter() {
             @Override
@@ -78,7 +79,7 @@ public class FrameStoricoOrdiniPersonali extends JFrame {
 
                     if (rigaSelezionata != -1) {
                         String id_ordineSelezionato = lista_id_Ordini.get(rigaSelezionata);
-                        mostraDettagliOrdine(id_ordineSelezionato);
+                        mostraDettagliOrdine(id_ordineSelezionato); //chiamo i dettagli
                     }
                 }
             }

@@ -23,8 +23,9 @@ public class ControllerAmministratore {
         return entity.AdminFacade.getListaProdottiPerScorrimento();
     }
 
+    //le funzioni di gestione dei prodotti non richiedono una logica tanto complessa -> passo la gestione alla facade
     public static boolean creaNuovoProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
-        System.out.println("CONTROLLER: Richiesta creazione prodotto. Delego alla Facade...");
+        System.out.println("CONTROLLER: Richiesta creazione prodotto. Delego alla Facade...");  //print di debug
         return AdminFacade.creaProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);
     }
 

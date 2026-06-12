@@ -27,11 +27,11 @@ public class FrameRicercaProdotti extends JFrame {
 
     private Consumer<List<String[]>> onRisultatiTrovati;
 
-    //costruttore
+    //costruttori, uno per la ricerca da amministratore, l'altro per il cliente
     public FrameRicercaProdotti(ControllerCliente controller, Consumer<List<String[]>> callbackRisultati) {
         this.controllerCliente = controller;
         this.onRisultatiTrovati = callbackRisultati;
-        this.isAdmin = false;
+        this.isAdmin = false;  //impostiamo questo "flag" che ci tornerà utile
         setupListener();
     }
 
@@ -49,18 +49,18 @@ public class FrameRicercaProdotti extends JFrame {
                 // Previene errori se non c'è nulla selezionato
                 String categoria = "";
                 if (cmbCategoriaRicerca.getSelectedItem() != null) {
-                    categoria = cmbCategoriaRicerca.getSelectedItem().toString();
+                    categoria = cmbCategoriaRicerca.getSelectedItem().toString();  //salvo da parte quale è il campo sul quale si vuole ricercare
                 }
 
                 String parolaChiave = txtElementoDaCercare.getText();
 
                 List<String[]> righe;
-                if (isAdmin) {
+                if (isAdmin) {  //in base a chi fa la chiamata chiamo il controller collegato
                     righe = ControllerAmministratore.ricercaProdottoInCatalogo(categoria, parolaChiave);
                 } else {
                     righe = ControllerCliente.ricercaProdottoInCatalogo(categoria, parolaChiave);
                 }
-                onRisultatiTrovati.accept(righe);
+                onRisultatiTrovati.accept(righe);  //restituisco il catalogo filtrato utilizzando le funzioni definite sotto
                 JFrame frameAttuale = (JFrame) SwingUtilities.getWindowAncestor(MainPane);
                 if (frameAttuale != null) {
                     frameAttuale.dispose();
@@ -69,7 +69,7 @@ public class FrameRicercaProdotti extends JFrame {
         });
     }
 
-    //metodi
+    //queste sono le funzioni chiamate nei mainframe di cliente e amministratore per mostrare a video i cataloghi filtrati
     public static JFrame apriFormRicercaCliente(ControllerCliente controller, Consumer<List<String[]>> callbackRisultati) {
         JFrame frame = new JFrame("Ricerca Prodotti");
         FrameRicercaProdotti form = new FrameRicercaProdotti(controller, callbackRisultati);
@@ -95,6 +95,7 @@ public class FrameRicercaProdotti extends JFrame {
         frame.setVisible(true);
         return frame;
     }
+
 
 
     {

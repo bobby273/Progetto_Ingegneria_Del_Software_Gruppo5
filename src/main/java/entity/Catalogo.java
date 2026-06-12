@@ -21,7 +21,7 @@ public class Catalogo {
 
     static Catalogo getInstance() {
         if(instance == null) {
-            instance = new Catalogo(); //Non sono sicuro che vada messo, controlliamo!
+            instance = new Catalogo();
         }
         return instance;
 
@@ -47,13 +47,6 @@ public class Catalogo {
         }
     }
 
-    // RETRIEVAL: Il catalogo sa come cercare un prodotto
-    /* TODO: Da eliminare
-    Prodotto ricercaProdotto(String nome) {
-        gp = new GestorePersistenza();
-        List<Prodotto> ris = gp.cercaPerCampo(Prodotto.class, "nome", nome);
-        return ris.isEmpty() ? null : ris.get(0);
-    }*/
 
     List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
 
@@ -67,40 +60,26 @@ public class Catalogo {
         return gp.cercaPerCampoLike(Prodotto.class, categoriaRicerca, elementoDaCercare);
     }
 
-    // CREAZIONE: Il catalogo decide se un prodotto può essere aggiunto
-    /*TODO: Va rimosso?
-    boolean aggiungiProdotto(Prodotto nuovo) {
-        // Controllo di esistenza delegato allExpert stesso
-        if (ricercaProdotto(nuovo.getNome()) != null) {
-            System.out.println("CATALOGO: Impossibile aggiungere, prodotto già esistente.");
-            return false;
-        }
-        gp = new GestorePersistenza();
-        return gp.salva(nuovo);
-    }*/
 
-    // --- INFORMATION EXPERT: RIMOZIONE (spostata qui dal gestore/facade) ---
     boolean rimuoviProdotto(String nomeProdotto) {
         EntityManager em = JpaUtil.getInstance().getEntityManager();
         try {
             em.getTransaction().begin();
-            // 1. Troviamo il prodotto nel database
+            // 1. Troviamo il prodotto nel database tramite la funzione find di EntityManager
             Prodotto p = em.find(Prodotto.class, nomeProdotto);
 
             if (p != null) {
-                // 2. IL SOFT DELETE: Sostituiamo la cancellazione fisica con la nostra etichetta!
-                // Al posto di em.remove(p), cambiamo solo lo stato.
+                //per non avere problema di FK nella relazione tra prodotto e ordine abbiamo deciso di non eliminare veramente il prodotto dal database ma marcarlo come eliminato tramite un attributo booleano
                 p.setEliminato(true);
 
-                // 3. Salviamo. JPA capisce da solo che 'p' è cambiato e lancerà una query UPDATE
                 em.getTransaction().commit();
-                System.out.println("✅ [CATALOGO] Prodotto '" + nomeProdotto + "' nascosto con successo (Soft Delete).");
+                System.out.println("[CATALOGO] Prodotto '" + nomeProdotto + "' nascosto con successo (Soft Delete).");  //stampa di debug
                 return true;
             }
             em.getTransaction().commit();
             return false;
         } catch (RuntimeException e) {
-            System.out.println("❌ [CATALOGO] Errore durante il Soft Delete: " + e.getMessage());
+            System.out.println("[CATALOGO] Errore durante il Soft Delete: " + e.getMessage());
             if (em.getTransaction().isActive()) {
                 em.getTransaction().rollback();
             }

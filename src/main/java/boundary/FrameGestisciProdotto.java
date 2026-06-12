@@ -46,18 +46,14 @@ public class FrameGestisciProdotto extends JFrame {
         setLocationRelativeTo(null);
 
 
-        this.nomeProdottoCorrente = nome;
-        // ==========================================
-// 1. POPOLAMENTO INIZIALE DEI CAMPI (Dati dallo Stub)
-// ==========================================
-        // ... qui sotto c'è il codice della tua griglia che inizializza i componenti ...
+        this.nomeProdottoCorrente = nome; //mi salvo il nome originale
 
         // Assegnazione dei testi ricevuti
         textNome.setText(nome);
         textCategoria.setText(categoria);
         textPrezzo.setText(prezzo);
         areaDescrizione.setText(descrizione);
-        textQtaDisponibile.setText(qta);
+        textQtaDisponibile.setText(qta);   //così mi compare una descrizione dettagliata del prodotto da cui posso modificare i singoli campi
 
         // Configurazione RadioButton
         ButtonGroup gruppoDisp = new ButtonGroup();
@@ -95,14 +91,14 @@ public class FrameGestisciProdotto extends JFrame {
             if (input != null) {
                 String nuovoNome = input.trim();
 
-                // Controllo Boundary Locale
+                // facciamo i controlli dell'input direttamente dalla boundary
                 if (nuovoNome.isEmpty() || nuovoNome.length() > 1000) {
                     JOptionPane.showMessageDialog(this, "Errore: Il nome non può essere vuoto o superare i 1000 caratteri.", "Errore", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 // Chiamata al controller
-                boolean successo = ControllerAmministratore.modificaNomeProdotto(this.nomeProdottoCorrente, nuovoNome);
+                boolean successo = ControllerAmministratore.modificaNomeProdotto(this.nomeProdottoCorrente, nuovoNome);  //delego al controller il resto dell'elaborazione
 
                 if (successo) {
                     textNome.setText(nuovoNome);
@@ -135,11 +131,9 @@ public class FrameGestisciProdotto extends JFrame {
                     return;
                 }
 
-                // 3. CHIAMATA DIRETTA AL METODO AGGIORNA PRODOTTO
-                // Passiamo lo stato attuale di tutta la GUI e la nuova categoria
+
                 boolean successo = ControllerAmministratore.modificaCategoriaProdotto(this.nomeProdottoCorrente, nuovaCat);
 
-                // 4. GESTIONE DELLA RISPOSTA (Dal Sequence Diagram)
                 if (successo) {
                     textCategoria.setText(nuovaCat); // Aggiorna la grafica solo se il DB dà l'OK
                     JOptionPane.showMessageDialog(this, "Categoria modificata con successo!", "Successo", JOptionPane.INFORMATION_MESSAGE);
@@ -220,7 +214,7 @@ public class FrameGestisciProdotto extends JFrame {
         });
 
 
-        // MODIFICA IS DISPONIBILE (Dialogo a scelta multipla)
+        // MODIFICA IS DISPONIBILE (
         modificaIsDisponibileButton.addActionListener(e -> {
             String[] opzioni = {"SI", "NO"};
             int scelta = JOptionPane.showOptionDialog(this, "Il prodotto è disponibile?", "Modifica Disponibilità",

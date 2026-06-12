@@ -33,13 +33,14 @@ public class FrameAccesso {
         accediButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                //riempimento dati da interfaccia
                 String email = textFieldEmail.getText();
                 String password = passwordField.getText();
                 //per il check del login
                 String emailUtente = email;
-                int esito = -1;
+                int esito = -1;  //metto come condizione iniziale quella di errore
                 if (email.length() <= 40 && password.length() <= 40 && password.length() >= 8 && email.contains("@")) {
-                    esito = ControllerAccesso.checkTipoUtente(email, password);
+                    esito = ControllerAccesso.checkTipoUtente(email, password);  //delego la logica di controllo al controller per capire se le credenziali appartengono a un amministratore o a un cliente
                     if (esito == ControllerAccesso.UTENTE_AMM) {
                         //chiamata alla frame di admin
                         labelEsito.setText("Amministratore");
@@ -52,7 +53,7 @@ public class FrameAccesso {
                         if (frameMain != null) {
                             frameMain.dispose();
                         }
-                        Window finestraAttuale = SwingUtilities.getWindowAncestor(accessoPane);
+                        Window finestraAttuale = SwingUtilities.getWindowAncestor(accessoPane); //prende il riferimento alla finestra attuale per fare dispose
                         if (finestraAttuale != null) {
                             finestraAttuale.dispose();
                         }

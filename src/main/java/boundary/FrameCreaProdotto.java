@@ -34,15 +34,15 @@ public class FrameCreaProdotto extends JFrame {
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setVisible(true);
 
-        // --- 1. GRUPPO PER IS DISPONIBILE ---
+        //creo due gruppi per i bottoni scontato e disponibile, così da evitare che possano essere premute entrambe le opzioni contemporaneamente
         ButtonGroup groupDisponibile = new ButtonGroup();
-// Assumi che questi siano i nomi delle tue variabili per i tasti SI/NO di isDisponibile
+
         groupDisponibile.add(SIRadioButtonDisponibile);
         groupDisponibile.add(NORadioButtonDisponibile);
 
-// --- 2. GRUPPO PER IS SCONTATO ---
+
         ButtonGroup groupScontato = new ButtonGroup();
-// Assumi che questi siano i nomi delle tue variabili per i tasti SI/NO di isScontato
+
         groupScontato.add(SIRadioButtonScontato);
         groupScontato.add(NORadioButtonScontato);
 
@@ -79,7 +79,7 @@ public class FrameCreaProdotto extends JFrame {
             }
             if (!categoria.matches("^[a-zA-ZÀ-ÿ\\s]+$")) {
                 JOptionPane.showMessageDialog(this, "Errore: La Categoria deve contenere solo lettere. Numeri e simboli non sono consentiti.", "Errore Input", JOptionPane.ERROR_MESSAGE);
-                return;
+                return;  //rendo illegali categorie che contengono caratteri non numerici
             }
 
             // ==========================================
@@ -139,11 +139,9 @@ public class FrameCreaProdotto extends JFrame {
                 return;
             }
 
-            // ==========================================
-            // SE IL CODICE ARRIVA QUI, TUTTI I DATI SONO CORRETTI!
-            // ==========================================
+           //FINE VALIDAZIONE
 
-            // Recuperiamo i booleani dai tuoi JRadioButton
+            // Recuperiamo i booleani dai JRadioButton
             boolean disponibile = SIRadioButtonDisponibile.isSelected();
             boolean scontato = SIRadioButtonScontato.isSelected();
 

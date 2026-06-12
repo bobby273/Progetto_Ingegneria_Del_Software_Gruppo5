@@ -44,7 +44,7 @@ public class MainframeAmministratore extends JFrame {
                 this.controllerAmministratore = new ControllerAmministratore(this.emailUtente);
             }
 
-            String messaggioDlc = "Buy the DLC, you broke ass!";
+            String messaggioDlc = "Buy the DLC, you broke ass!";  //messaggio che compare quando si cerca di accedere a una funzione non implementata
 
             visualizzaDettaglioOrdineButton.addActionListener(e -> {
                 // Richiede l'input all'utente e lo salva nella variabile id_ordine
@@ -59,8 +59,10 @@ public class MainframeAmministratore extends JFrame {
                 }
             });
 
+
+            //le prossime tre funzioni sono tutte non implementate
             consultaAndamentoButton.addActionListener(e ->
-                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)
+                    JOptionPane.showMessageDialog(this, messaggioDlc, "DLC Required", JOptionPane.WARNING_MESSAGE)  //warning message è per far uscire un pannello di warning
             );
 
             visualizzaOrdiniRicevutiButton.addActionListener(e ->
@@ -71,11 +73,16 @@ public class MainframeAmministratore extends JFrame {
                 FrameRicercaProdotti.apri_form_ricerca_admin(controllerAmministratore, risultati -> mostraRisultatiRicerca(risultati));
             });
 
-            creaProdottoButton.addActionListener(e -> {
-                FrameCreaProdotto frameCreazione = new FrameCreaProdotto();
-                frameCreazione.setVisible(true);
-                frameCreazione.setLocationRelativeTo(null);
+            creaProdottoButton.addActionListener(e -> { //da qui si apre tutta la logica del pulsante crea prodotto
+                FrameCreaProdotto frameCreazione = new FrameCreaProdotto();  //istanzio il frame che ci permette di creare un nuovo prodotto
+                frameCreazione.setVisible(true);  //lo rendo visibile
+                frameCreazione.setLocationRelativeTo(null);  //grazie a questa opzione centro la finestra nello schermo
 
+
+                //con questo blocco di codice faccio in modo che,
+                // quando viene chiuso il frame crea prodotto (quindi completata la creazione),
+                // si ritorna al catalogo che viene aggiornato automaticamente per essere coerente
+                // con il cambiamento, tramite la funzione fillCatalogo()
                 frameCreazione.addWindowListener(new WindowAdapter() {
                     @Override
                     public void windowClosed(WindowEvent windowEvent) {
@@ -91,11 +98,12 @@ public class MainframeAmministratore extends JFrame {
         }
     }
 
+    //funzione per riempire il catalogo
     private void fillCatalogo() {
         CatalogoPane.removeAll();
 
         // Riceviamo una lista di array di stringhe dal Controller
-        List<String[]> listaCatalogo = ControllerAmministratore.ottieniListaProdotti();
+        List<String[]> listaCatalogo = ControllerAmministratore.ottieniListaProdotti();  //chiamo la funzione di catalogo che permette di fare retrieval di tutti i prodotti
 
         if (listaCatalogo.isEmpty()) {
             // Forziamo il BorderLayout per questo ramo
@@ -163,13 +171,13 @@ public class MainframeAmministratore extends JFrame {
                 btnRimuovi.addActionListener(e -> {
                     int risposta = JOptionPane.showConfirmDialog(this,
                             "Sei sicuro di voler eliminare permanentemente " + nomeProdotto + " dal catalogo?",
-                            "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);
+                            "Conferma Eliminazione", JOptionPane.YES_NO_OPTION);  //richiedo una conferma di eliminazione
 
                     if (risposta == JOptionPane.YES_OPTION) {
-                        boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto);
+                        boolean eliminato = ControllerAmministratore.rimuoviProdotto(nomeProdotto); //delego al controller
                         if (eliminato) {
                             JOptionPane.showMessageDialog(this, "Prodotto rimosso con successo.");
-                            fillCatalogo();
+                            fillCatalogo();  //se l'eliminazione va a buon fine devo aggiornare il catalogo a schermo
                         } else {
                             JOptionPane.showMessageDialog(this, "Errore nell'eliminazione.", "Errore", JOptionPane.ERROR_MESSAGE);
                         }
@@ -177,7 +185,7 @@ public class MainframeAmministratore extends JFrame {
                 });
 
                 btnGestione.addActionListener(e -> {
-                    // Passiamo le stringhe estratte direttamente al costruttore
+                    // Passiamo le stringhe estratte direttamente al costruttore della frame che ci permette di gestire il prodotto
                     FrameGestisciProdotto frameGestione = new FrameGestisciProdotto(
                             nomeProdotto, categoriaProdotto, prezzoProdotto, descrizioneProdotto, qtaProdotto, isDisponibile, isScontato
                     );
@@ -188,7 +196,7 @@ public class MainframeAmministratore extends JFrame {
                         @Override
                         public void windowClosed(WindowEvent windowEvent) {
                             fillCatalogo();
-                        }
+                        }  //anche in questo caso, completata la modifica chiamo fillCatalogo()
                     });
                 });
 
