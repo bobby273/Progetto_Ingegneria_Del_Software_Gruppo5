@@ -21,17 +21,34 @@ public class AdminFacade {
         this.mailAmministratore = mailUser;
     }
 
-    public boolean annullaOrdine(String id_ordine){
-        //come prima cosa faccio un check sul login così che anche se si provasse a accedere direttamente a queste funzioni da linea di comando si verrebbe bloccati se non autenticati
-        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
+    public boolean annullaOrdine(String id_ordine) {
+        if (checkLogin(mailAmministratore, AMMINISTRATORE) == AMMINISTRATORE) {
             Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
-            boolean annullato = amministratore.annullaOrdine(id_ordine);  //delego all'entity amministratore
-            boolean aggiorna = false;  //metto come condizione iniziale false
+
+            // Delega all'entity: qui lo stato dell'ordine cambia in memoria e le quantità nel catalogo vengono aggiornate
+            boolean annullato = amministratore.annullaOrdine(id_ordine);
+
             if (annullato) {
-                Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = !((gp.aggiorna(o)==null || gp.aggiorna(o.getCliente())==null));
+                // CORREZIONE 1: Preleviamo l'ordine corretto (quello modificato in memoria)
+                Ordine o = StoricoOrdini.getInstance().cercaOrdinePerId(id_ordine);
+
+                // Aggiorniamo Ordine e Cliente sul Database
+                boolean aggiornaOrdine = (gp.aggiorna(o) != null);
+                boolean aggiornaCliente = (gp.aggiorna(o.getCliente()) != null);
+
+                // CORREZIONE 2: Salviamo sul Database anche i prodotti con le nuove quantità
+                boolean aggiornaProdotti = true;
+                for(OrdineContiene c : o.getProdottiContenuti()) {
+                    Prodotto prodottoModificato = c.getProdotto();
+                    if (gp.aggiorna(prodottoModificato) == null) {
+                        aggiornaProdotti = false;
+                    }
+                }
+
+                // L'operazione ha successo solo se TUTTE le query al database sono andate a buon fine
+                return aggiornaOrdine && aggiornaCliente && aggiornaProdotti;
             }
-            return aggiorna;
+            return false;
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
