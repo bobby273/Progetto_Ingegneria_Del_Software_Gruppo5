@@ -103,7 +103,7 @@ public class GestorePersistenza {
     public <T> List<T> cercaPerCampoLike(Class<T> classe, String nomeCampo, Object valore) {
         return cercaPerCampiLike(
                 classe,
-                Map.of(nomeCampo, valore)
+                Map.of(nomeCampo, valore,"isEliminato", false)
         );
     }
 
