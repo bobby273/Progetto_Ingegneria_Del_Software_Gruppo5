@@ -1,6 +1,5 @@
 package controller;
 
-//import StubPagamento.InterfacciaPagamento;
 import entity.ClientFacade; //per comunicare con livello entity
 
 import java.time.LocalDateTime;
@@ -38,14 +37,8 @@ public class ControllerCliente {
     }
 
     public boolean creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza){
-        return clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza); //TODO: Andrebbe aggiunto MAIL_CLIENTE come primo parametro
+        return clientFacade.creaOrdine(indirizzo,num_carta,CCV,meseScadenza,annoScadenza);
     }
-
-    //Per accedere all'intero catalogo --> facade (che spacchetta i dati)
-    /*TODO: public static List<Prodotto> getTuttiIProdotti(){
-        return clientFacade.getTuttiIProdotti();
-        --> note to self: rimosso e sostituito con metodo getCatalogoBreve() [ora è in Facade]
-    }*/
 
     //Spacchettamento e impacchettamento (catalogo e carrello) per evitare che Boundary debba importare Prodotto
     public static List<String[]> getCatalogoBreve() {
@@ -58,21 +51,7 @@ public class ControllerCliente {
 
     public static Object[] apriDettaglioProdotto(String nomeProdotto) {
         Object[] prodotto = clientFacade.getDettagliProdotto(nomeProdotto);
-        return prodotto; //TODO: modificato
-
-        /*
-        if (prodotto != null) {
-            //Ricezione dalla Facade
-            new boundary.FrameDettaglioProdotto(
-                    (String) prodotto[0],
-                    (float) prodotto[1],
-                    (String) prodotto[2],
-                    (int) prodotto[3],
-                    (boolean) prodotto[4],
-                    (String) prodotto[5],
-                    (boolean) prodotto[6]
-            );
-        } */
+        return prodotto;
     }
 
     // Metodo per far verificare alla Boundary se un prodotto esiste (permettere stampa di mess errore apposito [testing])

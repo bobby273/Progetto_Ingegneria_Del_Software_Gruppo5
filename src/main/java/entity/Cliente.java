@@ -1,6 +1,5 @@
 package entity;
 
-//import StubPagamento.InterfacciaPagamento;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
 
@@ -30,7 +29,7 @@ public class Cliente extends Utente{
     Cliente(String email, String nome, String cognome, String password, String indirizzoSpedizione){
         super(email, nome, cognome, password);
         this.indirizzoSpedizione=indirizzoSpedizione;
-        this.ordiniPersonali=new ArrayList<Ordine>();
+        this.ordiniPersonali=new ArrayList<>();
         this.carrello = new Carrello(email);
     }
 
@@ -38,29 +37,19 @@ public class Cliente extends Utente{
     Long getId(){
         return id;
     }
-    Carrello getCarrello(){
-        return carrello;
-    }
     String getIndirizzoSpedizione(){
         return indirizzoSpedizione;
     }
 
     Ordine creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza) {
 
-        Ordine ordine = null;
         // costruisco l'ordine
-        ordine = new Ordine(this, indirizzo, this.carrello);
-
-        if(ordine == null){
-            System.out.println("Crash nel costruttore Ordine");
-            return null;
-        }
-
+        Ordine ordine = new Ordine(this, indirizzo, this.carrello);
         System.out.println("Costruttore Ordine superato con successo!");
 
         if (ordine.getProdottiContenuti() == null || ordine.getProdottiContenuti().isEmpty()) {
             System.out.println("Impossibile creare l'ordine!");
-            Ordine.elimina(ordine);
+
             return null;
         }
 
@@ -91,7 +80,7 @@ public class Cliente extends Utente{
                 return ordine;
 
             } catch (Exception e) {
-                System.out.println("Problema: " + e.toString());
+                System.out.println("Problema: " + e);
                 e.printStackTrace();
 
                 // Facciamo rollback fittizio per sicurezza

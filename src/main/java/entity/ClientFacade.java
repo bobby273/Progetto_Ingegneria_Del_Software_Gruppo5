@@ -45,7 +45,7 @@ public class ClientFacade {
     }
 
     public boolean creaOrdine(String indirizzo, long num_carta, int CCV, int meseScadenza, int annoScadenza){
-        System.out.println("🔍 [FACADE] Inizio procedura creaOrdine per l'utente: " + mailUtente);
+        System.out.println("[FACADE] Inizio procedura creaOrdine per l'utente: " + mailUtente);
 
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
@@ -62,7 +62,6 @@ public class ClientFacade {
             if (o != null) {
                 System.out.println("Ordine creato internamente. Procedo al salvataggio diretto...");
                 gp.salva(o);
-                //cliente.getCarrello().getProdottiContenuti().clear();
                 // aggiorna carrello del cliente
                 gp.aggiorna(cliente);
                 System.out.println("Ordine salvato nel Database con successo");
