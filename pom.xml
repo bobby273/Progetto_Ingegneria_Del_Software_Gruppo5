@@ -14,10 +14,6 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
-
-    <!--
-        giammy: ho copiato le dipendenze e la repository identico a come ha fatto il bro ma non dovrebbe dare problemi
-    -->
     <repositories>
         <repository>
             <id>central</id>
