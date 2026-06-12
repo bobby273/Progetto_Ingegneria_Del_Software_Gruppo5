@@ -3,6 +3,7 @@ package controller;
 import entity.UserFacade;
 
 public class ControllerAccesso {
+    //instanzio delle variabili con valore pre-determinato
     public static final int AMM_CREATO=0;
     public static final int CLIE_CREATO=1;
     public static final int UTENTE_NON_TROVATO=2;
@@ -51,6 +52,12 @@ public class ControllerAccesso {
         UserFacade userFacade=new UserFacade();
         return userFacade.verificaEsistenzaAmministratore(email);
     }
+
+    /*
+    Uso il metodo checkLogin nelle funzioni che necessitano di autenticazione o permessi Amministratore
+    Esso chiama a sua volta i metodi di checkEsistenzaAmministratore/Cliente al fine di verificare che l'utente
+    autenticato disponga dei permessi validi per le varie funzioni
+     */
 
     public static int checkLogin(String email, int tipo){
         if(!checkEsistenzaAmministratore(email)){

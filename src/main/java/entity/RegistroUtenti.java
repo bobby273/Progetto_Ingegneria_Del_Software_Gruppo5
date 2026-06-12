@@ -10,6 +10,7 @@ public class RegistroUtenti {
         this.gestorePers=new GestorePersistenza();
     }
 
+    //metodo per il fornire l'istanza di registro utenti
     static RegistroUtenti getInstance(){
         if(instance==null){
             instance=new RegistroUtenti();
@@ -25,6 +26,7 @@ public class RegistroUtenti {
         if(verificaEsistenzaAmministratore(email))
             return 5;
         Amministratore admin=new Amministratore(email, nome, cognome, password, badge);
+        //verifico il corretto salvataggio del amministratore
         if(gestorePers.salva(admin))
             return 0;
         return -1;
@@ -36,6 +38,7 @@ public class RegistroUtenti {
         if(verificaEsistenzaCliente(email))
             return 5;
         Cliente clt=new Cliente(email, nome, cognome, password, indirizzoSpedizione);
+        //verifico il corretto salvataggio del cliente
         if(gestorePers.salva(clt))
             return 1;
         return -1;

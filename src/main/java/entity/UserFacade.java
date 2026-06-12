@@ -3,14 +3,10 @@ package entity;
 import java.util.Map;
 
 public class UserFacade {
-
-    //Attributi
-
-
-    //Metodi
     public UserFacade() {
     }
 
+    //tutti i metodi chiamano a loro volta l'istanza di RegistroUtenti al fine di completare l'operazione.
     public int creaNuovoAmministratore(String email, String nome, String cognome, String password, String badge) {
         return RegistroUtenti.getInstance().creaNuovoAmministratore(email, nome, cognome, password, badge);
     }

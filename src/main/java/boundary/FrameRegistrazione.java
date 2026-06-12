@@ -30,12 +30,13 @@ public class FrameRegistrazione {
     private JFrame FrameAccesso;
 
     public FrameRegistrazione() {
+        //inizializzazione delle variabili riguardanti la registrazione amministratore
         checkBoxAdmin.setSelected(false);
         textFieldBadge.setVisible(false);
         textFieldBadge.setEnabled(false);
         textAdmin.setVisible(false);
 
-
+        //Action listener per la validazione dei campi di registrazione
         buttonConfReg.addActionListener(new ActionListener() {
                                             @Override
                                             public void actionPerformed(ActionEvent e) {
@@ -46,14 +47,14 @@ public class FrameRegistrazione {
                                                 String indirizzoSpedizione = textFieldIndSped.getText();
                                                 boolean isAdmin = checkBoxAdmin.isSelected();
                                                 String badge = textFieldBadge.getText();
-
+                                                //esito servirà per il messaggio di ritorno mostrato in fondo nella finestra
                                                 int esito = -1;
                                                 if (isAdmin) {
                                                     if (email.length() <= 40 && email.contains("@")
-                                                            && nome.length() <= 40 && nome.matches("[\\p{L}\\s']+")
+                                                            && nome.length() <= 40 && nome.matches("[\\p{L}\\s']+") //con questo parametro accetto solo le lettere maiuscole, minuscole e simboli presenti nei nomi(come aprostrofo etc.)
                                                             && cognome.length() <= 40 && cognome.matches("[\\p{L}\\s']+")
                                                             && password.length() >= 8 && password.length() <= 40
-                                                            && badge.length() == 20 && badge.matches("[0-9]+"))
+                                                            && badge.length() == 20 && badge.matches("[0-9]+")) //con questo parametro accetto solo cifre numeriche
                                                         esito = ControllerAccesso.creaNuovoAmministratore(email, nome, cognome, password, badge);
                                                 } else {
                                                     if (email.length() <= 40 && email.contains("@")
@@ -66,6 +67,7 @@ public class FrameRegistrazione {
                                                 if (esito == ControllerAccesso.AMM_CREATO) {
                                                     labelEsito.setText("Amministratore registrato con successo.");
                                                     if (FrameAccesso == null || !FrameAccesso.isDisplayable()) {
+                                                        //instanzio una frame per l'interfaccia di autenticazione
                                                         FrameAccesso formacc = new FrameAccesso();
                                                         FrameAccesso = formacc.apriFormAcc();
                                                         FrameAccesso.setLocationRelativeTo(null);
@@ -74,6 +76,7 @@ public class FrameRegistrazione {
                                                         FrameAccesso.toFront();
                                                         FrameAccesso.requestFocus();
                                                     }
+                                                    //utilizzo finestraAttuale per prendere il riferimento all'ui di registrazione e chiuderla
                                                     Window finestraAttuale = SwingUtilities.getWindowAncestor(registrazionePane);
                                                     if (finestraAttuale != null) {
                                                         finestraAttuale.dispose();
@@ -83,6 +86,7 @@ public class FrameRegistrazione {
                                                 } else if (esito == ControllerAccesso.CLIE_CREATO) {
                                                     labelEsito.setText("Cliente registrato con successo.");
                                                     if (FrameAccesso == null || !FrameAccesso.isDisplayable()) {
+                                                        //instanzio una frame per l'interfaccia di autenticazione
                                                         FrameAccesso formacc = new FrameAccesso();
                                                         FrameAccesso = formacc.apriFormAcc();
                                                         FrameAccesso.setLocationRelativeTo(null);
@@ -91,6 +95,7 @@ public class FrameRegistrazione {
                                                         FrameAccesso.toFront();
                                                         FrameAccesso.requestFocus();
                                                     }
+                                                    //utilizzo finestraAttuale per prendere il riferimento all'ui di registrazione e chiuderla
                                                     Window finestraAttuale = SwingUtilities.getWindowAncestor(registrazionePane);
                                                     if (finestraAttuale != null) {
                                                         finestraAttuale.dispose();
@@ -101,7 +106,7 @@ public class FrameRegistrazione {
                                             }
                                         }
         );
-
+        //action listener per registrarti come Amministratore
         checkBoxAdmin.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -116,6 +121,7 @@ public class FrameRegistrazione {
         });
     }
 
+    //metodo per aprire l'ui di registrazione
     public JFrame apriFormReg() {
         JFrame frame = new JFrame("Registrazione");
         frame.setContentPane(registrazionePane);

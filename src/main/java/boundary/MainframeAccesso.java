@@ -19,6 +19,7 @@ public class MainframeAccesso {
     private JFrame FrameAccesso;
 
     public MainframeAccesso() {
+        //action listener per aprire l'ui di registrazione
         RegistrazioneButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -33,7 +34,7 @@ public class MainframeAccesso {
                 }
             }
         });
-
+        //action listener per aprire l'ui di accesso
         AccessoButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -52,6 +53,7 @@ public class MainframeAccesso {
     }
 
     public static void main(String[] args) {
+        //creo l'ui dell'homepage
         JFrame frame = new JFrame("Homepage");
         MainframeAccesso mainframe = new MainframeAccesso();
         frame.setContentPane(mainframe.MainPanel);
