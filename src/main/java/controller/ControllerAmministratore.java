@@ -1,7 +1,6 @@
 package controller;
 
 import entity.AdminFacade;
-import database.GestorePersistenza;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +10,7 @@ public class ControllerAmministratore {
     //Attributi
     private static AdminFacade adminFacade;
 
+    //la maggioranza delle cose viene delegato al livello entity perché non c'è logica di business consistente
     public ControllerAmministratore(String mailUtente) {
         this.adminFacade = new AdminFacade(mailUtente);
     }
