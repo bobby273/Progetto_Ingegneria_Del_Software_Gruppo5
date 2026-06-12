@@ -71,7 +71,7 @@ public class Cliente extends Utente{
                 System.out.println("Tento di aggiungere allo StoricoOrdini...");
                 StoricoOrdini.getInstance().aggiungiOrdine(ordine);
 
-                System.out.println("⏳ DEBUG: Tento di scalare le quantità dal catalogo...");
+                System.out.println("DEBUG: Tento di scalare le quantità dal catalogo...");
                 for(OrdineContiene c : ordine.getProdottiContenuti()) {
                     Catalogo.getInstance().modificaQuantita(c.getProdotto().getNome(), (c.getProdotto().getQtaDisponibile() - c.getQuantita()));
                 }

@@ -1,6 +1,5 @@
 package entity;
 
-//import StubPagamento.InterfacciaPagamento;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,12 +22,15 @@ public class Amministratore extends Utente{
     }
 
    boolean annullaOrdine(String id_ordine) {
+
         StoricoOrdini storicoOrdini = StoricoOrdini.getInstance();
         Ordine ordine = storicoOrdini.cercaOrdinePerId(id_ordine);
         if(ordine == null) return false;
+        //imposto lo stato dell'ordine
         if(ordine.getStato()==Stato.CONSEGNATO
                 || ordine.getStato()==Stato.SPEDITO
                 || ordine.getStato()==Stato.ANNULLATO) return false;
+        //se l'ordine non è rimborsato non è possibile annullarlo
         if(!InterfacciaPagamento.RimborsaOrdine(ordine)) return false;
         ordine.setStato(Stato.ANNULLATO);
         StoricoOrdini.getInstance().inviaNotifiche();
