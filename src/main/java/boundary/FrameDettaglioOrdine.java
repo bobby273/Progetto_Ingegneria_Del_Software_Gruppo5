@@ -4,14 +4,8 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
 import controller.ControllerCliente;
-import entity.Cliente;
-import entity.Ordine;
-import entity.OrdineContiene;
+
 import entity.Stato;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 
 import javax.swing.*;
 import java.awt.*;
