@@ -247,7 +247,7 @@ public class ClientFacade {
     public List<String[]> getStoricoOrdiniPersonale() {
         if(checkLogin(mailUtente, CLIENTE) == CLIENTE) {
 
-            Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
+                Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
             List<String[]> storicoPers = new ArrayList<>();
 
             if (cliente != null) {

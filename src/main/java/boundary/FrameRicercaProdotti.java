@@ -70,7 +70,7 @@ public class FrameRicercaProdotti extends JFrame {
     }
 
     //metodi
-    public static JFrame apri_form_ricerca_cliente(ControllerCliente controller, Consumer<List<String[]>> callbackRisultati) {
+    public static JFrame apriFormRicercaCliente(ControllerCliente controller, Consumer<List<String[]>> callbackRisultati) {
         JFrame frame = new JFrame("Ricerca Prodotti");
         FrameRicercaProdotti form = new FrameRicercaProdotti(controller, callbackRisultati);
 

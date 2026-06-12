@@ -58,7 +58,7 @@ public class MainframeCliente extends JFrame {
 
         RicercaProdotto.addActionListener(e -> {
 
-            FrameRicercaProdotti.apri_form_ricerca_cliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
+            FrameRicercaProdotti.apriFormRicercaCliente(controllerCliente, risultati -> mostraRisultatiRicerca(risultati));
 
         });
         VisualizzaStoricoOrdini.addActionListener(e -> {
