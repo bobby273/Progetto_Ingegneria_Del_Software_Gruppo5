@@ -1,6 +1,6 @@
 package entity;
 
-import java.util.Map;
+
 
 public class UserFacade {
     public UserFacade() {

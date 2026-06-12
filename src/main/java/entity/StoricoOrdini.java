@@ -1,6 +1,5 @@
 package entity;
 
-import database.GestorePersistenza;
 
 import java.util.ArrayList;
 import java.util.List;

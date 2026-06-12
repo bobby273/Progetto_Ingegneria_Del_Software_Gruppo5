@@ -1,6 +1,6 @@
 package entity;
 
-//import StubPagamento.InterfacciaPagamento;
+
 import database.GestorePersistenza;
 
 import javax.swing.*;
