@@ -8,7 +8,6 @@ import java.util.List;
 public class StoricoOrdini {
     private static StoricoOrdini instance; //StoricoOrdini si comporta come singleton per tutto il BCED,
     //ma verrà usato in maniera diversa da utente e cliente
-    private GestorePersistenza gp = new GestorePersistenza();
     private List<Ordine> ordini;
 
     private StoricoOrdini(){
@@ -34,6 +33,7 @@ public class StoricoOrdini {
         }
     }
 
+    //i seguenti due metodi fanno parte della specifica ma non sono implementati
     void rimuoviOrdine(Ordine ordineDaRimuovere){
         if (ordineDaRimuovere != null && this.ordini.contains(ordineDaRimuovere)) {
             this.ordini.remove(ordineDaRimuovere);
@@ -49,8 +49,7 @@ public class StoricoOrdini {
         } else {
             for (Ordine o: ordini){
                 System.out.println("ID:"+o.getId()+"\t Costo totale:"+o.getTotale()+ "\t Cliente:" + o.getCliente()+"\tOggetti contenuti:"+o.getProdottiContenuti()+ "\t Stato Ordine" +o.getStato()+"\t Data Conferma Ordine:" +o.getDataConferma()+ "\t Indirizzo Spedizione:"+o.getIndirizzoSpedizione()+"\n");
-                //unico dubbio:quando il cliente userà questo metodo per visualizzare i propri ordini,
-                //cosa mostrerà data conferma ordine? conviene inserire lì il tasto di conferma?
+
             }
         }
 

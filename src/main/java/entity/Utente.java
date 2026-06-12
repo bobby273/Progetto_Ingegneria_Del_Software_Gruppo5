@@ -17,13 +17,6 @@ public class Utente {
         this.password=password;
     }
 
-    //Getter e setter
-    String getNome() {
-        return nome;
-    }
-    String getCognome() {
-        return cognome;
-    }
 
     // l'unico get utile è quello dell'email in quanto serve per la visualizzazione degli ordini personali
     String getEmail() {

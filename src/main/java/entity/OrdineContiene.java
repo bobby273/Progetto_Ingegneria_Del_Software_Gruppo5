@@ -5,12 +5,12 @@ import jakarta.persistence.*;
 @Entity
 public class OrdineContiene {
 
-    // 1. CHIAVE PRIMARIA REALE: Ogni riga dello scontrino avrà il suo ID univoco (1, 2, 3...)
+    //CHIAVE PRIMARIA REALE: Ogni riga dello scontrino avrà il suo ID univoco (1, 2, 3...) ecc
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 2. RIMOSSO @Id: Ora è una colonna normale, così possono esserci più prodotti con lo stesso ordine_id
+    //@Id: Ora è una colonna normale, così possono esserci più prodotti con lo stesso ordine_id, altrimenti hibernate dà errore di duplicazione di chiave primaria
     private String ordine_id;
 
     private int quantità;
@@ -38,15 +38,9 @@ public class OrdineContiene {
         return quantità;
     }
 
-    void setQuantita(int quantita) {
-        this.quantità = quantita;
-    }
 
     Prodotto getProdotto() {
         return prodotto;
     }
 
-    String getOrdine_id() {
-        return ordine_id;
-    }
 }
