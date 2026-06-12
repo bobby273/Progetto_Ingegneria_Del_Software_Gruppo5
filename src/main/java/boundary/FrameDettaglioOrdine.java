@@ -4,6 +4,7 @@ import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import controller.ControllerAmministratore;
 import controller.ControllerCliente;
+
 import entity.Stato;
 
 import javax.swing.*;

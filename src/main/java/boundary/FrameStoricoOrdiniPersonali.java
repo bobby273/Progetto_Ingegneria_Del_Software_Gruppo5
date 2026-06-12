@@ -12,7 +12,6 @@ import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 
-//TODO: verificarne la funzionalità
 public class FrameStoricoOrdiniPersonali extends JFrame {
     //variabili per il GUI Designer
     private JPanel StoricoOrdiniPane;

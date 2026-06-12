@@ -5,7 +5,7 @@ import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
 import controller.ControllerAccesso;
 
-import javax.naming.ldap.Control;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
