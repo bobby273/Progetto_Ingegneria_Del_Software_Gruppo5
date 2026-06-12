@@ -157,7 +157,7 @@ public class FrameCreaOrdine extends JFrame {
                         JOptionPane.ERROR_MESSAGE);
                 throw new IllegalArgumentException();
             }
-            if (indirizzo.length() < 5 || indirizzo.length() > 100 || !indirizzo.matches("^[\\p{L}\\p{N} ]+$")) {
+            if (indirizzo.length() < 5 || indirizzo.length() > 100 || !indirizzo.matches("^[\\p{L}\\p{N} ,]+$")) {
                 JOptionPane.showMessageDialog(this,
                         "L'indirizzo deve essere composto da lettere e numeri, e deve essere compreso tra 5 e 100 caratteri.",
                         "Errore di formato dei dati",
