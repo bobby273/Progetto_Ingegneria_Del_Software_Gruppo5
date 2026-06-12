@@ -34,7 +34,15 @@ public class ClientFacade {
             boolean aggiorna = false;
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = !((gp.aggiorna(o)==null) ||(gp.aggiorna(cliente)==null));
+                // Salvataggio sul Database dei prodotti con le nuove quantità
+                boolean aggiornaProdotti = true;
+                for(OrdineContiene c : o.getProdottiContenuti()) {
+                    Prodotto prodottoModificato = c.getProdotto();
+                    if (gp.aggiorna(prodottoModificato) == null) {
+                        aggiornaProdotti = false;
+                    }
+                }
+                aggiorna = !((gp.aggiorna(o)==null) || (gp.aggiorna(cliente)==null) || aggiornaProdotti);
             }
             return aggiorna;
         } else{

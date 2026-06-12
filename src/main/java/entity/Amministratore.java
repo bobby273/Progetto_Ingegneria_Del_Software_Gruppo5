@@ -1,6 +1,7 @@
 package entity;
 
 import StubPagamento.InterfacciaPagamento;
+import database.GestorePersistenza;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,26 +22,27 @@ public class Amministratore extends Utente{
         this.badge=badge;
     }
 
-   boolean annullaOrdine(String id_ordine) {
+   Ordine annullaOrdine(String id_ordine) {
 
         StoricoOrdini storicoOrdini = StoricoOrdini.getInstance();
         Ordine ordine = storicoOrdini.cercaOrdinePerId(id_ordine);
-        if(ordine == null) return false;
+        if(ordine == null) return null;
         //imposto lo stato dell'ordine
         if(ordine.getStato()==Stato.CONSEGNATO
                 || ordine.getStato()==Stato.SPEDITO
-                || ordine.getStato()==Stato.ANNULLATO) return false;
+                || ordine.getStato()==Stato.ANNULLATO) return null;
         //se l'ordine non è rimborsato non è possibile annullarlo
-        if(!InterfacciaPagamento.RimborsaOrdine(ordine)) return false;
-        ordine.setStato(Stato.ANNULLATO);
+        if(!InterfacciaPagamento.RimborsaOrdine(ordine)) return null;
         StoricoOrdini.getInstance().inviaNotifiche();
        //Rimettiamo i prodotti nel catalogo
        Catalogo catalogo = Catalogo.getInstance();
        for(OrdineContiene c : ordine.getProdottiContenuti()) {
            Prodotto prodotto = c.getProdotto();
            int quantita = c.getQuantita();
-           catalogo.modificaQuantita(prodotto.getNome(), prodotto.getQtaDisponibile() + quantita);
+           int nuovaQuantita = prodotto.getQtaDisponibile() + quantita;
+           catalogo.modificaQuantita(prodotto.getNome(), nuovaQuantita);
        }
-        return true;
+       ordine.setStato(Stato.ANNULLATO);
+       return ordine;
     }
 }

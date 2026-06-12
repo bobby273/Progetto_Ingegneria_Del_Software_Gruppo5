@@ -26,17 +26,14 @@ public class AdminFacade {
             Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
 
             // Delega all'entity: qui lo stato dell'ordine cambia in memoria e le quantità nel catalogo vengono aggiornate
-            boolean annullato = amministratore.annullaOrdine(id_ordine);
+            Ordine o = amministratore.annullaOrdine(id_ordine);
 
-            if (annullato) {
-                // CORREZIONE 1: Preleviamo l'ordine corretto (quello modificato in memoria)
-                Ordine o = StoricoOrdini.getInstance().cercaOrdinePerId(id_ordine);
-
+            if (o != null) {
                 // Aggiorniamo Ordine e Cliente sul Database
                 boolean aggiornaOrdine = (gp.aggiorna(o) != null);
                 boolean aggiornaCliente = (gp.aggiorna(o.getCliente()) != null);
 
-                // CORREZIONE 2: Salviamo sul Database anche i prodotti con le nuove quantità
+                // Salviamo sul Database anche i prodotti con le nuove quantità
                 boolean aggiornaProdotti = true;
                 for(OrdineContiene c : o.getProdottiContenuti()) {
                     Prodotto prodottoModificato = c.getProdotto();
@@ -47,8 +44,9 @@ public class AdminFacade {
 
                 // L'operazione ha successo solo se TUTTE le query al database sono andate a buon fine
                 return aggiornaOrdine && aggiornaCliente && aggiornaProdotti;
+            }else {
+                return false;
             }
-            return false;
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
