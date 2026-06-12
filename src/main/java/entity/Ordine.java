@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 import StubPagamento.InterfacciaPagamento;
 import jakarta.persistence.*;
 
-//import StubPagamento.InterfacciaPagamento;
+
 
 @Entity
 public class Ordine {
