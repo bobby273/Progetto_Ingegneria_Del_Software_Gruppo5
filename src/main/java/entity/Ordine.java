@@ -55,7 +55,7 @@ public class Ordine {
         if(prodottiInCarrello == null || prodottiInCarrello.isEmpty()) {
             return prodottiInOrdine;
         }
-
+        //copio dal carrello del cliente al nuovo ordine
         List<CarrelloContiene> copiaCarrello = new ArrayList<>(prodottiInCarrello);
 
         for (CarrelloContiene carrelloContiene : copiaCarrello) {
@@ -87,7 +87,6 @@ public class Ordine {
         while(esiste){
             for(int i=0; i<10; i++) {
                 id[i] = random.nextInt(10);
-                //System.out.print(id[i]);
             }
             idOrdine = Arrays.stream(id).mapToObj(String::valueOf).collect(Collectors.joining());
             if(StoricoOrdini.getInstance().cercaOrdinePerId(idOrdine)==null){
@@ -118,15 +117,6 @@ public class Ordine {
                 this.cliente != null ? this.cliente.getId() : null
         };
     }
-
-    /*
-    public static void main(String[] args){
-        Cliente io = new Cliente("aaaaaaaaaa@gmail.com","Robertina","Giovengo","aaaaaaa12345670","Via Antonio Segni");
-        Ordine ordine = new Ordine(io,"Via Antonio Segni",new Carrello("aaaaaaaaaa@gmail.com"));
-        System.out.println(ordine.getId());
-    }
-
-     */
 
     //getter e setter
     Cliente getCliente() {
@@ -170,7 +160,7 @@ public class Ordine {
     float getTotale() {
         return totale;
     }
-
+    //localdatetime ritorna il timestamp
     LocalDateTime getDataConferma() {
         return dataConferma;
     }

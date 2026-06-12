@@ -19,6 +19,7 @@ public class Catalogo {
         gp = new GestorePersistenza();
     }
 
+    //usato per ritornare l'istanza del catalogo
     static Catalogo getInstance() {
         if(instance == null) {
             instance = new Catalogo();
@@ -28,7 +29,6 @@ public class Catalogo {
     }
 
     //Metodi
-
     List<Prodotto> getTuttiIProdotti() {
         if (gp == null) {
             gp = new database.GestorePersistenza();
@@ -36,6 +36,7 @@ public class Catalogo {
         return gp.cercaPerCampi(Prodotto.class, java.util.Map.of("isEliminato", false));
     }
 
+    //ricerca del prodotto nel db
     Prodotto ricercaProdotto(String nomeProdotto) {
         try{
             return gp.cercaPrimoPerCampi(Prodotto.class, Map.of("nome", nomeProdotto));
@@ -49,8 +50,6 @@ public class Catalogo {
 
 
     List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-
-
         final List<String> CAMPI_RICERCA_AMMESSI = Arrays.asList("nome", "categoria", "descrizione");
         // Controllo di sicurezza per evitare che utenti da terminale possano cercare su campi non ammessi.
         if (!CAMPI_RICERCA_AMMESSI.contains(categoriaRicerca)) {
@@ -150,7 +149,7 @@ public class Catalogo {
             return false;
         }
 
-        // L'istanziazione avviene qui dentro!
+        // L'istanziazione avviene qui dentro
         Prodotto nuovoProdotto = new Prodotto(nome, qta, descrizione, (float) prezzo, categoria, disponibile, scontato);
 
         GestorePersistenza gp = new GestorePersistenza();

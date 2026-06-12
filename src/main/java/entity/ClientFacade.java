@@ -196,7 +196,6 @@ public class ClientFacade {
         }
     }
 
-
     //proviamo a filtrare direttamente nella clientFacade.
     public List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
@@ -268,15 +267,6 @@ public class ClientFacade {
             return null;
         }
     }
-
-    public Prodotto ricercaProdotto(String nomeProdotto) { //TODO: vedi se unirlo all'altro metodo
-        return Catalogo.getInstance().ricercaProdotto(nomeProdotto);
-    }
-
-    /*TRY: probabilmente va eliminato
-    public List<Prodotto> ricercaProdottoInCatalogo(String categoriaRicerca, String elementoDaCercare) {
-        return Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-    }*/
 
     //Manuel: per ottenere prodotti da visualizzare in catalogo
     public List<Prodotto> getTuttiIProdotti(){
@@ -370,32 +360,7 @@ public class ClientFacade {
         }
     }
 
-    // Nella ClientFacade: Metodo per la ricerca che restituisce i dati pronti per la GUI
-    public List<String[]> ricercaProdottoInCatalogoBreve(String categoriaRicerca, String elementoDaCercare) {
-        if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {
-            List<Prodotto> prodottiTrovati;
 
-            // Se la ricerca è vuota, restituiamo tutto il catalogo
-            if (elementoDaCercare == null || elementoDaCercare.trim().isEmpty()) {
-                prodottiTrovati = Catalogo.getInstance().getTuttiIProdotti();
-            } else {
-                // Altrimenti deleghiamo al catalogo la ricerca specifica
-                prodottiTrovati = Catalogo.getInstance().ricercaProdottoInCatalogo(categoriaRicerca, elementoDaCercare);
-            }
-
-            // Spacchettiamo i risultati per la Boundary
-            List<String[]> risultatiBrevi = new ArrayList<>();
-            if (prodottiTrovati != null) {
-                for (Prodotto p : prodottiTrovati) {
-                    risultatiBrevi.add(new String[]{p.getNome(), p.getDescrizione()});
-                }
-            }
-            return risultatiBrevi;
-        } else {
-            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
 
     public String getIndirizzoDefaultCliente(String emailCliente){
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE) {

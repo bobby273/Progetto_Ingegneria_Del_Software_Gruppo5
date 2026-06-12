@@ -8,7 +8,7 @@ public class Carrello_per_testing {
     private final String mailUtente; //Id di utente è la sua mail (univoco)
     private List<CarrelloContiene_per_testing> prodottiContenuti; // =righe della tabella carrello
 
-    //CLASSI DI UTILITA
+    //CLASSI DI UTILITA'
     public static class CarrelloContiene_per_testing {
         int quantita;
         Prodotto_per_testing prodotto;
