@@ -142,7 +142,7 @@ public class FrameDettaglioOrdine extends JFrame {
                         JOptionPane.YES_NO_OPTION);
 
                 if (conferma == JOptionPane.YES_OPTION) {
-                    boolean successo = false;
+                    boolean successo;
 
                     // CONTROLLO DEL RUOLO: Scegliamo a quale controller chiedere l'annullamento
                     if (isAmministratore) {
