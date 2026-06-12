@@ -22,10 +22,11 @@ public class AdminFacade {
     }
 
     public boolean annullaOrdine(String id_ordine){
+        //come prima cosa faccio un check sul login così che anche se si provasse a accedere direttamente a queste funzioni da linea di comando si verrebbe bloccati se non autenticati
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             Amministratore amministratore = gp.cercaPrimoPerCampi(Amministratore.class, Map.of("email", mailAmministratore));
-            boolean annullato = amministratore.annullaOrdine(id_ordine);
-            boolean aggiorna = false;
+            boolean annullato = amministratore.annullaOrdine(id_ordine);  //delego all'entity amministratore
+            boolean aggiorna = false;  //metto come condizione iniziale false
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
                 aggiorna = (gp.aggiorna(o)==null || gp.aggiorna(o.getCliente())==null);
@@ -39,7 +40,7 @@ public class AdminFacade {
 
     public static boolean creaProdotto(String nome, String categoria, double prezzo, String descrizione, int qta, boolean disponibile, boolean scontato) {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
-            return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);  //l'infromation expert di prodotto è catalogo, per la gestione dei prodotti mi devo quindi rifare a lui
+            return Catalogo.getInstance().creaEAggiungiProdotto(nome, categoria, prezzo, descrizione, qta, disponibile, scontato);  //l'information expert di prodotto è catalogo, per la gestione dei prodotti mi devo quindi rifare a lui
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;
@@ -120,41 +121,32 @@ public static boolean rimuoviProdotto(String nomeProdotto) {
 
     public static java.util.List<String[]> getListaProdottiPerScorrimento() {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
-            // 1. Il catalogo estrae le entità (siamo nello stesso package, quindi funziona!)
+            // 1. Il catalogo estrae le entità (siamo nello stesso package, quindi funziona)
             java.util.List<Prodotto> veriProdotti = Catalogo.getInstance().getTuttiIProdotti();
             java.util.List<String[]> listaDatiGrezzi = new java.util.ArrayList<>();
 
-            // 2. Trasformiamo ogni entità in un array di Stringhe leggibile dall'esterno
+            // Trasformiamo ogni entità in un array di Stringhe leggibile dall'esterno
             for (Prodotto p : veriProdotti) {
                 String[] datiProdotto = new String[]{
-                        p.getNome(),            // index 0
-                        p.getCategoria(),       // index 1
-                        String.format("%.2f", p.getPrezzo()), // index 2
-                        p.getDescrizione(),     // index 3
-                        String.valueOf(p.getQtaDisponibile()), // index 4
-                        String.valueOf(p.isDisponibile()),            // Index 5 <-- AGGIUNTO REALE DAL DB
+                        p.getNome(),
+                        p.getCategoria(),
+                        String.format("%.2f", p.getPrezzo()),
+                        p.getDescrizione(),
+                        String.valueOf(p.getQtaDisponibile()),
+                        String.valueOf(p.isDisponibile()),
                         String.valueOf(p.isScontato())
                 };
                 listaDatiGrezzi.add(datiProdotto);
             }
 
-            return listaDatiGrezzi;
+            return listaDatiGrezzi;  //ritorno i prodotti come lista di stringa ocsì da facilitare il collegamento con la gui
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return null;
         }
     }
 
-    public List<Prodotto> getTuttiIProdotti(){
-        if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
-            return Catalogo.getInstance().getTuttiIProdotti();
-        } else {
-            JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
-            return null;
-        }
-    }
 
-    //proviamo a filtrare direttamente nella AdminFacade.
     public static List<String[]> ricercaProdottoInCatalogo(String categoriaRicerca,String elementoDaCercare) {
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             List<Prodotto> prodottiTrovati;
@@ -176,7 +168,7 @@ public static boolean rimuoviProdotto(String nomeProdotto) {
                             String.valueOf(p.getQtaDisponibile()),
                             String.valueOf(p.isDisponibile()),
                             String.valueOf(p.isScontato())
-                    });
+                    }); //aggiungo i prodotti trovati al risultato
                 }
             }
             return risultati;
@@ -236,6 +228,7 @@ public static boolean rimuoviProdotto(String nomeProdotto) {
         }
     }
 
+    //funzione per prendere i prodotti contenuti nell'ordine e la loro quantità
     public ArrayList<String> getProdottoEQuantita(String id_ordine){
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
