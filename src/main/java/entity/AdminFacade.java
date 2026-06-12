@@ -29,7 +29,7 @@ public class AdminFacade {
             boolean aggiorna = false;  //metto come condizione iniziale false
             if (annullato) {
                 Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
-                aggiorna = (gp.aggiorna(o)==null || gp.aggiorna(o.getCliente())==null);
+                aggiorna = !((gp.aggiorna(o)==null || gp.aggiorna(o.getCliente())==null));
             }
             return aggiorna;
         } else {

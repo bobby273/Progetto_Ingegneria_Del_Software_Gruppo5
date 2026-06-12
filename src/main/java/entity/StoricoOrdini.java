@@ -1,16 +1,26 @@
 package entity;
 
-
+import database.GestorePersistenza;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class StoricoOrdini {
     private static StoricoOrdini instance; //StoricoOrdini si comporta come singleton per tutto il BCED,
     //ma verrà usato in maniera diversa da utente e cliente
     private List<Ordine> ordini;
-
+    private GestorePersistenza gestorePers;
     private StoricoOrdini(){
         this.ordini = new ArrayList<>();
+        this.gestorePers = new GestorePersistenza();
+        popolaArray();
+    }
+
+    private void popolaArray(){
+        //List<Ordine> ord_db=gestorePers.cercaPerCampi(Ordine.class, Map.of("id_ordine", "%"));
+        List<Ordine> ord_db=gestorePers.cercaPerCampi(Ordine.class, Map.of());
+
+        ordini.addAll(ord_db);
     }
 
     static StoricoOrdini getInstance() {

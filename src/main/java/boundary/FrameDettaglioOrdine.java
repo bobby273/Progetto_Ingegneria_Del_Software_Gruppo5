@@ -73,10 +73,6 @@ public class FrameDettaglioOrdine extends JFrame {
         this.indirizzoSpedizione = controller.getIndirizzoSpedizione(id_ordine);
         this.ProdottiEQuantita = controller.getProdottiEQuantita(id_ordine);
         this.id_cliente = controller.getIdCliente(id_ordine);
-
-        //per il futuro, avremo una implementazione analoga a quella che avviene nel costruttore cliente
-        //Object[] infoOrdine = controller.getInfoOrdine(id_ordine);
-        //popolaDatiDaArray(infoOrdine);
         apriFrame();
     }
 
