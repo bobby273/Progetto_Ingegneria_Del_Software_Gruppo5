@@ -30,10 +30,10 @@ public class ClientFacade {
     public boolean annullaOrdine(String id_ordine) {
         if(checkLogin(mailUtente,CLIENTE)==CLIENTE){
             Cliente cliente = gp.cercaPrimoPerCampi(Cliente.class, Map.of("email", mailUtente));
-            boolean annullato = cliente.annullaOrdine(id_ordine);
+            Ordine o = cliente.annullaOrdine(id_ordine);
             boolean aggiorna = false;
-            if (annullato) {
-                Ordine o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            if (o != null) {
+                o = gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
                 // Salvataggio sul Database dei prodotti con le nuove quantità
                 boolean aggiornaProdotti = true;
                 for(OrdineContiene c : o.getProdottiContenuti()) {
@@ -42,7 +42,9 @@ public class ClientFacade {
                         aggiornaProdotti = false;
                     }
                 }
-                aggiorna = !((gp.aggiorna(o)==null) || (gp.aggiorna(cliente)==null) || aggiornaProdotti);
+                if((gp.aggiorna(o)!=null) && (gp.aggiorna(cliente)!=null) && aggiornaProdotti){
+                    aggiorna = true;
+                }
             }
             return aggiorna;
         } else{

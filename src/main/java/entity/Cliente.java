@@ -102,13 +102,13 @@ public class Cliente extends Utente{
     }
 
 
-    boolean annullaOrdine(String id_ordine){
+    Ordine annullaOrdine(String id_ordine){
         Ordine ordine = cercaOrdine(id_ordine);
-        if(ordine == null) return false;
+        if(ordine == null) return null;
         if(ordine.getStato()==Stato.CONSEGNATO
                 || ordine.getStato()==Stato.SPEDITO
-                || ordine.getStato()==Stato.ANNULLATO) return false;
-        if(!InterfacciaPagamento.RimborsaOrdine(ordine))return false;
+                || ordine.getStato()==Stato.ANNULLATO) return null;
+        if(!InterfacciaPagamento.RimborsaOrdine(ordine))return null;
         ordine.setStato(Stato.ANNULLATO);
         StoricoOrdini.getInstance().inviaNotifiche();
         //Rimettiamo i prodotti nel catalogo
@@ -118,7 +118,7 @@ public class Cliente extends Utente{
             int quantita = c.getQuantita();
             catalogo.modificaQuantita(prodotto.getNome(), prodotto.getQtaDisponibile() + quantita);
         }
-        return true;
+        return ordine;
     }
 
     private Ordine cercaOrdine(String id_ordine){

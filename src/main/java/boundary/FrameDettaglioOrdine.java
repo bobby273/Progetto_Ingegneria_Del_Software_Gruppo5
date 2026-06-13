@@ -161,9 +161,9 @@ public class FrameDettaglioOrdine extends JFrame {
                         if(frameStoricoOrdiniPersonali != null) {
                             frameStoricoOrdiniPersonali.aggiornaTabella();
                         }
-                    } else { //scriviamo questa casistica per puri motivi di sicurezza
-                        //in teoria non è mai accessibile dalla GUI per codice in riga 118-120.
-                        JOptionPane.showMessageDialog(PanelOrdine, "Errore: hai già annullato questo ordine!", "Errore", JOptionPane.ERROR_MESSAGE);
+                    } else {
+                        //se l'operazione non è andata a buon fine
+                        JOptionPane.showMessageDialog(PanelOrdine, "Errore nell'annullamento dell'ordine", "Errore", JOptionPane.ERROR_MESSAGE);
                     }
                 }
             }
