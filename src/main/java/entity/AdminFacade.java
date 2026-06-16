@@ -27,7 +27,7 @@ public class AdminFacade {
 
             // Delega all'entity: qui lo stato dell'ordine cambia in memoria e le quantità nel catalogo vengono aggiornate
             Ordine o = amministratore.annullaOrdine(id_ordine);
-
+            boolean annullato = false;
             if (o != null) {
                 // Aggiorniamo Ordine e Cliente sul Database
                 boolean aggiornaOrdine = (gp.aggiorna(o) != null);
@@ -43,10 +43,11 @@ public class AdminFacade {
                 }
 
                 // L'operazione ha successo solo se TUTTE le query al database sono andate a buon fine
-                return aggiornaOrdine && aggiornaCliente && aggiornaProdotti;
-            }else {
-                return false;
+                if(aggiornaOrdine && aggiornaCliente && aggiornaProdotti){
+                    annullato = true;
+                }
             }
+            return annullato;
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);
             return false;

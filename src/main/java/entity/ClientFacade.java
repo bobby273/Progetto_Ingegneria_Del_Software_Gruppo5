@@ -74,6 +74,7 @@ public class ClientFacade {
                 gp.salva(o);
                 // aggiorna carrello del cliente
                 gp.aggiorna(cliente);
+                //notifico il cliente che è andato tutto bene
                 StoricoOrdini.getInstance().inviaNotifiche();
                 System.out.println("Ordine salvato nel Database con successo");
                 return true;
