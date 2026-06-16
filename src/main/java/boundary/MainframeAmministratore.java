@@ -49,13 +49,26 @@ public class MainframeAmministratore extends JFrame {
             visualizzaDettaglioOrdineButton.addActionListener(e -> {
                 // Richiede l'input all'utente e lo salva nella variabile id_ordine
                 String id_ordine = JOptionPane.showInputDialog(this, "Inserisci l'id dell'ordine:", "0");
+                //controllo per la correttezza del formato di id_ordine
+                if(id_ordine.length()==10){
+                    if(!id_ordine.matches("[0-9]+")){
+                        JOptionPane.showMessageDialog(this, "Formato id ordine non valido. Deve essere composto da 10 cifre numeriche.", "Errore", JOptionPane.ERROR_MESSAGE);
+                        return;
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(this, "Formato id ordine non valido. Lunghezza errata.", "Errore", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
 
                 // Controllo di sicurezza: verifica che l'utente non abbia premuto "Annulla" o inserito una stringa vuota
                 if (id_ordine != null && !id_ordine.trim().isEmpty()) {
                     // Istanzia il nuovo frame passando il controller e l'ID appena recuperato
                     FrameDettaglioOrdine frameDettaglio = new FrameDettaglioOrdine(new ControllerAmministratore(emailUtente), id_ordine);
-                    frameDettaglio.setVisible(true);
-                    frameDettaglio.setLocationRelativeTo(null);
+                    //se l'ordine non viene trovato questa variabile sara' impostata a false, evitando la creazione di una finestra vuota
+                    if(frameDettaglio.isEnabled()){
+                        frameDettaglio.setVisible(true);
+                        frameDettaglio.setLocationRelativeTo(null);
+                    }
                 }
             });
 

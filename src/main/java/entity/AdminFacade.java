@@ -207,6 +207,10 @@ public static boolean rimuoviProdotto(String nomeProdotto) {
     public String getStato(String id_ordine){
         if(checkLogin(mailAmministratore,AMMINISTRATORE)==AMMINISTRATORE) {
             Ordine o= gp.cercaPrimoPerCampi(Ordine.class, Map.of("id_ordine", id_ordine));
+            //verifichiamo che l'ordine sia stato trovato, essendo Stato il primo parametro che cerca l'ordine, basta fare la verifica solo con lui
+            if(o==null){
+                return "Ordine non trovato";
+            }
             return o.getStato().toString();
         } else {
             JOptionPane.showMessageDialog(null , "Accesso negato: credenziali non valide o utente non autorizzato.", "Errore di Autenticazione", JOptionPane.ERROR_MESSAGE);

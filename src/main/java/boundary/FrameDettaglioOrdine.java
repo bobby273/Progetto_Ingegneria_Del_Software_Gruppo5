@@ -64,10 +64,18 @@ public class FrameDettaglioOrdine extends JFrame {
     }
 
     public FrameDettaglioOrdine(ControllerAmministratore controller, String id_ordine) {
+        //Enabled true che useremo per controllo futuro del retrieve dell'ordine
+        this.setEnabled(true);
         this.controllerAmministratore = controller;
         this.isAmministratore = true;
         this.id_ordineSelezionato = id_ordine;
         this.stato = controller.getStato(id_ordine);
+        //se lo stato dell'ordine e' "Ordine non trovato" diamo un messaggio di errore ed impostiamo Enabled su false per evitare la creazione di una finestra vuota
+        if(stato.equals("Ordine non trovato")) {
+            JOptionPane.showMessageDialog(this, "Ordine non trovato.", "Errore", JOptionPane.ERROR_MESSAGE);
+            this.setEnabled(false);
+            return;
+        }
         this.totale = controller.getTotale(id_ordine);
         this.dataConferma = controller.getDataConferma(id_ordine);
         this.indirizzoSpedizione = controller.getIndirizzoSpedizione(id_ordine);
